@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>BreedingAI · Análisis de cría</title>
+  <title>BreedingAI · Análisis profesional de cría</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="app.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -16,56 +16,87 @@
 </header>
 
 <main class="container app">
-  <h1>Análisis profesional de cruce</h1>
-  <p class="subtitle">Evaluación objetiva para criadores responsables.</p>
+
+  <h1>Análisis profesional de cruce canino</h1>
+  <p class="subtitle">
+    Evaluación objetiva basada en criterios genéticos, sanitarios y funcionales.
+  </p>
 
   <form id="analysisForm" class="card">
 
-    <label>Raza</label>
-    <select id="raza" required>
-      <option value="">Selecciona una raza</option>
-      <option value="Golden Retriever">Golden Retriever</option>
-      <option value="Bulldog Francés">Bulldog Francés</option>
-      <option value="Border Collie">Border Collie</option>
-    </select>
-
-    <label>Objetivo de cría</label>
-    <select id="objetivo" required>
-      <option value="salud">Salud</option>
-      <option value="temperamento">Temperamento</option>
-      <option value="trabajo">Trabajo</option>
-    </select>
-
-    <label>Consanguinidad</label>
-    <select id="consanguinidad">
-      <option value="baja">Baja</option>
-      <option value="moderada">Moderada</option>
-      <option value="alta">Alta</option>
-    </select>
-
-    <label>Antecedentes</label>
-    <div class="checks">
-      <label><input type="checkbox" value="displasia"> Displasia</label>
-      <label><input type="checkbox" value="respiratorio"> Respiratorios</label>
-      <label><input type="checkbox" value="ocular"> Oculares</label>
-      <label><input type="checkbox" value="neurologico"> Neurológicos</label>
+    <div class="field">
+      <label>Raza</label>
+      <select id="raza" required>
+        <option value="">Selecciona una raza</option>
+        <option value="Golden Retriever">Golden Retriever</option>
+        <option value="Bulldog Francés">Bulldog Francés</option>
+        <option value="Border Collie">Border Collie</option>
+      </select>
     </div>
 
-    <button type="submit" class="btn-primary">Generar análisis</button>
+    <div class="field">
+      <label>Objetivo de cría</label>
+      <select id="objetivo" required>
+        <option value="">Selecciona un objetivo</option>
+        <option value="salud">Salud</option>
+        <option value="familia">Familia / Compañía</option>
+        <option value="trabajo">Trabajo / Rendimiento</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Consanguinidad</label>
+      <select id="consanguinidad" required>
+        <option value="">Selecciona un nivel</option>
+        <option value="baja">No relacionada</option>
+        <option value="media">Parientes lejanos</option>
+        <option value="alta">Línea común / repetición</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Antecedentes conocidos</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" value="displasia"> Displasia</label>
+        <label><input type="checkbox" value="respiratorios"> Respiratorios</label>
+        <label><input type="checkbox" value="oculares"> Oculares</label>
+        <label><input type="checkbox" value="neurologicos"> Neurológicos</label>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-primary">
+      Generar análisis
+    </button>
+
   </form>
 
-  <section id="report" class="card hidden">
-    <h2 id="clasificacion"></h2>
-    <ul>
-      <li>Riesgo hereditario: <strong><span id="riesgo"></span>/10</strong></li>
-      <li>Compatibilidad genética: <strong><span id="compatibilidad"></span>/10</strong></li>
-      <li>Adecuación al objetivo: <strong><span id="adecuacion"></span>/10</strong></li>
-    </ul>
+  <section id="result" class="card hidden">
+    <h2 id="classification"></h2>
+
+    <div class="scores">
+      <div>
+        <strong>Riesgo hereditario</strong>
+        <span id="riskScore"></span>/10
+      </div>
+      <div>
+        <strong>Compatibilidad genética</strong>
+        <span id="compatibilityScore"></span>/10
+      </div>
+      <div>
+        <strong>Adecuación al objetivo</strong>
+        <span id="suitabilityScore"></span>/10
+      </div>
+    </div>
+
+    <p id="recommendation" class="recommendation"></p>
+    <p id="warnings" class="warnings"></p>
   </section>
+
 </main>
 
 <script src="app.js"></script>
 </body>
 </html>
+
 
 
