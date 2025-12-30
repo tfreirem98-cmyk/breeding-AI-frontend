@@ -1,88 +1,125 @@
+* {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
-  background: #f6f7f6;
-  color: #0f1f17;
+  background: #f6f8f7;
+  color: #0b1f17;
 }
 
 .header {
-  padding: 20px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
+  padding: 24px 48px;
   font-weight: 700;
   font-size: 20px;
-  color: #0f1f17;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  padding: 80px 48px;
+  gap: 60px;
+}
+
+.hero-text {
+  max-width: 520px;
+}
+
+.hero-text h1 {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.hero-image img {
+  max-width: 520px;
+  border-radius: 24px;
+}
+
+.btn-primary {
+  display: inline-block;
+  background: #0f5132;
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: 999px;
   text-decoration: none;
+  font-weight: 600;
 }
 
-.container {
-  max-width: 800px;
-  margin: auto;
-  padding: 40px 20px;
+.analysis {
+  padding: 80px 48px;
 }
 
-.subtitle {
-  color: #555;
+.form-card {
+  background: #fff;
+  padding: 32px;
+  border-radius: 24px;
+  max-width: 700px;
 }
 
 label {
   display: block;
-  margin-top: 20px;
+  margin-top: 16px;
   font-weight: 600;
 }
 
 select {
   width: 100%;
   padding: 12px;
-  margin-top: 8px;
-  border-radius: 8px;
+  margin-top: 6px;
+  border-radius: 12px;
   border: 1px solid #ccc;
 }
 
 fieldset {
   margin-top: 20px;
-  padding: 15px;
-  border-radius: 8px;
+  padding: 16px;
+  border-radius: 12px;
 }
 
 fieldset label {
   display: inline-block;
-  margin-right: 15px;
+  margin-right: 16px;
 }
 
-.btn-primary {
-  margin-top: 30px;
+.full {
   width: 100%;
-  padding: 16px;
-  background: #1f5d44;
-  color: white;
+  margin-top: 24px;
   border: none;
-  border-radius: 30px;
-  font-size: 16px;
   cursor: pointer;
 }
 
 .result {
   margin-top: 40px;
-  padding: 30px;
-  background: #0f2f22;
-  color: white;
-  border-radius: 16px;
+  background: #0b2d1f;
+  color: #fff;
+  padding: 32px;
+  border-radius: 24px;
 }
 
 .hidden {
   display: none;
 }
 
-footer {
-  background: #0f2f22;
-  color: white;
-  text-align: center;
-  padding: 20px;
-  margin-top: 80px;
+.why {
+  padding: 80px 48px;
 }
 
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.why-card {
+  background: #fff;
+  padding: 24px;
+  border-radius: 20px;
+}
+
+.footer {
+  background: #0b2d1f;
+  color: #fff;
+  text-align: center;
+  padding: 32px;
+}
