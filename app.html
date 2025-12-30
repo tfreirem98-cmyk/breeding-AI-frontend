@@ -1,36 +1,67 @@
-<form id="analysisForm">
-  <label>Raza</label>
-  <select id="raza">
-    <option>Golden Retriever</option>
-    <option>Bulldog Francés</option>
-    <option>Border Collie</option>
-  </select>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Análisis de cruce | BreedingAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body>
 
-  <label>Objetivo de cría</label>
-  <select id="objetivo">
-    <option value="salud">Salud</option>
-    <option value="trabajo">Trabajo</option>
-    <option value="belleza">Belleza</option>
-  </select>
+<header class="header">
+  <a href="index.html" class="logo">BreedingAI</a>
+</header>
 
-  <label>Consanguinidad</label>
-  <select id="consanguinidad">
-    <option value="baja">Baja</option>
-    <option value="media">Media</option>
-    <option value="alta">Alta</option>
-  </select>
+<main class="container">
 
-  <fieldset>
-    <legend>Antecedentes conocidos</legend>
-    <label><input type="checkbox" name="antecedentes" value="displasia"> Displasia</label>
-    <label><input type="checkbox" name="antecedentes" value="respiratorios"> Respiratorios</label>
-    <label><input type="checkbox" name="antecedentes" value="oculares"> Oculares</label>
-    <label><input type="checkbox" name="antecedentes" value="neurologicos"> Neurológicos</label>
-  </fieldset>
+  <h1>Análisis profesional de cruce</h1>
+  <p class="subtitle">Evaluación objetiva para criadores responsables.</p>
 
-  <button type="submit">Generar análisis</button>
-</form>
+  <form id="analysisForm">
 
-<div id="resultado"></div>
+    <label>Raza</label>
+    <select name="raza" required>
+      <option value="">Selecciona una raza</option>
+      <option>Golden Retriever</option>
+      <option>Bulldog Francés</option>
+      <option>Border Collie</option>
+      <option>Labrador Retriever</option>
+      <option>Pastor Alemán</option>
+    </select>
+
+    <label>Objetivo de cría</label>
+    <select name="objetivo">
+      <option>Salud</option>
+      <option>Trabajo</option>
+      <option>Exposición</option>
+    </select>
+
+    <label>Consanguinidad</label>
+    <select name="consanguinidad">
+      <option>Baja</option>
+      <option>Media</option>
+      <option>Alta</option>
+    </select>
+
+    <fieldset>
+      <legend>Antecedentes conocidos</legend>
+      <label><input type="checkbox" value="displasia"> Displasia</label>
+      <label><input type="checkbox" value="respiratorios"> Respiratorios</label>
+      <label><input type="checkbox" value="oculares"> Oculares</label>
+      <label><input type="checkbox" value="neurologicos"> Neurológicos</label>
+    </fieldset>
+
+    <button type="submit">Generar análisis</button>
+  </form>
+
+  <section id="result" class="result hidden"></section>
+
+</main>
+
+<footer class="footer">© 2025 BreedingAI</footer>
+
 <script src="app.js"></script>
+</body>
+</html>
+
 
