@@ -1,51 +1,79 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("analysisForm");
-  const result = document.getElementById("result");
+// ======================
+// ANALYSIS FORM
+// ======================
+const form = document.getElementById("analysisForm");
+const resultBox = document.getElementById("result");
 
-  const verdictEl = document.getElementById("verdict");
-  const analysisTextEl = document.getElementById("analysisText");
-  const recommendationTextEl = document.getElementById("recommendationText");
-
+if (form) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const breed = document.getElementById("breed").value;
     const goal = document.getElementById("goal").value;
-    const inbreeding = document.getElementById("consanguinity").value;
+    const consanguinity = document.getElementById("consanguinity").value;
 
-    const conditions = Array.from(
-      document.querySelectorAll("input[name='conditions']:checked")
-    ).map((c) => c.value);
+    const antecedentes = [];
+    document
+      .querySelectorAll("input[name='antecedentes']:checked")
+      .forEach((el) => antecedentes.push(el.value));
 
-    const res = await fetch(
-      "https://breedingai-backend.onrender.com/analyze",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ breed, goal, inbreeding, conditions }),
-      }
-    );
+    resultBox.innerHTML = "Analizando…";
 
-    const data = await res.json();
+    try {
+      const res = await fetch(
+        "https://breedingai-backend.onrender.com/analyze",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            breed,
+            goal,
+            consanguinity,
+            antecedentes,
+          }),
+        }
+      );
 
-    result.style.display = "block";
-    verdictEl.textContent = data.verdict;
-    analysisTextEl.textContent = data.explanation;
-    recommendationTextEl.textContent = data.recommendations;
+      if (!res.ok) throw new Error("Error backend");
+
+      const data = await res.json();
+
+      resultBox.innerHTML = `
+        <h3>Resultado del análisis</h3>
+        <p><strong>Veredicto:</strong> ${data.verdict}</p>
+        <p><strong>Puntuación:</strong> ${data.score}</p>
+        <p>${data.explanation}</p>
+        <p><strong>Recomendación:</strong> ${data.recommendation}</p>
+      `;
+    } catch (err) {
+      resultBox.innerHTML =
+        "El análisis no está disponible en este momento. Inténtalo de nuevo.";
+    }
   });
+}
 
-  document.getElementById("payPro").addEventListener("click", async () => {
-    const res = await fetch(
-      "https://breedingai-backend.onrender.com/create-checkout-session",
-      {
-        method: "POST",
-      }
-    );
+// ======================
+// STRIPE PRO BUTTON
+// ======================
+const proBtn = document.getElementById("payPro");
 
-    const data = await res.json();
-    window.location.href = data.url;
+if (proBtn) {
+  proBtn.addEventListener("click", async () => {
+    try {
+      const res = await fetch(
+        "https://breedingai-backend.onrender.com/create-checkout-session",
+        { method: "POST" }
+      );
+
+      if (!res.ok) throw new Error("Stripe error");
+
+      const data = await res.json();
+      window.location.href = data.url;
+    } catch (err) {
+      alert("No se pudo iniciar el pago PRO");
+    }
   });
-});
+}
 
 
 
