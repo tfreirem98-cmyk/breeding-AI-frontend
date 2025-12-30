@@ -1,5 +1,5 @@
 const form = document.getElementById("analysisForm");
-const result = document.getElementById("resultado");
+const result = document.getElementById("result");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -7,28 +7,30 @@ form.addEventListener("submit", async (e) => {
   const raza = document.getElementById("raza").value;
   const objetivo = document.getElementById("objetivo").value;
   const consanguinidad = document.getElementById("consanguinidad").value;
-  const antecedentes = [...document.querySelectorAll("input:checked")].map(i => i.value);
 
-  result.classList.remove("hidden");
-  result.textContent = "Generando análisis...";
+  const antecedentes = [...document.querySelectorAll("input[type=checkbox]:checked")]
+    .map(cb => cb.value);
 
-  const res = await fetch("https://breedingai-backend.onrender.com/analyze", {
+  const response = await fetch("https://breedingai-backend.onrender.com/analyze", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ raza, objetivo, consanguinidad, antecedentes })
+    body: JSON.stringify({
+      raza,
+      objetivo,
+      consanguinidad,
+      antecedentes
+    })
   });
 
-  const data = await res.json();
-  const r = data.resultado;
+  const data = await response.json();
 
+  result.classList.remove("hidden");
   result.innerHTML = `
-    <h2>${r.estado}</h2>
-    <p>Compatibilidad genética: ${r.compatibilidad}/10</p>
-    <p>Riesgo hereditario: ${r.riesgoHereditario}/10</p>
-    <p>Adecuación al objetivo: ${r.adecuacionObjetivo}/10</p>
-    <p>${r.recomendacion}</p>
-    <ul>${r.advertencias.map(a => `<li>${a}</li>`).join("")}</ul>
+    <h2>${data.clasificacion}</h2>
+    <p><strong>Compatibilidad genética:</strong> ${data.compatibilidad}/10</p>
+    <p><strong>Riesgo hereditario:</strong> ${data.riesgo}/10</p>
+    <p><strong>Adecuación al objetivo:</strong> ${data.adecuacion}/10</p>
+    <p>${data.recomendacion}</p>
   `;
 });
-
 
