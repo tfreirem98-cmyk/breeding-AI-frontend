@@ -1,24 +1,29 @@
 body {
-  font-family: system-ui;
-  background: #f7f9f8;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f8fafc;
   padding: 40px;
 }
 
-h1 {
-  margin-bottom: 30px;
+.back {
+  text-decoration: none;
+  color: #2563eb;
 }
 
-form {
-  background: white;
-  padding: 30px;
-  border-radius: 20px;
-  max-width: 600px;
+h1 {
+  margin: 24px 0;
+}
+
+.card {
+  background: #fff;
+  padding: 32px;
+  border-radius: 24px;
+  max-width: 520px;
 }
 
 select, button {
   width: 100%;
-  padding: 12px;
   margin-bottom: 16px;
+  padding: 12px;
 }
 
 button {
@@ -28,12 +33,16 @@ button {
   border-radius: 999px;
 }
 
-#result {
+.result {
   margin-top: 40px;
   background: #052e16;
-  color: white;
-  padding: 30px;
-  border-radius: 20px;
+  color: #fff;
+  padding: 32px;
+  border-radius: 24px;
+}
+
+.hidden {
+  display: none;
 }
 
 
