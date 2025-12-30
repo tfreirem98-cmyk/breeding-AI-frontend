@@ -1,47 +1,49 @@
-const form = document.getElementById("analysis-form");
-const resultBox = document.getElementById("result");
+const breeds = [
+  "Golden Retriever","Labrador Retriever","Pastor Alemán","Border Collie",
+  "Caniche","Bulldog Francés","Bulldog Inglés","Doberman","Rottweiler",
+  "Beagle","Cocker Spaniel","Husky Siberiano","Chihuahua","Shih Tzu",
+  "Mastín Español","Dogo Argentino","Akita Inu","Samoyedo","Yorkshire Terrier",
+  "Whippet","Galgo Español","Shar Pei","Cane Corso","San Bernardo",
+  "Gran Danés","Weimaraner","Basset Hound","Pastor Australiano","Malinois"
+];
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const breed = document.getElementById("breed").value;
-  const goal = document.getElementById("goal").value;
-  const consanguinity = document.getElementById("consanguinity").value;
-
-  const antecedents = Array.from(
-    document.querySelectorAll("input[name='antecedents']:checked")
-  ).map(el => el.value);
-
-  try {
-    const res = await fetch("https://breedingai-backend.vercel.app/analyze", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        breed,
-        goal,
-        consanguinity,
-        antecedents
-      })
-    });
-
-    if (!res.ok) throw new Error("Error servidor");
-
-    const data = await res.json();
-
-    resultBox.innerHTML = `
-      <h3>${data.label}</h3>
-      <p>Compatibilidad genética: ${data.scores.compatibility}/10</p>
-      <p>Riesgo hereditario: ${data.scores.risk}/10</p>
-      <p>Adecuación al objetivo: ${data.scores.goal}/10</p>
-      <p>${data.text}</p>
-    `;
-  } catch (err) {
-    resultBox.innerHTML = "<p>Error al generar el análisis</p>";
-  }
+const breedSelect = document.getElementById("breed");
+breeds.forEach(b => {
+  const o = document.createElement("option");
+  o.value = b;
+  o.textContent = b;
+  breedSelect.appendChild(o);
 });
 
+document.getElementById("analysis-form").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const antecedentes = [...document.querySelectorAll("input[type=checkbox]:checked")]
+    .map(c => c.value);
+
+  const payload = {
+    breed: breedSelect.value,
+    goal: document.getElementById("goal").value,
+    consanguinity: document.getElementById("consanguinity").value,
+    antecedentes
+  };
+
+  const res = await fetch("https://breedingai-backend.vercel.app/analyze", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await res.json();
+
+  document.getElementById("result").innerHTML = `
+    <h2>${data.veredicto}</h2>
+    <p>Compatibilidad genética: ${data.compatibilidadGenetica}/10</p>
+    <p>Riesgo hereditario: ${data.riesgoHereditario}/10</p>
+    <p>Adecuación al objetivo: ${data.adecuacionObjetivo}/10</p>
+    <p>${data.recomendacion}</p>
+  `;
+});
 
 
 
