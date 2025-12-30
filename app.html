@@ -2,52 +2,111 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Análisis – BreedingAI</title>
+  <title>Análisis profesional de cruce | BreedingAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CSS -->
   <link rel="stylesheet" href="app.css" />
 </head>
 <body>
 
-<a href="index.html" class="back">← Volver</a>
+  <!-- HEADER -->
+  <header class="top-bar">
+    <a href="index.html" class="back-link">← Volver</a>
+  </header>
 
-<h1>Análisis profesional de cruce</h1>
+  <!-- MAIN -->
+  <main class="app-container">
 
-<form id="analysisForm" class="card">
-  <select id="breed">
-    <option>Border Collie</option>
-    <option>Golden Retriever</option>
-    <option>Labrador</option>
-    <option>Pastor Alemán</option>
-    <option>Caniche</option>
-    <option>Doberman</option>
-    <option>Rottweiler</option>
-    <option>Bulldog Francés</option>
-  </select>
+    <h1>Análisis profesional de cruce</h1>
+    <p class="subtitle">
+      Evaluación objetiva orientada a criadores profesionales.
+    </p>
 
-  <select id="goal">
-    <option value="salud">Salud</option>
-    <option value="trabajo">Trabajo</option>
-    <option value="belleza">Belleza</option>
-  </select>
+    <!-- FORMULARIO -->
+    <form id="analysis-form" class="analysis-card">
 
-  <select id="inbreeding">
-    <option value="baja">Baja</option>
-    <option value="media">Media</option>
-    <option value="alta">Alta</option>
-  </select>
+      <!-- RAZA -->
+      <label for="breed">Raza</label>
+      <select id="breed" required>
+        <option value="Border Collie">Border Collie</option>
+        <option value="Golden Retriever">Golden Retriever</option>
+        <option value="Labrador Retriever">Labrador Retriever</option>
+        <option value="Pastor Alemán">Pastor Alemán</option>
+        <option value="Caniche">Caniche</option>
+        <option value="Doberman">Doberman</option>
+        <option value="Bulldog Francés">Bulldog Francés</option>
+        <option value="Bulldog Inglés">Bulldog Inglés</option>
+        <option value="Rottweiler">Rottweiler</option>
+        <option value="Beagle">Beagle</option>
+        <option value="Cocker Spaniel">Cocker Spaniel</option>
+        <option value="Husky Siberiano">Husky Siberiano</option>
+      </select>
 
-  <fieldset>
-    <legend>Antecedentes</legend>
-    <label><input type="checkbox" value="displasia"> Displasia</label>
-    <label><input type="checkbox" value="respiratorios"> Respiratorios</label>
-    <label><input type="checkbox" value="oculares"> Oculares</label>
-    <label><input type="checkbox" value="neurologicos"> Neurológicos</label>
-  </fieldset>
+      <!-- OBJETIVO -->
+      <label for="goal">Objetivo de cría</label>
+      <select id="goal" required>
+        <option value="Salud">Salud</option>
+        <option value="Trabajo">Trabajo</option>
+        <option value="Exposición">Exposición</option>
+        <option value="Compañía">Compañía</option>
+      </select>
 
-  <button type="submit">Generar análisis</button>
-</form>
+      <!-- CONSANGUINIDAD -->
+      <label for="inbreeding">Consanguinidad</label>
+      <select id="inbreeding" required>
+        <option value="Baja">Baja</option>
+        <option value="Media">Media</option>
+        <option value="Alta">Alta</option>
+      </select>
 
-<div id="result" class="result hidden"></div>
+      <!-- ANTECEDENTES -->
+      <fieldset class="conditions-box">
+        <legend>Antecedentes conocidos</legend>
 
-<script src="app.js"></script>
+        <label>
+          <input type="checkbox" name="conditions" value="Displasia" />
+          Displasia
+        </label>
+
+        <label>
+          <input type="checkbox" name="conditions" value="Respiratorios" />
+          Respiratorios
+        </label>
+
+        <label>
+          <input type="checkbox" name="conditions" value="Oculares" />
+          Oculares
+        </label>
+
+        <label>
+          <input type="checkbox" name="conditions" value="Neurológicos" />
+          Neurológicos
+        </label>
+      </fieldset>
+
+      <!-- BOTÓN -->
+      <button type="submit" class="primary-button">
+        Generar análisis
+      </button>
+
+    </form>
+
+    <!-- RESULTADOS -->
+    <section id="result" class="result-box">
+      <!-- Aquí el JS inyecta el análisis -->
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    © 2025 BreedingAI
+  </footer>
+
+  <!-- JS -->
+  <script src="app.js"></script>
+
 </body>
 </html>
+
