@@ -1,37 +1,55 @@
 const form = document.getElementById("analysisForm");
-const result = document.getElementById("result");
+const resultBox = document.getElementById("resultado");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const data = {
-    raza: form.raza.value,
-    objetivo: form.objetivo.value,
-    consanguinidad: form.consanguinidad.value,
-    antecedentes: [...form.querySelectorAll("input:checked")].map(i => i.value)
-  };
+  const raza = document.getElementById("raza").value;
+  const objetivo = document.getElementById("objetivo").value;
+  const consanguinidad = document.getElementById("consanguinidad").value;
 
-  result.classList.remove("hidden");
-  result.innerHTML = "Generando análisis...";
+  const antecedentes = Array.from(
+    document.querySelectorAll("input[type=checkbox]:checked")
+  ).map(cb => cb.value);
 
   try {
-    const res = await fetch("https://breedingai-backend.onrender.com/analyze", {
+    const response = await fetch("https://breedingai-backend.onrender.com/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        raza,
+        objetivo,
+        consanguinidad,
+        antecedentes
+      })
     });
 
-    const json = await res.json();
+    const data = await response.json();
 
-    result.innerHTML = `
-      <h2>${json.clasificacion}</h2>
-      <p><strong>Compatibilidad genética:</strong> ${json.compatibilidad}/10</p>
-      <p><strong>Riesgo hereditario:</strong> ${json.riesgo}/10</p>
-      <p><strong>Adecuación al objetivo:</strong> ${json.adecuacion}/10</p>
-      <p>${json.recomendacion}</p>
-    `;
-  } catch {
-    result.innerHTML = "Error al generar el análisis.";
+    if (!data.success) throw new Error("Respuesta inválida");
+
+    const r = data.resultado;
+
+    document.getElementById("estado").textContent = r.estado;
+    document.getElementById("compatibilidad").textContent = r.compatibilidad;
+    document.getElementById("riesgo").textContent = r.riesgoHereditario;
+    document.getElementById("adecuacion").textContent = r.adecuacionObjetivo;
+    document.getElementById("recomendacion").textContent = r.recomendacion;
+
+    const ul = document.getElementById("advertencias");
+    ul.innerHTML = "";
+    r.advertencias.forEach(a => {
+      const li = document.createElement("li");
+      li.textContent = a;
+      ul.appendChild(li);
+    });
+
+    resultBox.classList.remove("hidden");
+    resultBox.scrollIntoView({ behavior: "smooth" });
+
+  } catch (err) {
+    alert("Error al generar el análisis. Revisa el backend.");
+    console.error(err);
   }
 });
 
