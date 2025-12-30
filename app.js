@@ -1,36 +1,48 @@
 const form = document.getElementById("analysisForm");
-const result = document.getElementById("result");
+const resultDiv = document.getElementById("result");
+
+const API_URL = "https://breedingai-backend.vercel.app/analyze";
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const raza = document.getElementById("raza").value;
-  const objetivo = document.getElementById("objetivo").value;
-  const consanguinidad = document.getElementById("consanguinidad").value;
+  resultDiv.classList.add("hidden");
+  resultDiv.innerHTML = "Generando análisis...";
 
-  const antecedentes = [...document.querySelectorAll("input[type=checkbox]:checked")]
-    .map(cb => cb.value);
+  const breed = document.getElementById("breed").value;
+  const objective = document.getElementById("objective").value;
+  const consanguinity = document.getElementById("consanguinity").value;
 
-  const response = await fetch("https://breedingai-backend.onrender.com/analyze", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      raza,
-      objetivo,
-      consanguinidad,
-      antecedentes
-    })
-  });
+  const antecedentes = Array.from(
+    document.querySelectorAll("input[type=checkbox]:checked")
+  ).map(cb => cb.value);
 
-  const data = await response.json();
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        breed,
+        objective,
+        consanguinity,
+        antecedentes
+      })
+    });
 
-  result.classList.remove("hidden");
-  result.innerHTML = `
-    <h2>${data.clasificacion}</h2>
-    <p><strong>Compatibilidad genética:</strong> ${data.compatibilidad}/10</p>
-    <p><strong>Riesgo hereditario:</strong> ${data.riesgo}/10</p>
-    <p><strong>Adecuación al objetivo:</strong> ${data.adecuacion}/10</p>
-    <p>${data.recomendacion}</p>
-  `;
+    const data = await response.json();
+
+    resultDiv.innerHTML = `
+      <h3>${data.clasificacion}</h3>
+      <p><strong>Compatibilidad genética:</strong> ${data.compatibilidadGenetica}/10</p>
+      <p><strong>Riesgo hereditario:</strong> ${data.riesgoHereditario}/10</p>
+      <p><strong>Adecuación al objetivo:</strong> ${data.adecuacionObjetivo}/10</p>
+      <p>${data.recomendacion}</p>
+    `;
+
+    resultDiv.classList.remove("hidden");
+
+  } catch (err) {
+    resultDiv.innerHTML = "Error al generar el análisis.";
+    resultDiv.classList.remove("hidden");
+  }
 });
-
