@@ -1,7 +1,11 @@
 body {
-  font-family: system-ui, sans-serif;
+  font-family: system-ui;
+  background: #f7f9f8;
   padding: 40px;
-  background: #f8fafc;
+}
+
+h1 {
+  margin-bottom: 30px;
 }
 
 form {
@@ -11,21 +15,25 @@ form {
   max-width: 600px;
 }
 
-button {
-  margin-top: 20px;
-  padding: 14px;
+select, button {
   width: 100%;
-  background: #166534;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+button {
+  background: #14532d;
   color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: 999px;
 }
 
 #result {
   margin-top: 40px;
-  background: #064e3b;
+  background: #052e16;
   color: white;
   padding: 30px;
   border-radius: 20px;
 }
+
 
