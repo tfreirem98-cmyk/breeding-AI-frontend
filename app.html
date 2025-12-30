@@ -2,28 +2,23 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Análisis profesional de cruce | BreedingAI</title>
+  <title>BreedingAI · Análisis profesional de cruce</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- CSS -->
   <link rel="stylesheet" href="app.css" />
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="top-bar">
+  <header class="app-header">
     <a href="index.html" class="back-link">← Volver</a>
-  </header>
-
-  <!-- MAIN -->
-  <main class="app-container">
-
     <h1>Análisis profesional de cruce</h1>
     <p class="subtitle">
       Evaluación objetiva orientada a criadores profesionales.
     </p>
+  </header>
 
-    <!-- FORMULARIO -->
+  <main class="app-container">
+
     <form id="analysis-form" class="analysis-card">
 
       <!-- RAZA -->
@@ -35,12 +30,6 @@
         <option value="Pastor Alemán">Pastor Alemán</option>
         <option value="Caniche">Caniche</option>
         <option value="Doberman">Doberman</option>
-        <option value="Bulldog Francés">Bulldog Francés</option>
-        <option value="Bulldog Inglés">Bulldog Inglés</option>
-        <option value="Rottweiler">Rottweiler</option>
-        <option value="Beagle">Beagle</option>
-        <option value="Cocker Spaniel">Cocker Spaniel</option>
-        <option value="Husky Siberiano">Husky Siberiano</option>
       </select>
 
       <!-- OBJETIVO -->
@@ -49,7 +38,6 @@
         <option value="Salud">Salud</option>
         <option value="Trabajo">Trabajo</option>
         <option value="Exposición">Exposición</option>
-        <option value="Compañía">Compañía</option>
       </select>
 
       <!-- CONSANGUINIDAD -->
@@ -61,7 +49,7 @@
       </select>
 
       <!-- ANTECEDENTES -->
-      <fieldset class="conditions-box">
+      <fieldset class="conditions">
         <legend>Antecedentes conocidos</legend>
 
         <label>
@@ -92,21 +80,18 @@
 
     </form>
 
-    <!-- RESULTADOS -->
-    <section id="result" class="result-box">
-      <!-- Aquí el JS inyecta el análisis -->
+    <!-- RESULTADO -->
+    <section id="analysis-result" class="analysis-result" style="display:none;">
+      <!-- Aquí se inyecta el resultado desde app.js -->
     </section>
 
   </main>
 
-  <!-- FOOTER -->
-  <footer class="footer">
+  <footer class="app-footer">
     © 2025 BreedingAI
   </footer>
 
-  <!-- JS -->
   <script src="app.js"></script>
-
 </body>
 </html>
 
