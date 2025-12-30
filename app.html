@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Análisis · BreedingAI</title>
+  <title>Análisis – BreedingAI</title>
   <link rel="stylesheet" href="app.css" />
 </head>
 <body>
@@ -11,35 +11,43 @@
 
 <h1>Análisis profesional de cruce</h1>
 
-<form id="analysis-form">
-  <select id="breed"></select>
-
-  <select id="goal">
-    <option value="Salud">Salud</option>
-    <option value="Trabajo">Trabajo</option>
-    <option value="Estética">Estética</option>
+<form id="analysisForm" class="card">
+  <select id="breed">
+    <option>Border Collie</option>
+    <option>Golden Retriever</option>
+    <option>Labrador</option>
+    <option>Pastor Alemán</option>
+    <option>Caniche</option>
+    <option>Doberman</option>
+    <option>Rottweiler</option>
+    <option>Bulldog Francés</option>
   </select>
 
-  <select id="consanguinity">
-    <option value="Baja">Baja</option>
-    <option value="Media">Media</option>
-    <option value="Alta">Alta</option>
+  <select id="goal">
+    <option value="salud">Salud</option>
+    <option value="trabajo">Trabajo</option>
+    <option value="belleza">Belleza</option>
+  </select>
+
+  <select id="inbreeding">
+    <option value="baja">Baja</option>
+    <option value="media">Media</option>
+    <option value="alta">Alta</option>
   </select>
 
   <fieldset>
     <legend>Antecedentes</legend>
-    <label><input type="checkbox" value="Displasia"> Displasia</label>
-    <label><input type="checkbox" value="Respiratorios"> Respiratorios</label>
-    <label><input type="checkbox" value="Oculares"> Oculares</label>
-    <label><input type="checkbox" value="Neurológicos"> Neurológicos</label>
+    <label><input type="checkbox" value="displasia"> Displasia</label>
+    <label><input type="checkbox" value="respiratorios"> Respiratorios</label>
+    <label><input type="checkbox" value="oculares"> Oculares</label>
+    <label><input type="checkbox" value="neurologicos"> Neurológicos</label>
   </fieldset>
 
   <button type="submit">Generar análisis</button>
 </form>
 
-<div id="result"></div>
+<div id="result" class="result hidden"></div>
 
 <script src="app.js"></script>
 </body>
 </html>
-
