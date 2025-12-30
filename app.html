@@ -1,133 +1,89 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>BreedingAI · Análisis profesional de cría canina</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="app.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>BreedingAI · Análisis profesional</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="app.css" />
 </head>
 <body>
 
-<header class="header">
-  <div class="container">
-    <a href="index.html" class="logo">BreedingAI</a>
-  </div>
-</header>
+  <header class="header">
+    <h1>BreedingAI</h1>
+  </header>
 
-<main class="container app">
+  <main class="container">
+    <h2>Análisis profesional de cruce</h2>
+    <p>Evaluación objetiva para criadores responsables.</p>
 
-  <h1>Análisis profesional de cruce canino</h1>
-  <p class="subtitle">
-    Herramienta de apoyo a la decisión basada en criterios genéticos, sanitarios y funcionales.
-  </p>
+    <!-- FORMULARIO -->
+    <form id="analysis-form">
 
-  <form id="analysisForm" class="card">
-
-    <!-- RAZA -->
-    <div class="field">
       <label for="raza">Raza</label>
       <select id="raza" required>
         <option value="">Selecciona una raza</option>
         <option value="Golden Retriever">Golden Retriever</option>
-        <option value="Labrador Retriever">Labrador Retriever</option>
-        <option value="Pastor Alemán">Pastor Alemán</option>
-        <option value="Pastor Belga">Pastor Belga</option>
-        <option value="Border Collie">Border Collie</option>
         <option value="Bulldog Francés">Bulldog Francés</option>
-        <option value="Bulldog Inglés">Bulldog Inglés</option>
-        <option value="Caniche">Caniche</option>
-        <option value="Teckel">Teckel</option>
-        <option value="Yorkshire Terrier">Yorkshire Terrier</option>
-        <option value="Chihuahua">Chihuahua</option>
-        <option value="Rottweiler">Rottweiler</option>
-        <option value="Boxer">Boxer</option>
-        <option value="Husky Siberiano">Husky Siberiano</option>
-        <option value="Cocker Spaniel">Cocker Spaniel</option>
-        <option value="Beagle">Beagle</option>
-        <option value="Podenco">Podenco</option>
-        <option value="Otra">Otra raza (evaluación genérica)</option>
+        <option value="Border Collie">Border Collie</option>
       </select>
-      <small class="hint">
-        Si tu raza no aparece, se aplicará una evaluación genérica basada en criterios generales de cría responsable.
-      </small>
-    </div>
 
-    <!-- OBJETIVO -->
-    <div class="field">
       <label for="objetivo">Objetivo de cría</label>
-      <select id="objetivo" required>
-        <option value="">Selecciona un objetivo</option>
-        <option value="salud">Salud</option>
-        <option value="familia">Compañía / Temperamento</option>
-        <option value="trabajo">Trabajo / Rendimiento</option>
-        <option value="exposicion">Exposición</option>
-        <option value="mixto">Mixto</option>
+      <select id="objetivo">
+        <option value="Salud">Salud</option>
+        <option value="Trabajo">Trabajo</option>
+        <option value="Compañía">Compañía</option>
+        <option value="Exposición">Exposición</option>
       </select>
-    </div>
 
-    <!-- CONSANGUINIDAD -->
-    <div class="field">
-      <label for="consanguinidad">Grado de consanguinidad</label>
-      <select id="consanguinidad" required>
-        <option value="">Selecciona un nivel</option>
-        <option value="baja">No relacionada</option>
-        <option value="media">Parientes lejanos</option>
-        <option value="alta">Línea común / repetición directa</option>
+      <label for="consanguinidad">Consanguinidad</label>
+      <select id="consanguinidad">
+        <option value="Baja">Baja</option>
+        <option value="Media">Media</option>
+        <option value="Alta">Alta</option>
       </select>
-    </div>
 
-    <!-- ANTECEDENTES -->
-    <div class="field">
-      <label>Antecedentes conocidos</label>
-      <div class="checkbox-group">
-        <label><input type="checkbox" value="displasia"> Displasia</label>
-        <label><input type="checkbox" value="respiratorios"> Problemas respiratorios</label>
-        <label><input type="checkbox" value="oculares"> Problemas oculares</label>
-        <label><input type="checkbox" value="neurologicos"> Problemas neurológicos</label>
-      </div>
-      <small class="hint">
-        Marca únicamente antecedentes confirmados o altamente probables.
-      </small>
-    </div>
+      <fieldset>
+        <legend>Antecedentes conocidos</legend>
 
-    <button type="submit" class="btn-primary">
-      Generar análisis profesional
-    </button>
+        <label>
+          <input type="checkbox" name="antecedentes" value="Displasia" />
+          Displasia
+        </label>
 
-  </form>
+        <label>
+          <input type="checkbox" name="antecedentes" value="Respiratorios" />
+          Respiratorios
+        </label>
 
-  <!-- RESULTADO -->
-  <section id="result" class="card hidden">
-    <h2 id="classification"></h2>
+        <label>
+          <input type="checkbox" name="antecedentes" value="Oculares" />
+          Oculares
+        </label>
 
-    <div class="scores">
-      <div>
-        <strong>Riesgo hereditario</strong>
-        <span id="riskScore"></span>/10
-      </div>
-      <div>
-        <strong>Compatibilidad genética</strong>
-        <span id="compatibilityScore"></span>/10
-      </div>
-      <div>
-        <strong>Adecuación al objetivo</strong>
-        <span id="suitabilityScore"></span>/10
-      </div>
-    </div>
+        <label>
+          <input type="checkbox" name="antecedentes" value="Neurológicos" />
+          Neurológicos
+        </label>
+      </fieldset>
 
-    <p id="recommendation" class="recommendation"></p>
-    <p id="warnings" class="warnings"></p>
+      <!-- BOTÓN CORRECTO -->
+      <button type="submit" class="btn-primary">
+        Generar análisis
+      </button>
 
-    <p class="disclaimer">
-      Este análisis tiene carácter orientativo y no sustituye la evaluación veterinaria ni las pruebas genéticas específicas.
-    </p>
-  </section>
+    </form>
 
-</main>
+    <!-- RESULTADO -->
+    <section id="analysis-result" class="resultado"></section>
 
-<script src="app.js"></script>
+  </main>
+
+  <!-- JS -->
+  <script src="app.js"></script>
 </body>
 </html>
+
 
 
