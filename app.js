@@ -1,26 +1,36 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("analysis-form");
-  const resultBox = document.getElementById("analysis-result");
+  const form = document.getElementById("analysisForm");
+  const resultSection = document.getElementById("result");
 
-  if (!form || !resultBox) {
-    console.error("Formulario o contenedor de resultados no encontrado");
+  const verdictBadge = document.getElementById("verdictBadge");
+  const riskScoreEl = document.getElementById("riskScore");
+  const analysisTextEl = document.getElementById("analysisText");
+  const recommendationTextEl = document.getElementById("recommendationText");
+
+  if (!form || !resultSection) {
+    console.error("Formulario o sección de resultados no encontrada");
     return;
   }
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    resultBox.textContent = "Analizando cruce...";
-    resultBox.style.display = "block";
+    // Mostrar estado de carga
+    resultSection.style.display = "block";
+    verdictBadge.textContent = "ANALIZANDO...";
+    verdictBadge.className = "badge moderate";
+    riskScoreEl.textContent = "-";
+    analysisTextEl.textContent = "Procesando datos del cruce...";
+    recommendationTextEl.textContent = "";
 
+    // Recoger datos del formulario
     const breed = document.getElementById("breed").value;
     const goal = document.getElementById("goal").value;
-    const inbreeding = document.getElementById("inbreeding").value;
+    const inbreeding = document.getElementById("consanguinity").value;
 
-    const conditions = [];
-    document
-      .querySelectorAll("input[name='conditions']:checked")
-      .forEach((c) => conditions.push(c.value));
+    const conditions = Array.from(
+      document.querySelectorAll("input[name='conditions']:checked")
+    ).map((c) => c.value);
 
     try {
       const response = await fetch(
@@ -40,22 +50,34 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       if (!response.ok) {
-        throw new Error("Respuesta inválida del servidor");
+        throw new Error("Error en la respuesta del servidor");
       }
 
       const data = await response.json();
 
-      resultBox.innerHTML = `
-        <h3>Resultado del análisis</h3>
-        <p><strong>Veredicto:</strong> ${data.verdict}</p>
-        <p><strong>Puntuación de riesgo:</strong> ${data.riskScore}</p>
-        <p>${data.explanation}</p>
-        <p><strong>Recomendación:</strong> ${data.recommendations}</p>
-      `;
+      // Ajustar badge según veredicto
+      let badgeClass = "badge moderate";
+      if (data.verdict === "APTO") badgeClass = "badge low";
+      if (data.verdict === "NO RECOMENDADO") badgeClass = "badge high";
+
+      verdictBadge.className = badgeClass;
+      verdictBadge.textContent = data.verdict;
+
+      riskScoreEl.textContent = data.riskScore;
+
+      analysisTextEl.textContent = data.explanation;
+      recommendationTextEl.textContent = data.recommendations;
+
     } catch (error) {
       console.error(error);
-      resultBox.textContent =
-        "El análisis no está disponible en este momento. Inténtalo de nuevo.";
+
+      verdictBadge.className = "badge high";
+      verdictBadge.textContent = "ERROR";
+
+      analysisTextEl.textContent =
+        "No se pudo realizar el análisis en este momento.";
+      recommendationTextEl.textContent =
+        "Comprueba tu conexión o inténtalo más tarde.";
     }
   });
 });
