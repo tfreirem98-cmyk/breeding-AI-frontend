@@ -2,143 +2,71 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>BreedingAI – Análisis profesional</title>
+  <title>BreedingAI · Análisis profesional</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- CSS -->
   <link rel="stylesheet" href="app.css" />
 </head>
 
 <body>
 
-  <!-- TOPBAR -->
-  <header class="topbar">
-    <a href="index.html" class="back-link">← Volver</a>
-    <div class="brand">BreedingAI</div>
-  </header>
+<header class="topbar">
+  <span class="brand">BreedingAI</span>
+</header>
 
-  <!-- CONTENIDO -->
-  <main class="container">
+<main class="container">
 
-    <h1>Análisis profesional de cruce</h1>
-    <p class="subtitle">
-      Evaluación objetiva orientada a criadores profesionales.
-    </p>
+  <h1>Análisis profesional de cruce</h1>
+  <p class="subtitle">Herramienta profesional para criadores.</p>
 
-    <!-- FORMULARIO -->
-    <section class="card">
-      <form id="analysisForm">
+  <form id="analysisForm" class="card">
 
-        <div class="form-group">
-          <label for="breed">Raza</label>
-          <select id="breed" name="breed" required>
-            <option value="Border Collie">Border Collie</option>
-            <option value="Labrador Retriever">Labrador Retriever</option>
-            <option value="Golden Retriever">Golden Retriever</option>
-            <option value="Pastor Alemán">Pastor Alemán</option>
-            <option value="Caniche">Caniche</option>
-            <option value="Bulldog Francés">Bulldog Francés</option>
-            <option value="Rottweiler">Rottweiler</option>
-            <option value="Doberman">Doberman</option>
-            <option value="Cocker Spaniel">Cocker Spaniel</option>
-            <option value="Chihuahua">Chihuahua</option>
-          </select>
-        </div>
+    <label>Raza</label>
+    <select id="breed">
+      <option>Border Collie</option>
+      <option>Golden Retriever</option>
+      <option>Labrador Retriever</option>
+      <option>Pastor Alemán</option>
+    </select>
 
-        <div class="form-group">
-          <label for="goal">Objetivo de cría</label>
-          <select id="goal" name="goal" required>
-            <option value="Salud">Salud</option>
-            <option value="Trabajo">Trabajo</option>
-            <option value="Exposición">Exposición</option>
-          </select>
-        </div>
+    <label>Objetivo</label>
+    <select id="goal">
+      <option>Salud</option>
+      <option>Trabajo</option>
+      <option>Exposición</option>
+    </select>
 
-        <div class="form-group">
-          <label for="consanguinity">Consanguinidad</label>
-          <select id="consanguinity" name="consanguinity" required>
-            <option value="Baja">Baja</option>
-            <option value="Media">Media</option>
-            <option value="Alta">Alta</option>
-          </select>
-        </div>
+    <label>Consanguinidad</label>
+    <select id="consanguinity">
+      <option>Baja</option>
+      <option>Media</option>
+      <option>Alta</option>
+    </select>
 
-        <fieldset class="checkbox-group">
-          <legend>Antecedentes conocidos</legend>
+    <fieldset class="checkbox-group">
+      <legend>Antecedentes</legend>
+      <label><input type="checkbox" name="conditions" value="Displasia"> Displasia</label>
+      <label><input type="checkbox" name="conditions" value="Oculares"> Oculares</label>
+      <label><input type="checkbox" name="conditions" value="Respiratorios"> Respiratorios</label>
+    </fieldset>
 
-          <label>
-            <input type="checkbox" name="conditions" value="Displasia" />
-            Displasia
-          </label>
+    <button type="submit" class="primary-btn">Generar análisis</button>
+  </form>
 
-          <label>
-            <input type="checkbox" name="conditions" value="Respiratorios" />
-            Respiratorios
-          </label>
+  <section id="result" class="result-card" style="display:none;">
+    <h2 id="verdict"></h2>
+    <p id="analysisText"></p>
+    <p id="recommendationText"></p>
 
-          <label>
-            <input type="checkbox" name="conditions" value="Oculares" />
-            Oculares
-          </label>
+    <button id="payPro" class="primary-btn" style="margin-top:20px;">
+      Desbloquear informe PRO
+    </button>
+  </section>
 
-          <label>
-            <input type="checkbox" name="conditions" value="Neurológicos" />
-            Neurológicos
-          </label>
-        </fieldset>
+</main>
 
-        <button type="submit" class="primary-btn">
-          Generar análisis
-        </button>
-
-      </form>
-    </section>
-
-    <!-- RESULTADO -->
-    <section id="result" class="result-card" style="display: none;">
-
-      <h2>Resultado del análisis</h2>
-
-      <div class="verdict">
-        <span class="label">Veredicto:</span>
-        <span id="verdictBadge" class="badge moderate">
-          RIESGO MODERADO
-        </span>
-      </div>
-
-      <div class="score">
-        <strong>Puntuación de riesgo:</strong>
-        <span id="riskScore">6</span>
-      </div>
-
-      <p id="analysisText" class="analysis-text">
-        Evaluación basada en raza, consanguinidad y antecedentes.
-      </p>
-
-      <div class="recommendation">
-        <strong>Recomendación</strong>
-        <p id="recommendationText">
-          Se recomienda test genético y reducir consanguinidad.
-        </p>
-      </div>
-
-      <p class="disclaimer">
-        Este análisis no sustituye pruebas genéticas oficiales.
-      </p>
-
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    © 2025 BreedingAI
-  </footer>
-
-  <!-- JS -->
-  <script src="app.js"></script>
-
+<script src="app.js"></script>
 </body>
 </html>
+
 
 
