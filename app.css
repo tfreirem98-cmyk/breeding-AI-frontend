@@ -1,48 +1,273 @@
-body {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #f8fafc;
-  padding: 40px;
+/* ==============================
+   RESET BÁSICO
+============================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.back {
-  text-decoration: none;
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f7f9f8;
+  color: #0f172a;
+  line-height: 1.6;
+}
+
+/* ==============================
+   TOPBAR
+============================== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.back-link {
   color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #14532d;
+}
+
+/* ==============================
+   CONTENEDOR PRINCIPAL
+============================== */
+.container {
+  max-width: 900px;
+  margin: 48px auto;
+  padding: 0 24px;
 }
 
 h1 {
-  margin: 24px 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #022c22;
 }
 
+.subtitle {
+  color: #475569;
+  margin-bottom: 32px;
+  font-size: 1rem;
+}
+
+/* ==============================
+   TARJETA FORMULARIO
+============================== */
 .card {
-  background: #fff;
+  background: #ffffff;
+  border-radius: 16px;
   padding: 32px;
-  border-radius: 24px;
-  max-width: 520px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  margin-bottom: 40px;
 }
 
-select, button {
+.form-group {
+  margin-bottom: 24px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #0f172a;
+}
+
+select {
   width: 100%;
-  margin-bottom: 16px;
-  padding: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-button {
-  background: #14532d;
-  color: white;
-  border: none;
+select:focus {
+  outline: none;
+  border-color: #15803d;
+  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.15);
+}
+
+/* ==============================
+   CHECKBOXES
+============================== */
+.checkbox-group {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 28px;
+}
+
+.checkbox-group legend {
+  font-weight: 600;
+  padding: 0 8px;
+  color: #0f172a;
+}
+
+.checkbox-group label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 20px;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+}
+
+.checkbox-group input {
+  margin-right: 6px;
+}
+
+/* ==============================
+   BOTÓN PRINCIPAL
+============================== */
+.primary-btn {
+  width: 100%;
+  padding: 16px;
   border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #14532d, #166534);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.result {
-  margin-top: 40px;
-  background: #052e16;
-  color: #fff;
+.primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(20, 83, 45, 0.3);
+}
+
+.primary-btn:active {
+  transform: translateY(0);
+}
+
+/* ==============================
+   RESULTADOS
+============================== */
+.result-card {
+  background: #ffffff;
+  border-radius: 16px;
   padding: 32px;
-  border-radius: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  margin-bottom: 60px;
 }
 
-.hidden {
-  display: none;
+.result-card h2 {
+  font-size: 1.6rem;
+  margin-bottom: 24px;
+  color: #022c22;
 }
+
+.verdict {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.verdict .label {
+  font-weight: 600;
+  margin-right: 12px;
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.badge.low {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge.moderate {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge.high {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.score {
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+.analysis-text {
+  color: #334155;
+  margin-bottom: 24px;
+}
+
+.recommendation {
+  background: #f0fdf4;
+  border-left: 4px solid #16a34a;
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.recommendation strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #14532d;
+}
+
+.disclaimer {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* ==============================
+   FOOTER
+============================== */
+.footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+/* ==============================
+   RESPONSIVE
+============================== */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .card,
+  .result-card {
+    padding: 24px;
+  }
+
+  .checkbox-group label {
+    display: block;
+    margin-bottom: 8px;
+  }
+}
+
 
 
