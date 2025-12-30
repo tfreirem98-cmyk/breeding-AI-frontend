@@ -2,69 +2,91 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>BreedingAI · Análisis profesional</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BreedingAI | Análisis</title>
   <link rel="stylesheet" href="app.css" />
 </head>
 <body>
 
-<header class="topbar">BreedingAI</header>
+<header class="header">
+  <a href="index.html" class="logo">BreedingAI</a>
+</header>
 
 <main class="container">
 
-<form id="analysisForm">
+  <h1>Análisis profesional de cruce</h1>
+  <p class="subtitle">Evaluación objetiva para criadores responsables.</p>
 
-  <label>Raza</label>
-  <select id="raza" required>
-    <option value="">Selecciona una raza</option>
-    <option>Golden Retriever</option>
-    <option>Labrador Retriever</option>
-    <option>Pastor Alemán</option>
-    <option>Bulldog Francés</option>
-    <option>Bulldog Inglés</option>
-    <option>Border Collie</option>
-    <option>Caniche</option>
-    <option>Rottweiler</option>
-    <option>Doberman</option>
-    <option>Chihuahua</option>
-    <option>Yorkshire Terrier</option>
-    <option>Beagle</option>
-    <option>Boxer</option>
-    <option>Husky Siberiano</option>
-    <option>Akita Inu</option>
-    <option>Shiba Inu</option>
-    <option>Cocker Spaniel</option>
-    <option>Dálmata</option>
-    <option>Mastín</option>
-  </select>
+  <form id="analysisForm">
 
-  <label>Objetivo</label>
-  <select id="objetivo">
-    <option>Salud</option>
-    <option>Trabajo</option>
-    <option>Equilibrio</option>
-  </select>
+    <label>Raza</label>
+    <select id="raza" required>
+      <option value="">Selecciona una raza</option>
+      <option>Golden Retriever</option>
+      <option>Labrador Retriever</option>
+      <option>Pastor Alemán</option>
+      <option>Bulldog Francés</option>
+      <option>Bulldog Inglés</option>
+      <option>Border Collie</option>
+      <option>Caniche</option>
+      <option>Rottweiler</option>
+      <option>Doberman</option>
+      <option>Boxer</option>
+      <option>Beagle</option>
+      <option>Teckel</option>
+      <option>Husky Siberiano</option>
+      <option>Alaskan Malamute</option>
+      <option>Akita Inu</option>
+      <option>Shiba Inu</option>
+      <option>Chihuahua</option>
+      <option>Yorkshire Terrier</option>
+      <option>Schnauzer</option>
+      <option>Setter Inglés</option>
+      <option>Pointer</option>
+      <option>Weimaraner</option>
+      <option>Cocker Spaniel</option>
+      <option>Springer Spaniel</option>
+      <option>Mastín Español</option>
+      <option>Dogo Argentino</option>
+      <option>Pitbull Terrier</option>
+      <option>American Bully</option>
+      <option>Pastor Belga Malinois</option>
+      <option>Pastor Australiano</option>
+      <option>Samoyedo</option>
+      <option>San Bernardo</option>
+      <option>Gran Danés</option>
+      <option>Basenji</option>
+      <option>Whippet</option>
+      <option>Galgo Español</option>
+    </select>
 
-  <label>Consanguinidad</label>
-  <select id="consanguinidad">
-    <option>Baja</option>
-    <option>Media</option>
-    <option>Alta</option>
-  </select>
+    <label>Objetivo de cría</label>
+    <select id="objetivo">
+      <option>Salud</option>
+      <option>Trabajo</option>
+      <option>Exposición</option>
+      <option>Compañía</option>
+    </select>
 
-  <fieldset>
-    <legend>Antecedentes</legend>
-    <label><input type="checkbox" value="displasia"> Displasia</label>
-    <label><input type="checkbox" value="oculares"> Oculares</label>
-    <label><input type="checkbox" value="respiratorios"> Respiratorios</label>
-    <label><input type="checkbox" value="neurologicos"> Neurológicos</label>
-  </fieldset>
+    <label>Consanguinidad</label>
+    <select id="consanguinidad">
+      <option>Baja</option>
+      <option>Media</option>
+      <option>Alta</option>
+    </select>
 
-  <button type="submit">Generar análisis</button>
+    <fieldset>
+      <legend>Antecedentes conocidos</legend>
+      <label><input type="checkbox" value="displasia"> Displasia</label>
+      <label><input type="checkbox" value="respiratorios"> Respiratorios</label>
+      <label><input type="checkbox" value="oculares"> Oculares</label>
+      <label><input type="checkbox" value="neurologicos"> Neurológicos</label>
+    </fieldset>
 
-</form>
+    <button type="submit" class="btn-primary">Generar análisis</button>
 
-<section id="resultado" class="hidden"></section>
+  </form>
+
+  <section id="result" class="result hidden"></section>
 
 </main>
 
