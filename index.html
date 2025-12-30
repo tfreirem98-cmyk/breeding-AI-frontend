@@ -2,126 +2,75 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>BreedingAI | Evaluación profesional de cruces</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="stylesheet" href="app.css" />
+  <title>BreedingAI | Cría responsable con datos</title>
+  <link rel="stylesheet" href="index.css" />
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="logo">BreedingAI</div>
-  </header>
+<header class="header">
+  <h1>BreedingAI</h1>
+  <a href="app.html" class="btn">Probar análisis</a>
+</header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-text">
-      <h1>Decisiones de cría responsables</h1>
-      <p>
-        Evaluación profesional de cruces caninos basada en genética,
-        riesgo hereditario y objetivos reales de cría.
-      </p>
-      <a href="#analysis" class="btn-primary">Empezar análisis</a>
-    </div>
-
-    <div class="hero-image">
-      <img
-        src="https://images.unsplash.com/photo-1558788353-f76d92427f16"
-        alt="Golden Retriever"
-      />
-    </div>
-  </section>
-
-  <!-- ANALYSIS -->
-  <section id="analysis" class="analysis">
-    <h2>Análisis profesional de cruce</h2>
-    <p class="subtitle">
-      Herramienta diseñada para criadores. No es texto genérico.
+<section class="hero">
+  <div class="hero-text">
+    <h2>Decisiones de cría responsables</h2>
+    <p>
+      Plataforma profesional para criadores que necesitan
+      evaluar riesgos genéticos, compatibilidad y viabilidad
+      real de cruces.
     </p>
+    <a href="app.html" class="btn primary">Empezar análisis</a>
+  </div>
+  <img src="https://images.unsplash.com/photo-1558788353-f76d92427f16" alt="Perro" />
+</section>
 
-    <form id="analysisForm" class="form-card">
-
-      <label>Raza</label>
-      <select id="breed" required>
-        <option value="">Selecciona una raza</option>
-        <option>Golden Retriever</option>
-        <option>Labrador Retriever</option>
-        <option>Pastor Alemán</option>
-        <option>Bulldog Francés</option>
-        <option>Bulldog Inglés</option>
-        <option>Border Collie</option>
-        <option>Rottweiler</option>
-        <option>Doberman</option>
-        <option>Caniche</option>
-        <option>Beagle</option>
-        <option>Teckel</option>
-        <option>Boxer</option>
-        <option>Chihuahua</option>
-        <option>Husky Siberiano</option>
-        <option>Mastín Español</option>
-        <option>Setter Inglés</option>
-      </select>
-
-      <label>Objetivo de cría</label>
-      <select id="objective" required>
-        <option value="Salud">Salud</option>
-        <option value="Trabajo">Trabajo</option>
-        <option value="Exposición">Exposición</option>
-        <option value="Compañía">Compañía</option>
-      </select>
-
-      <label>Consanguinidad</label>
-      <select id="consanguinity" required>
-        <option value="Baja">Baja</option>
-        <option value="Media">Media</option>
-        <option value="Alta">Alta</option>
-      </select>
-
-      <fieldset>
-        <legend>Antecedentes conocidos</legend>
-        <label><input type="checkbox" value="displasia" /> Displasia</label>
-        <label><input type="checkbox" value="respiratorios" /> Respiratorios</label>
-        <label><input type="checkbox" value="oculares" /> Oculares</label>
-        <label><input type="checkbox" value="neurologicos" /> Neurológicos</label>
-      </fieldset>
-
-      <button type="submit" class="btn-primary full">
-        Generar análisis
-      </button>
-    </form>
-
-    <div id="result" class="result hidden"></div>
-  </section>
-
-  <!-- WHY -->
-  <section class="why">
-    <h2>¿Por qué BreedingAI?</h2>
-
-    <div class="why-grid">
-      <div class="why-card">
-        <h3>Análisis estructurado</h3>
-        <p>Métricas claras, comparables y reproducibles.</p>
-      </div>
-
-      <div class="why-card">
-        <h3>Enfoque profesional</h3>
-        <p>Diseñado para criadores, no para curiosos.</p>
-      </div>
-
-      <div class="why-card">
-        <h3>Prevención</h3>
-        <p>Detecta riesgos antes de que el cruce se realice.</p>
-      </div>
+<section class="why">
+  <h3>¿Por qué BreedingAI?</h3>
+  <div class="cards">
+    <div class="card">
+      <h4>Análisis estructurado</h4>
+      <p>Métricas claras, comparables y reproducibles.</p>
     </div>
-  </section>
+    <div class="card">
+      <h4>Enfoque profesional</h4>
+      <p>Diseñado para criaderos, no para curiosos.</p>
+    </div>
+    <div class="card">
+      <h4>Prevención real</h4>
+      <p>Detecta riesgos antes de que el cruce se realice.</p>
+    </div>
+  </div>
+</section>
 
-  <footer class="footer">
-    © 2025 BreedingAI
-  </footer>
+<section class="plans">
+  <h3>Planes</h3>
+  <div class="cards">
+    <div class="card">
+      <h4>Prueba</h4>
+      <p>1 análisis gratuito</p>
+      <strong>0 €</strong>
+    </div>
+    <div class="card">
+      <h4>Profesional</h4>
+      <p>Análisis ilimitados</p>
+      <strong>29 €/mes</strong>
+    </div>
+    <div class="card">
+      <h4>Criadero</h4>
+      <p>Histórico + soporte</p>
+      <strong>99 €/mes</strong>
+    </div>
+  </div>
+</section>
 
-  <script src="app.js"></script>
+<footer>
+  © 2025 BreedingAI
+</footer>
+
 </body>
 </html>
+
+
 
 
