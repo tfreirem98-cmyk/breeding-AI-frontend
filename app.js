@@ -1,49 +1,77 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("analysisForm");
-  const result = document.getElementById("result");
+  const resultSection = document.getElementById("result");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  if (!form) {
+    console.error("❌ No se encontró el formulario analysisForm");
+    return;
+  }
 
-    const raza = document.getElementById("raza").value;
-    const objetivo = document.getElementById("objetivo").value;
-    const consanguinidad = document.getElementById("consanguinidad").value;
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    console.log("▶️ Enviando análisis...");
+
+    const raza = document.getElementById("raza")?.value;
+    const objetivo = document.getElementById("objetivo")?.value;
+    const consanguinidad = document.getElementById("consanguinidad")?.value;
 
     const antecedentes = Array.from(
       document.querySelectorAll(".checkbox-group input:checked")
     ).map(cb => cb.value);
 
-    const response = await fetch("https://breedingai-backend.onrender.com/analyze", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        raza,
-        objetivo,
-        consanguinidad,
-        antecedentes
-      })
-    });
-
-    const data = await response.json();
-
-    if (data.error) {
-      alert(data.error);
+    if (!raza || !objetivo || !consanguinidad) {
+      alert("Por favor, completa todos los campos obligatorios.");
       return;
     }
 
-    document.getElementById("classification").textContent = data.classification;
-    document.getElementById("riskScore").textContent = data.scores.riesgoHereditario;
-    document.getElementById("compatibilityScore").textContent = data.scores.compatibilidadGenetica;
-    document.getElementById("suitabilityScore").textContent = data.scores.adecuacionObjetivo;
+    try {
+      const response = await fetch(
+        "https://breedingai-backend.onrender.com/analyze",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            raza,
+            objetivo,
+            consanguinidad,
+            antecedentes
+          })
+        }
+      );
 
-    document.getElementById("recommendation").textContent =
-      data.professionalAssessment.recommendation;
+      if (!response.ok) {
+        throw new Error("Error en la respuesta del servidor");
+      }
 
-    document.getElementById("warnings").textContent =
-      data.professionalAssessment.warnings;
+      const data = await response.json();
+      console.log("✅ Resultado recibido:", data);
 
-    result.classList.remove("hidden");
-    result.scrollIntoView({ behavior: "smooth" });
+      document.getElementById("classification").textContent =
+        data.classification;
+
+      document.getElementById("riskScore").textContent =
+        data.scores.riesgoHereditario;
+
+      document.getElementById("compatibilityScore").textContent =
+        data.scores.compatibilidadGenetica;
+
+      document.getElementById("suitabilityScore").textContent =
+        data.scores.adecuacionObjetivo;
+
+      document.getElementById("recommendation").textContent =
+        data.professionalAssessment.recommendation;
+
+      document.getElementById("warnings").textContent =
+        data.professionalAssessment.warnings;
+
+      resultSection.classList.remove("hidden");
+      resultSection.scrollIntoView({ behavior: "smooth" });
+
+    } catch (error) {
+      console.error("❌ Error al generar análisis:", error);
+      alert("Ocurrió un error al generar el análisis. Inténtalo de nuevo.");
+    }
   });
 });
 
