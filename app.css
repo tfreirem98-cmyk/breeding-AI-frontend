@@ -6,7 +6,7 @@ body {
 }
 
 .container {
-  max-width: 800px;
+  max-width: 900px;
   margin: auto;
   padding: 0 24px;
 }
@@ -22,6 +22,8 @@ body {
 .logo {
   font-weight: 700;
   font-size: 20px;
+  text-decoration: none;
+  color: inherit;
 }
 
 .app {
@@ -30,20 +32,25 @@ body {
 
 .subtitle {
   color: #5f6f69;
+  margin-bottom: 32px;
 }
 
 .card {
   background: white;
   border-radius: 24px;
   padding: 32px;
-  margin-top: 32px;
-  box-shadow: 0 20px 40px rgba(0,0,0,.08);
+  margin-bottom: 32px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.field {
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
   font-weight: 600;
-  margin-top: 16px;
+  margin-bottom: 8px;
 }
 
 select {
@@ -53,11 +60,10 @@ select {
   border: 1px solid #ccc;
 }
 
-.checks {
+.checkbox-group {
   display: grid;
-  grid-template-columns: repeat(2,1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  margin-top: 8px;
 }
 
 .btn-primary {
@@ -74,4 +80,21 @@ select {
 
 .hidden {
   display: none;
+}
+
+.scores {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 24px 0;
+}
+
+.recommendation {
+  font-weight: 600;
+  margin-top: 16px;
+}
+
+.warnings {
+  color: #8a2d2d;
+  margin-top: 8px;
 }
