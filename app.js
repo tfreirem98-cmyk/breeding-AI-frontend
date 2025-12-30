@@ -15,15 +15,14 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Mostrar estado de carga
+    // Estado inicial
     resultSection.style.display = "block";
     verdictBadge.textContent = "ANALIZANDO...";
     verdictBadge.className = "badge moderate";
     riskScoreEl.textContent = "-";
-    analysisTextEl.textContent = "Procesando datos del cruce...";
+    analysisTextEl.textContent = "Procesando información genética y criterios de cría...";
     recommendationTextEl.textContent = "";
 
-    // Recoger datos del formulario
     const breed = document.getElementById("breed").value;
     const goal = document.getElementById("goal").value;
     const inbreeding = document.getElementById("consanguinity").value;
@@ -37,9 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "https://breedingai-backend.onrender.com/analyze",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             breed,
             goal,
@@ -50,37 +47,108 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       if (!response.ok) {
-        throw new Error("Error en la respuesta del servidor");
+        throw new Error("Error en backend");
       }
 
       const data = await response.json();
 
-      // Ajustar badge según veredicto
+      // Badge visual
       let badgeClass = "badge moderate";
       if (data.verdict === "APTO") badgeClass = "badge low";
       if (data.verdict === "NO RECOMENDADO") badgeClass = "badge high";
 
       verdictBadge.className = badgeClass;
       verdictBadge.textContent = data.verdict;
-
       riskScoreEl.textContent = data.riskScore;
 
-      analysisTextEl.textContent = data.explanation;
-      recommendationTextEl.textContent = data.recommendations;
+      // TEXTO PROFESIONAL (AQUÍ ESTÁ EL VALOR)
+      analysisTextEl.textContent = generarInformeProfesional({
+        breed,
+        goal,
+        inbreeding,
+        conditions,
+        verdict: data.verdict,
+        riskScore: data.riskScore,
+      });
+
+      recommendationTextEl.textContent =
+        generarRecomendacionProfesional({
+          goal,
+          inbreeding,
+          conditions,
+          verdict: data.verdict,
+        });
 
     } catch (error) {
       console.error(error);
-
       verdictBadge.className = "badge high";
       verdictBadge.textContent = "ERROR";
-
       analysisTextEl.textContent =
-        "No se pudo realizar el análisis en este momento.";
+        "No se ha podido completar el análisis en este momento.";
       recommendationTextEl.textContent =
-        "Comprueba tu conexión o inténtalo más tarde.";
+        "Inténtalo de nuevo más tarde o revisa la conexión.";
     }
   });
 });
+
+/* ===========================
+   GENERADORES DE TEXTO
+=========================== */
+
+function generarInformeProfesional({
+  breed,
+  goal,
+  inbreeding,
+  conditions,
+  verdict,
+  riskScore,
+}) {
+  let texto = `El cruce analizado para la raza ${breed} ha sido evaluado teniendo en cuenta el objetivo de cría (${goal}), el nivel de consanguinidad (${inbreeding}) y los antecedentes clínicos conocidos. `;
+
+  if (conditions.length > 0) {
+    texto += `Se han identificado antecedentes relevantes (${conditions.join(
+      ", "
+    )}), lo que incrementa el nivel de atención requerido en este cruce. `;
+  }
+
+  if (verdict === "APTO") {
+    texto +=
+      "El análisis indica que el cruce es compatible desde un punto de vista genético y funcional, siempre que se mantengan controles básicos de selección.";
+  }
+
+  if (verdict === "RIESGO MODERADO") {
+    texto +=
+      "El resultado muestra un riesgo moderado, lo que sugiere que el cruce no es descartable, pero sí requiere una planificación cuidadosa y medidas preventivas.";
+  }
+
+  if (verdict === "NO RECOMENDADO") {
+    texto +=
+      "El nivel de riesgo detectado es elevado. Desde un punto de vista profesional, este cruce no es recomendable sin pruebas genéticas exhaustivas y asesoramiento especializado.";
+  }
+
+  texto += ` La puntuación global de riesgo obtenida es ${riskScore} sobre 10.`;
+
+  return texto;
+}
+
+function generarRecomendacionProfesional({
+  goal,
+  inbreeding,
+  conditions,
+  verdict,
+}) {
+  if (verdict === "APTO") {
+    return "Mantener controles sanitarios regulares y evitar aumentar el grado de consanguinidad en futuras generaciones.";
+  }
+
+  if (verdict === "RIESGO MODERADO") {
+    return "Se recomienda realizar pruebas genéticas específicas, limitar la consanguinidad y seleccionar cuidadosamente los ejemplares reproductores.";
+  }
+
+  return "Este cruce debería reevaluarse con test genéticos completos, reducción de consanguinidad y asesoramiento veterinario especializado antes de considerar su ejecución.";
+}
+
+
 
 
 
