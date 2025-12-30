@@ -2,65 +2,84 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Análisis de cruce | BreedingAI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BreedingAI · Análisis profesional de cría</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="app.css" />
 </head>
+
 <body>
+  <header class="topbar">
+    <div class="logo">BreedingAI</div>
+  </header>
 
-<header class="header">
-  <a href="index.html" class="logo">BreedingAI</a>
-</header>
+  <main class="container">
 
-<main class="container">
+    <section class="hero">
+      <h1>Análisis profesional de cruce</h1>
+      <p>Evaluación objetiva para criadores responsables basada en criterios genéticos reales.</p>
+    </section>
 
-  <h1>Análisis profesional de cruce</h1>
-  <p class="subtitle">Evaluación objetiva para criadores responsables.</p>
+    <form id="analysisForm" class="card">
+      <div class="field">
+        <label>Raza</label>
+        <select id="raza" required>
+          <option value="">Selecciona una raza</option>
+          <option>Golden Retriever</option>
+          <option>Bulldog Francés</option>
+          <option>Border Collie</option>
+        </select>
+      </div>
 
-  <form id="analysisForm">
+      <div class="field">
+        <label>Objetivo de cría</label>
+        <select id="objetivo" required>
+          <option>Salud</option>
+          <option>Trabajo</option>
+          <option>Equilibrio</option>
+        </select>
+      </div>
 
-    <label>Raza</label>
-    <select name="raza" required>
-      <option value="">Selecciona una raza</option>
-      <option>Golden Retriever</option>
-      <option>Bulldog Francés</option>
-      <option>Border Collie</option>
-      <option>Labrador Retriever</option>
-      <option>Pastor Alemán</option>
-    </select>
+      <div class="field">
+        <label>Consanguinidad</label>
+        <select id="consanguinidad" required>
+          <option>Baja</option>
+          <option>Media</option>
+          <option>Alta</option>
+        </select>
+      </div>
 
-    <label>Objetivo de cría</label>
-    <select name="objetivo">
-      <option>Salud</option>
-      <option>Trabajo</option>
-      <option>Exposición</option>
-    </select>
+      <fieldset class="field">
+        <legend>Antecedentes conocidos</legend>
+        <label><input type="checkbox" value="displasia"> Displasia</label>
+        <label><input type="checkbox" value="respiratorios"> Respiratorios</label>
+        <label><input type="checkbox" value="oculares"> Oculares</label>
+        <label><input type="checkbox" value="neurologicos"> Neurológicos</label>
+      </fieldset>
 
-    <label>Consanguinidad</label>
-    <select name="consanguinidad">
-      <option>Baja</option>
-      <option>Media</option>
-      <option>Alta</option>
-    </select>
+      <button type="submit" class="primary-btn">Generar análisis</button>
+    </form>
 
-    <fieldset>
-      <legend>Antecedentes conocidos</legend>
-      <label><input type="checkbox" value="displasia"> Displasia</label>
-      <label><input type="checkbox" value="respiratorios"> Respiratorios</label>
-      <label><input type="checkbox" value="oculares"> Oculares</label>
-      <label><input type="checkbox" value="neurologicos"> Neurológicos</label>
-    </fieldset>
+    <section id="resultado" class="result hidden">
+      <h2 id="estado"></h2>
 
-    <button type="submit">Generar análisis</button>
-  </form>
+      <div class="scores">
+        <div>Compatibilidad genética <strong id="compatibilidad"></strong>/10</div>
+        <div>Riesgo hereditario <strong id="riesgo"></strong>/10</div>
+        <div>Adecuación al objetivo <strong id="adecuacion"></strong>/10</div>
+      </div>
 
-  <section id="result" class="result hidden"></section>
+      <p id="recomendacion" class="recomendacion"></p>
 
-</main>
+      <ul id="advertencias" class="advertencias"></ul>
+    </section>
 
-<footer class="footer">© 2025 BreedingAI</footer>
+  </main>
 
-<script src="app.js"></script>
+  <footer class="footer">
+    © 2025 BreedingAI · Uso profesional
+  </footer>
+
+  <script src="app.js"></script>
 </body>
 </html>
 
