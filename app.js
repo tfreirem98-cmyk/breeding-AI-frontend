@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("analysisForm");
-  const report = document.getElementById("report");
+  const result = document.getElementById("result");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -10,10 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const consanguinidad = document.getElementById("consanguinidad").value;
 
     const antecedentes = Array.from(
-      document.querySelectorAll(".checks input:checked")
+      document.querySelectorAll(".checkbox-group input:checked")
     ).map(cb => cb.value);
 
-    const res = await fetch("https://breedingai-backend.onrender.com/analyze", {
+    const response = await fetch("https://breedingai-backend.onrender.com/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -24,17 +24,28 @@ document.addEventListener("DOMContentLoaded", () => {
       })
     });
 
-    const data = await res.json();
-    const r = data.resultado;
+    const data = await response.json();
 
-    document.getElementById("clasificacion").textContent = r.clasificacion;
-    document.getElementById("riesgo").textContent = r.scores.riesgoHereditario;
-    document.getElementById("compatibilidad").textContent = r.scores.compatibilidadGenetica;
-    document.getElementById("adecuacion").textContent = r.scores.adecuacionObjetivo;
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
 
-    report.classList.remove("hidden");
-    report.scrollIntoView({ behavior: "smooth" });
+    document.getElementById("classification").textContent = data.classification;
+    document.getElementById("riskScore").textContent = data.scores.riesgoHereditario;
+    document.getElementById("compatibilityScore").textContent = data.scores.compatibilidadGenetica;
+    document.getElementById("suitabilityScore").textContent = data.scores.adecuacionObjetivo;
+
+    document.getElementById("recommendation").textContent =
+      data.professionalAssessment.recommendation;
+
+    document.getElementById("warnings").textContent =
+      data.professionalAssessment.warnings;
+
+    result.classList.remove("hidden");
+    result.scrollIntoView({ behavior: "smooth" });
   });
 });
+
 
 
