@@ -1,49 +1,42 @@
-const breeds = [
-  "Golden Retriever","Labrador Retriever","Pastor Alemán","Border Collie",
-  "Caniche","Bulldog Francés","Bulldog Inglés","Doberman","Rottweiler",
-  "Beagle","Cocker Spaniel","Husky Siberiano","Chihuahua","Shih Tzu",
-  "Mastín Español","Dogo Argentino","Akita Inu","Samoyedo","Yorkshire Terrier",
-  "Whippet","Galgo Español","Shar Pei","Cane Corso","San Bernardo",
-  "Gran Danés","Weimaraner","Basset Hound","Pastor Australiano","Malinois"
-];
+const form = document.getElementById("analysisForm");
+const resultBox = document.getElementById("result");
 
-const breedSelect = document.getElementById("breed");
-breeds.forEach(b => {
-  const o = document.createElement("option");
-  o.value = b;
-  o.textContent = b;
-  breedSelect.appendChild(o);
-});
-
-document.getElementById("analysis-form").addEventListener("submit", async e => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const antecedentes = [...document.querySelectorAll("input[type=checkbox]:checked")]
-    .map(c => c.value);
+  const breed = document.getElementById("breed").value;
+  const goal = document.getElementById("goal").value;
+  const inbreeding = document.getElementById("inbreeding").value;
 
-  const payload = {
-    breed: breedSelect.value,
-    goal: document.getElementById("goal").value,
-    consanguinity: document.getElementById("consanguinity").value,
-    antecedentes
-  };
+  const issues = [...form.querySelectorAll("input[type=checkbox]:checked")]
+    .map(i => i.value);
 
-  const res = await fetch("https://breedingai-backend.vercel.app/analyze", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
+  resultBox.classList.remove("hidden");
+  resultBox.textContent = "Generando análisis...";
 
-  const data = await res.json();
+  try {
+    const res = await fetch("https://breedingai-backend.vercel.app/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ breed, goal, inbreeding, issues })
+    });
 
-  document.getElementById("result").innerHTML = `
-    <h2>${data.veredicto}</h2>
-    <p>Compatibilidad genética: ${data.compatibilidadGenetica}/10</p>
-    <p>Riesgo hereditario: ${data.riesgoHereditario}/10</p>
-    <p>Adecuación al objetivo: ${data.adecuacionObjetivo}/10</p>
-    <p>${data.recomendacion}</p>
-  `;
+    if (!res.ok) throw new Error("Backend error");
+
+    const data = await res.json();
+
+    resultBox.innerHTML = `
+      <h2>${data.verdict}</h2>
+      <p><strong>Compatibilidad genética:</strong> ${data.compatibility}/10</p>
+      <p><strong>Riesgo hereditario:</strong> ${data.risk}/10</p>
+      <p><strong>Adecuación al objetivo:</strong> ${data.goalScore}/10</p>
+      <p>${data.summary}</p>
+    `;
+
+  } catch (err) {
+    resultBox.textContent =
+      "El análisis no está disponible en este momento. Inténtalo de nuevo.";
+  }
 });
-
 
 
