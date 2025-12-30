@@ -1,53 +1,46 @@
-const API = "https://breedingai-backend.vercel.app";
+const form = document.getElementById("analysis-form");
+const resultBox = document.getElementById("result");
 
-document.getElementById("analysisForm").addEventListener("submit", async e => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const data = {
-    breed: breed.value,
-    goal: goal.value,
-    inbreeding: inbreeding.value,
-    issues: [...document.querySelectorAll("input[name=issues]:checked")].map(i => i.value)
-  };
+  const breed = document.getElementById("breed").value;
+  const goal = document.getElementById("goal").value;
+  const consanguinity = document.getElementById("consanguinity").value;
 
-  result.innerHTML = "Generando análisis profesional...";
+  const antecedents = Array.from(
+    document.querySelectorAll("input[name='antecedents']:checked")
+  ).map(el => el.value);
 
   try {
-    const r = await fetch(`${API}/analyze`, {
+    const res = await fetch("https://breedingai-backend.vercel.app/analyze", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        breed,
+        goal,
+        consanguinity,
+        antecedents
+      })
     });
 
-    const res = await r.json();
+    if (!res.ok) throw new Error("Error servidor");
 
-    result.innerHTML = `
-      <h3>${res.verdict}</h3>
-      <p><strong>Compatibilidad genética:</strong> ${res.genetic}/10</p>
-      <p><strong>Riesgo hereditario:</strong> ${res.risk}/10</p>
-      <p><strong>Adecuación al objetivo:</strong> ${res.suitability}/10</p>
-      <hr/>
-      <p>${res.report}</p>
+    const data = await res.json();
+
+    resultBox.innerHTML = `
+      <h3>${data.label}</h3>
+      <p>Compatibilidad genética: ${data.scores.compatibility}/10</p>
+      <p>Riesgo hereditario: ${data.scores.risk}/10</p>
+      <p>Adecuación al objetivo: ${data.scores.goal}/10</p>
+      <p>${data.text}</p>
     `;
-  } catch {
-    result.innerHTML = "Error al generar el análisis.";
+  } catch (err) {
+    resultBox.innerHTML = "<p>Error al generar el análisis</p>";
   }
 });
-
-/* ===== STRIPE ===== */
-async function subscribe(priceId) {
-  const r = await fetch(`${API}/create-checkout-session`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      priceId,
-      successUrl: window.location.href,
-      cancelUrl: window.location.href
-    })
-  });
-  const { url } = await r.json();
-  window.location.href = url;
-}
 
 
 
