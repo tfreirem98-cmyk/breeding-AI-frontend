@@ -1,76 +1,69 @@
-const form = document.getElementById("analysis-form");
-const resultContainer = document.getElementById("analysis-result");
+const form = document.getElementById("analysisForm");
+const output = document.getElementById("resultado");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  console.log("▶ Enviando análisis...");
-
-  resultContainer.innerHTML = "<p>Generando análisis...</p>";
+  output.innerHTML = "⏳ Generando análisis profesional...";
 
   const raza = document.getElementById("raza").value;
   const objetivo = document.getElementById("objetivo").value;
   const consanguinidad = document.getElementById("consanguinidad").value;
 
-  const antecedentes = Array.from(
-    document.querySelectorAll("input[name='antecedentes']:checked")
-  ).map((el) => el.value);
+  const antecedentes = [];
+  document
+    .querySelectorAll("input[name='antecedentes']:checked")
+    .forEach((el) => antecedentes.push(el.value));
 
   try {
-    const response = await fetch(
+    const res = await fetch(
       "https://breedingai-backend.onrender.com/analyze",
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           raza,
           objetivo,
           consanguinidad,
-          antecedentes,
-        }),
+          antecedentes
+        })
       }
     );
 
-    const data = await response.json();
-    console.log("✔ Resultado recibido:", data);
+    const data = await res.json();
 
-    if (!data.ok) {
-      throw new Error("Respuesta inválida del servidor");
-    }
+    output.innerHTML = `
+      <h2>${data.clasificacion}</h2>
 
-    const r = data.resultado;
+      <p><strong>Compatibilidad genética:</strong> ${data.puntuaciones.compatibilidadGenetica} / 10</p>
+      <p><strong>Riesgo hereditario:</strong> ${data.puntuaciones.riesgoHereditario} / 10</p>
+      <p><strong>Adecuación al objetivo:</strong> ${data.puntuaciones.adecuacionObjetivo} / 10</p>
 
-    resultContainer.innerHTML = `
-      <div class="resultado-card">
-        <h3>${r.clasificacion}</h3>
+      <h3>Recomendación profesional</h3>
+      <p>${data.recomendacion}</p>
 
-        <div class="metricas">
-          <div>
-            <strong>Compatibilidad genética</strong>
-            <span>${r.compatibilidad} / 10</span>
-          </div>
-          <div>
-            <strong>Riesgo hereditario</strong>
-            <span>${r.riesgo} / 10</span>
-          </div>
-          <div>
-            <strong>Adecuación al objetivo</strong>
-            <span>${r.adecuacion} / 10</span>
-          </div>
-        </div>
+      ${
+        data.observaciones.length
+          ? `<h4>Observaciones</h4><ul>${data.observaciones
+              .map((o) => `<li>${o}</li>`)
+              .join("")}</ul>`
+          : ""
+      }
 
-        <div class="recomendacion">
-          <strong>Recomendación profesional</strong>
-          <p>${r.recomendacion}</p>
-        </div>
-      </div>
+      ${
+        data.advertencias.length
+          ? `<h4>Advertencias</h4><ul>${data.advertencias
+              .map((a) => `<li>${a}</li>`)
+              .join("")}</ul>`
+          : ""
+      }
+
+      <p><strong>Nivel de confianza:</strong> ${data.nivelConfianza}</p>
+
+      <small>${data.notaTecnica}</small>
     `;
-  } catch (error) {
-    console.error("❌ Error al generar análisis:", error);
-    resultContainer.innerHTML =
-      "<p style='color:red'>Error al generar el análisis. Inténtalo de nuevo.</p>";
+  } catch (err) {
+    output.innerHTML = "❌ Error al generar el análisis.";
   }
 });
 
