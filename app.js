@@ -1,5 +1,5 @@
 const form = document.getElementById("analysisForm");
-const resultBox = document.getElementById("resultado");
+const result = document.getElementById("resultado");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -7,50 +7,28 @@ form.addEventListener("submit", async (e) => {
   const raza = document.getElementById("raza").value;
   const objetivo = document.getElementById("objetivo").value;
   const consanguinidad = document.getElementById("consanguinidad").value;
+  const antecedentes = [...document.querySelectorAll("input:checked")].map(i => i.value);
 
-  const antecedentes = Array.from(
-    document.querySelectorAll("input[type=checkbox]:checked")
-  ).map(cb => cb.value);
+  result.classList.remove("hidden");
+  result.textContent = "Generando análisis...";
 
-  try {
-    const response = await fetch("https://breedingai-backend.onrender.com/analyze", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        raza,
-        objetivo,
-        consanguinidad,
-        antecedentes
-      })
-    });
+  const res = await fetch("https://breedingai-backend.onrender.com/analyze", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ raza, objetivo, consanguinidad, antecedentes })
+  });
 
-    const data = await response.json();
+  const data = await res.json();
+  const r = data.resultado;
 
-    if (!data.success) throw new Error("Respuesta inválida");
-
-    const r = data.resultado;
-
-    document.getElementById("estado").textContent = r.estado;
-    document.getElementById("compatibilidad").textContent = r.compatibilidad;
-    document.getElementById("riesgo").textContent = r.riesgoHereditario;
-    document.getElementById("adecuacion").textContent = r.adecuacionObjetivo;
-    document.getElementById("recomendacion").textContent = r.recomendacion;
-
-    const ul = document.getElementById("advertencias");
-    ul.innerHTML = "";
-    r.advertencias.forEach(a => {
-      const li = document.createElement("li");
-      li.textContent = a;
-      ul.appendChild(li);
-    });
-
-    resultBox.classList.remove("hidden");
-    resultBox.scrollIntoView({ behavior: "smooth" });
-
-  } catch (err) {
-    alert("Error al generar el análisis. Revisa el backend.");
-    console.error(err);
-  }
+  result.innerHTML = `
+    <h2>${r.estado}</h2>
+    <p>Compatibilidad genética: ${r.compatibilidad}/10</p>
+    <p>Riesgo hereditario: ${r.riesgoHereditario}/10</p>
+    <p>Adecuación al objetivo: ${r.adecuacionObjetivo}/10</p>
+    <p>${r.recomendacion}</p>
+    <ul>${r.advertencias.map(a => `<li>${a}</li>`).join("")}</ul>
+  `;
 });
 
 
