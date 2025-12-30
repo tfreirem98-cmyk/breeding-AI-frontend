@@ -1,50 +1,54 @@
-const form = document.getElementById("analysisForm");
-const resultDiv = document.getElementById("result");
+const API = "https://breedingai-backend.vercel.app";
 
-const API_URL = "https://breedingai-backend.vercel.app/analyze";
-
-form.addEventListener("submit", async (e) => {
+document.getElementById("analysisForm").addEventListener("submit", async e => {
   e.preventDefault();
 
-  resultDiv.classList.add("hidden");
-  resultDiv.innerHTML = "Generando análisis...";
+  const data = {
+    breed: breed.value,
+    goal: goal.value,
+    inbreeding: inbreeding.value,
+    issues: [...document.querySelectorAll("input[name=issues]:checked")].map(i => i.value)
+  };
 
-  const breed = document.getElementById("breed").value;
-  const objective = document.getElementById("objective").value;
-  const consanguinity = document.getElementById("consanguinity").value;
-
-  const antecedentes = Array.from(
-    document.querySelectorAll("input[type=checkbox]:checked")
-  ).map(cb => cb.value);
+  result.innerHTML = "Generando análisis profesional...";
 
   try {
-    const response = await fetch(API_URL, {
+    const r = await fetch(`${API}/analyze`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        breed,
-        objective,
-        consanguinity,
-        antecedentes
-      })
+      body: JSON.stringify(data)
     });
 
-    const data = await response.json();
+    const res = await r.json();
 
-    resultDiv.innerHTML = `
-      <h3>${data.clasificacion}</h3>
-      <p><strong>Compatibilidad genética:</strong> ${data.compatibilidadGenetica}/10</p>
-      <p><strong>Riesgo hereditario:</strong> ${data.riesgoHereditario}/10</p>
-      <p><strong>Adecuación al objetivo:</strong> ${data.adecuacionObjetivo}/10</p>
-      <p>${data.recomendacion}</p>
+    result.innerHTML = `
+      <h3>${res.verdict}</h3>
+      <p><strong>Compatibilidad genética:</strong> ${res.genetic}/10</p>
+      <p><strong>Riesgo hereditario:</strong> ${res.risk}/10</p>
+      <p><strong>Adecuación al objetivo:</strong> ${res.suitability}/10</p>
+      <hr/>
+      <p>${res.report}</p>
     `;
-
-    resultDiv.classList.remove("hidden");
-
-  } catch (err) {
-    resultDiv.innerHTML = "Error al generar el análisis.";
-    resultDiv.classList.remove("hidden");
+  } catch {
+    result.innerHTML = "Error al generar el análisis.";
   }
 });
+
+/* ===== STRIPE ===== */
+async function subscribe(priceId) {
+  const r = await fetch(`${API}/create-checkout-session`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      priceId,
+      successUrl: window.location.href,
+      cancelUrl: window.location.href
+    })
+  });
+  const { url } = await r.json();
+  window.location.href = url;
+}
+
+
 
 
