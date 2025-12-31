@@ -2,114 +2,50 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>BreedingAI · Análisis profesional de cruce</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
+  <title>BreedingAI – Análisis</title>
   <link rel="stylesheet" href="app.css" />
 </head>
-
 <body>
-  <header class="header">
-    <h1 class="logo">BreedingAI</h1>
-  </header>
 
-  <main class="container">
-    <section class="hero">
-      <h2>Análisis profesional de cruce</h2>
-      <p>
-        Evaluación objetiva de riesgos genéticos y viabilidad reproductiva,
-        orientada a criadores responsables.
-      </p>
-    </section>
+<div class="card">
+  <h2>Análisis profesional de cruce</h2>
 
-    <!-- FORMULARIO -->
-    <section class="card">
-      <label for="raza">Raza</label>
-      <select id="raza">
-        <option>Border Collie</option>
-        <option>Golden Retriever</option>
-        <option>Labrador Retriever</option>
-        <option>Pastor Alemán</option>
-        <option>Bulldog Inglés</option>
-        <option>Bulldog Francés</option>
-        <option>Caniche</option>
-        <option>Rottweiler</option>
-        <option>Doberman</option>
-        <option>Boxer</option>
-        <option>Beagle</option>
-        <option>Chihuahua</option>
-        <option>Husky Siberiano</option>
-        <option>Malamute de Alaska</option>
-        <option>Akita Inu</option>
-        <option>Shiba Inu</option>
-        <option>Dálmata</option>
-        <option>Setter Inglés</option>
-        <option>Cocker Spaniel</option>
-        <option>Teckel</option>
-      </select>
+  <select id="raza">
+    <option>Border Collie</option>
+    <option>Golden Retriever</option>
+    <option>Labrador Retriever</option>
+    <option>Pastor Alemán</option>
+    <option>Bulldog Inglés</option>
+  </select>
 
-      <label for="objetivo">Objetivo de cría</label>
-      <select id="objetivo">
-        <option>Salud</option>
-        <option>Trabajo</option>
-        <option>Compañía</option>
-        <option>Estética</option>
-      </select>
+  <select id="objetivo">
+    <option>Salud</option>
+    <option>Trabajo</option>
+    <option>Belleza</option>
+  </select>
 
-      <label for="consanguinidad">Consanguinidad</label>
-      <select id="consanguinidad">
-        <option>Baja</option>
-        <option>Media</option>
-        <option>Alta</option>
-      </select>
+  <select id="consanguinidad">
+    <option>Baja</option>
+    <option>Media</option>
+    <option>Alta</option>
+  </select>
 
-      <fieldset class="antecedentes">
-        <legend>Antecedentes conocidos</legend>
-        <label><input type="checkbox" name="antecedentes" value="Displasia"> Displasia</label>
-        <label><input type="checkbox" name="antecedentes" value="Oculares"> Oculares</label>
-        <label><input type="checkbox" name="antecedentes" value="Respiratorios"> Respiratorios</label>
-        <label><input type="checkbox" name="antecedentes" value="Neurológicos"> Neurológicos</label>
-      </fieldset>
+  <div class="checks">
+    <label><input type="checkbox" value="Displasia"> Displasia</label>
+    <label><input type="checkbox" value="Oculares"> Oculares</label>
+    <label><input type="checkbox" value="Respiratorios"> Respiratorios</label>
+    <label><input type="checkbox" value="Neurológicos"> Neurológicos</label>
+  </div>
 
-      <button id="analyzeBtn" class="btn-primary">
-        Generar análisis
-      </button>
-    </section>
+  <button id="analyze">Generar análisis</button>
+  <div id="result"></div>
+  <button id="pro" class="pro">Pasar a PRO – 5 €/mes</button>
+</div>
 
-    <!-- RESULTADO -->
-    <section id="result" class="result-card">
-      <!-- JS inyecta aquí -->
-    </section>
-
-    <!-- PRO -->
-    <section class="pro-card">
-      <h3>🔬 ¿Necesitas análisis profesionales?</h3>
-      <p>
-        Desbloquea análisis ilimitados, informes avanzados,
-        histórico completo de cruces y soporte prioritario.
-      </p>
-
-      <ul class="pro-features">
-        <li>✔ Análisis ilimitados</li>
-        <li>✔ Historial completo por criadero</li>
-        <li>✔ Recomendaciones avanzadas</li>
-        <li>✔ Acceso prioritario a nuevas funciones IA</li>
-      </ul>
-
-      <button id="proBtn" class="btn-pro">
-        Pasar a PRO · 29 €/mes
-      </button>
-    </section>
-  </main>
-
-  <footer class="footer">
-    © 2025 BreedingAI · Plataforma profesional para criadores
-  </footer>
-
-  <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
+
 
 
 
