@@ -2,73 +2,104 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>BreedingAI – Análisis profesional de cruce</title>
+  <title>BreedingAI · Análisis profesional</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="app.css" />
 </head>
-
 <body>
 
-<header class="topbar">
-  <h1>BreedingAI</h1>
+<header class="app-header">
+  <div class="container header-flex">
+    <span class="logo">BreedingAI</span>
+    <a href="index.html" class="back-link">← Volver</a>
+  </div>
 </header>
 
 <main class="container">
 
-  <h2>Análisis profesional de cruce</h2>
-  <p class="subtitle">Herramienta profesional para criadores.</p>
+  <section class="intro">
+    <h1>Análisis profesional de cruce</h1>
+    <p>Herramienta técnica diseñada para criadores responsables. Evaluación objetiva basada en raza, consanguinidad y antecedentes.</p>
+  </section>
 
-  <form id="analysisForm" class="card">
+  <section class="card form-card">
+    <form id="analysis-form">
 
-    <label for="breed">Raza</label>
-    <select id="breed" required>
-      <option value="">Selecciona una raza</option>
-      <option>Border Collie</option>
-      <option>Golden Retriever</option>
-      <option>Labrador Retriever</option>
-      <option>Pastor Alemán</option>
-      <option>Bulldog Francés</option>
-      <option>Bulldog Inglés</option>
-      <option>Caniche</option>
-      <option>Beagle</option>
-      <option>Rottweiler</option>
-      <option>Doberman</option>
-      <option>Boxer</option>
-      <option>Husky Siberiano</option>
-      <option>Chihuahua</option>
-      <option>Teckel</option>
-      <option>Akita Inu</option>
-    </select>
+      <label>Raza</label>
+      <select id="breed" required>
+        <option value="">Selecciona una raza</option>
+        <option>Border Collie</option>
+        <option>Labrador Retriever</option>
+        <option>Golden Retriever</option>
+        <option>Pastor Alemán</option>
+        <option>Bulldog Inglés</option>
+        <option>Caniche</option>
+        <option>Rottweiler</option>
+        <option>Boxer</option>
+        <option>Dachshund</option>
+        <option>Chihuahua</option>
+        <option>Husky Siberiano</option>
+        <option>Doberman</option>
+      </select>
 
-    <label for="goal">Objetivo</label>
-    <select id="goal" required>
-      <option value="Salud">Salud</option>
-      <option value="Trabajo">Trabajo</option>
-      <option value="Estética">Estética</option>
-    </select>
+      <label>Objetivo de cría</label>
+      <select id="goal">
+        <option value="Salud">Salud</option>
+        <option value="Trabajo">Trabajo</option>
+        <option value="Exposición">Exposición</option>
+      </select>
 
-    <label for="consanguinity">Consanguinidad</label>
-    <select id="consanguinity" required>
-      <option value="Baja">Baja</option>
-      <option value="Media">Media</option>
-      <option value="Alta">Alta</option>
-    </select>
+      <label>Consanguinidad estimada</label>
+      <select id="inbreeding">
+        <option value="Baja">Baja</option>
+        <option value="Media">Media</option>
+        <option value="Alta">Alta</option>
+      </select>
 
-    <fieldset>
-      <legend>Antecedentes</legend>
-      <label><input type="checkbox" name="antecedentes" value="Displasia"> Displasia</label>
-      <label><input type="checkbox" name="antecedentes" value="Oculares"> Oculares</label>
-      <label><input type="checkbox" name="antecedentes" value="Respiratorios"> Respiratorios</label>
-      <label><input type="checkbox" name="antecedentes" value="Neurologicos"> Neurológicos</label>
-    </fieldset>
+      <fieldset>
+        <legend>Antecedentes conocidos</legend>
+        <label><input type="checkbox" value="Displasia"> Displasia</label>
+        <label><input type="checkbox" value="Oculares"> Oculares</label>
+        <label><input type="checkbox" value="Respiratorios"> Respiratorios</label>
+        <label><input type="checkbox" value="Neurológicos"> Neurológicos</label>
+      </fieldset>
 
-    <button type="submit" class="primary-btn">
-      Generar análisis
-    </button>
+      <button type="submit" class="btn-primary full">Generar análisis</button>
+    </form>
+  </section>
 
-  </form>
+  <section id="result" class="card result-card hidden">
+    <h2>Resultado del análisis</h2>
 
-  <section id="result" class="result"></section>
+    <div class="result-grid">
+      <div>
+        <p class="label">Veredicto</p>
+        <p id="verdict" class="verdict"></p>
+      </div>
+      <div>
+        <p class="label">Puntuación de riesgo</p>
+        <p id="score" class="score"></p>
+      </div>
+    </div>
+
+    <p id="summary" class="summary"></p>
+
+    <div class="recommendation-box">
+      <p class="label">Recomendación profesional</p>
+      <p id="recommendation"></p>
+    </div>
+
+    <div class="upgrade">
+      <p>🔒 Este análisis es un resumen.</p>
+      <p>Los planes PRO incluyen:</p>
+      <ul>
+        <li>Informe genético detallado</li>
+        <li>Histórico de cruces</li>
+        <li>Recomendaciones por línea</li>
+      </ul>
+      <a href="#" class="btn-secondary">Ver planes profesionales</a>
+    </div>
+  </section>
 
 </main>
 
@@ -79,6 +110,7 @@
 <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
