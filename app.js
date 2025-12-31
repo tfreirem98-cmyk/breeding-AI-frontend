@@ -3,9 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const proBtn = document.getElementById("proBtn");
   const resultBox = document.getElementById("result");
 
-  // =========================
-  // ANALYSIS BUTTON
-  // =========================
+  /* ===============================
+     ANALYZE
+  ================================ */
   analyzeBtn.addEventListener("click", async () => {
     resultBox.innerHTML = "Analizando...";
 
@@ -19,18 +19,21 @@ document.addEventListener("DOMContentLoaded", () => {
       .forEach((el) => antecedentes.push(el.value));
 
     try {
-      const res = await fetch("https://breedingai-backend.onrender.com", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          raza,
-          objetivo,
-          consanguinidad,
-          antecedentes
-        })
-      });
+      const res = await fetch(
+        "https://breedingai-backend.onrender.com/analyze",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            raza,
+            objetivo,
+            consanguinidad,
+            antecedentes
+          })
+        }
+      );
 
-      if (!res.ok) throw new Error("Analyze failed");
+      if (!res.ok) throw new Error();
 
       const data = await res.json();
 
@@ -41,39 +44,31 @@ document.addEventListener("DOMContentLoaded", () => {
         <p>${data.explanation}</p>
         <p><strong>Recomendación:</strong> ${data.recommendation}</p>
       `;
-    } catch (err) {
+    } catch {
       resultBox.innerHTML =
-        "El análisis no está disponible en este momento. Inténtalo de nuevo.";
+        "El análisis no está disponible en este momento.";
     }
   });
 
-  // =========================
-  // PRO BUTTON (STRIPE)
-  // =========================
+  /* ===============================
+     STRIPE PRO
+  ================================ */
   proBtn.addEventListener("click", async () => {
     try {
       const res = await fetch(
-        "https://TU-BACKEND-RENDER.onrender.com/create-checkout-session",
-        {
-          method: "POST"
-        }
+        "https://breedingai-backend.onrender.com/create-checkout-session",
+        { method: "POST" }
       );
 
-      if (!res.ok) throw new Error("Stripe session error");
+      if (!res.ok) throw new Error();
 
       const data = await res.json();
-
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert("No se pudo iniciar el pago.");
-      }
-    } catch (err) {
-      alert("Error al conectar con el sistema de pago.");
+      window.location.href = data.url;
+    } catch {
+      alert("No se pudo iniciar el pago.");
     }
   });
 });
-
 
 
 
