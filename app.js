@@ -1,74 +1,37 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const analyzeBtn = document.getElementById("analyzeBtn");
-  const proBtn = document.getElementById("proBtn");
-  const resultBox = document.getElementById("result");
+const API = "https://breedingai-backend.onrender.com";
 
-  /* ===============================
-     ANALYZE
-  ================================ */
-  analyzeBtn.addEventListener("click", async () => {
-    resultBox.innerHTML = "Analizando...";
+const params = new URLSearchParams(window.location.search);
+const isPro = params.get("pro") === "1";
 
-    const raza = document.getElementById("raza").value;
-    const objetivo = document.getElementById("objetivo").value;
-    const consanguinidad = document.getElementById("consanguinidad").value;
+document.getElementById("analyze").onclick = async () => {
+  const antecedentes = [...document.querySelectorAll("input:checked")].map(i => i.value);
 
-    const antecedentes = [];
-    document
-      .querySelectorAll("input[name='antecedentes']:checked")
-      .forEach((el) => antecedentes.push(el.value));
-
-    try {
-      const res = await fetch(
-        "https://breedingai-backend.onrender.com/analyze",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            raza,
-            objetivo,
-            consanguinidad,
-            antecedentes
-          })
-        }
-      );
-
-      if (!res.ok) throw new Error();
-
-      const data = await res.json();
-
-      resultBox.innerHTML = `
-        <h3>Resultado del análisis</h3>
-        <p><strong>Veredicto:</strong> ${data.verdict}</p>
-        <p><strong>Puntuación:</strong> ${data.score}</p>
-        <p>${data.explanation}</p>
-        <p><strong>Recomendación:</strong> ${data.recommendation}</p>
-      `;
-    } catch {
-      resultBox.innerHTML =
-        "El análisis no está disponible en este momento.";
-    }
+  const res = await fetch(`${API}/analyze`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      raza: raza.value,
+      objetivo: objetivo.value,
+      consanguinidad: consanguinidad.value,
+      antecedentes,
+      isPro
+    })
   });
 
-  /* ===============================
-     STRIPE PRO
-  ================================ */
-  proBtn.addEventListener("click", async () => {
-    try {
-      const res = await fetch(
-        "https://breedingai-backend.onrender.com/create-checkout-session",
-        { method: "POST" }
-      );
+  if (res.status === 403) {
+    result.innerHTML = "Límite gratuito alcanzado.";
+    return;
+  }
 
-      if (!res.ok) throw new Error();
+  const data = await res.json();
+  result.innerText = data.analysis + `\n\nUsos restantes: ${data.usesLeft}`;
+};
 
-      const data = await res.json();
-      window.location.href = data.url;
-    } catch {
-      alert("No se pudo iniciar el pago.");
-    }
-  });
-});
+document.getElementById("pro").onclick = async () => {
+  const res = await fetch(`${API}/create-checkout-session`, { method: "POST" });
+  const data = await res.json();
+  window.location.href = data.url;
+};
 
 
 
