@@ -1,54 +1,85 @@
-<form id="analysisForm">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>BreedingAI – Análisis profesional de cruce</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="app.css" />
+</head>
 
-  <label for="breed">Raza</label>
-  <select id="breed" required>
-    <option value="">Selecciona una raza</option>
-    <option>Border Collie</option>
-    <option>Golden Retriever</option>
-    <option>Labrador Retriever</option>
-    <option>Pastor Alemán</option>
-    <option>Bulldog Francés</option>
-    <option>Bulldog Inglés</option>
-    <option>Caniche</option>
-    <option>Beagle</option>
-    <option>Rottweiler</option>
-    <option>Doberman</option>
-    <option>Boxer</option>
-    <option>Husky Siberiano</option>
-    <option>Chihuahua</option>
-    <option>Teckel</option>
-    <option>Akita Inu</option>
-  </select>
+<body>
 
-  <label for="goal">Objetivo</label>
-  <select id="goal" required>
-    <option value="Salud">Salud</option>
-    <option value="Trabajo">Trabajo</option>
-    <option value="Estética">Estética</option>
-  </select>
+<header class="topbar">
+  <h1>BreedingAI</h1>
+</header>
 
-  <label for="consanguinity">Consanguinidad</label>
-  <select id="consanguinity" required>
-    <option value="Baja">Baja</option>
-    <option value="Media">Media</option>
-    <option value="Alta">Alta</option>
-  </select>
+<main class="container">
 
-  <fieldset>
-    <legend>Antecedentes</legend>
-    <label><input type="checkbox" name="antecedentes" value="Displasia"> Displasia</label>
-    <label><input type="checkbox" name="antecedentes" value="Oculares"> Oculares</label>
-    <label><input type="checkbox" name="antecedentes" value="Respiratorios"> Respiratorios</label>
-    <label><input type="checkbox" name="antecedentes" value="Neurologicos"> Neurológicos</label>
-  </fieldset>
+  <h2>Análisis profesional de cruce</h2>
+  <p class="subtitle">Herramienta profesional para criadores.</p>
 
-  <button type="submit" class="primary-btn">
-    Generar análisis
-  </button>
+  <form id="analysisForm" class="card">
 
-</form>
+    <label for="breed">Raza</label>
+    <select id="breed" required>
+      <option value="">Selecciona una raza</option>
+      <option>Border Collie</option>
+      <option>Golden Retriever</option>
+      <option>Labrador Retriever</option>
+      <option>Pastor Alemán</option>
+      <option>Bulldog Francés</option>
+      <option>Bulldog Inglés</option>
+      <option>Caniche</option>
+      <option>Beagle</option>
+      <option>Rottweiler</option>
+      <option>Doberman</option>
+      <option>Boxer</option>
+      <option>Husky Siberiano</option>
+      <option>Chihuahua</option>
+      <option>Teckel</option>
+      <option>Akita Inu</option>
+    </select>
 
-<div id="result"></div>
+    <label for="goal">Objetivo</label>
+    <select id="goal" required>
+      <option value="Salud">Salud</option>
+      <option value="Trabajo">Trabajo</option>
+      <option value="Estética">Estética</option>
+    </select>
+
+    <label for="consanguinity">Consanguinidad</label>
+    <select id="consanguinity" required>
+      <option value="Baja">Baja</option>
+      <option value="Media">Media</option>
+      <option value="Alta">Alta</option>
+    </select>
+
+    <fieldset>
+      <legend>Antecedentes</legend>
+      <label><input type="checkbox" name="antecedentes" value="Displasia"> Displasia</label>
+      <label><input type="checkbox" name="antecedentes" value="Oculares"> Oculares</label>
+      <label><input type="checkbox" name="antecedentes" value="Respiratorios"> Respiratorios</label>
+      <label><input type="checkbox" name="antecedentes" value="Neurologicos"> Neurológicos</label>
+    </fieldset>
+
+    <button type="submit" class="primary-btn">
+      Generar análisis
+    </button>
+
+  </form>
+
+  <section id="result" class="result"></section>
+
+</main>
+
+<footer class="footer">
+  © 2025 BreedingAI
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
+
 
 
 
