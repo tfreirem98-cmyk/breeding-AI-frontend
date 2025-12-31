@@ -1,72 +1,55 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <title>BreedingAI · Análisis profesional</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="app.css" />
-</head>
+<form id="analysisForm">
 
-<body>
+  <label for="breed">Raza</label>
+  <select id="breed" required>
+    <option value="">Selecciona una raza</option>
+    <option>Border Collie</option>
+    <option>Golden Retriever</option>
+    <option>Labrador Retriever</option>
+    <option>Pastor Alemán</option>
+    <option>Bulldog Francés</option>
+    <option>Bulldog Inglés</option>
+    <option>Caniche</option>
+    <option>Beagle</option>
+    <option>Rottweiler</option>
+    <option>Doberman</option>
+    <option>Boxer</option>
+    <option>Husky Siberiano</option>
+    <option>Chihuahua</option>
+    <option>Teckel</option>
+    <option>Akita Inu</option>
+  </select>
 
-<header class="topbar">
-  <span class="brand">BreedingAI</span>
-</header>
+  <label for="goal">Objetivo</label>
+  <select id="goal" required>
+    <option value="Salud">Salud</option>
+    <option value="Trabajo">Trabajo</option>
+    <option value="Estética">Estética</option>
+  </select>
 
-<main class="container">
+  <label for="consanguinity">Consanguinidad</label>
+  <select id="consanguinity" required>
+    <option value="Baja">Baja</option>
+    <option value="Media">Media</option>
+    <option value="Alta">Alta</option>
+  </select>
 
-  <h1>Análisis profesional de cruce</h1>
-  <p class="subtitle">Herramienta profesional para criadores.</p>
+  <fieldset>
+    <legend>Antecedentes</legend>
+    <label><input type="checkbox" name="antecedentes" value="Displasia"> Displasia</label>
+    <label><input type="checkbox" name="antecedentes" value="Oculares"> Oculares</label>
+    <label><input type="checkbox" name="antecedentes" value="Respiratorios"> Respiratorios</label>
+    <label><input type="checkbox" name="antecedentes" value="Neurologicos"> Neurológicos</label>
+  </fieldset>
 
-  <form id="analysisForm" class="card">
+  <button type="submit" class="primary-btn">
+    Generar análisis
+  </button>
 
-    <label>Raza</label>
-    <select id="breed">
-      <option>Border Collie</option>
-      <option>Golden Retriever</option>
-      <option>Labrador Retriever</option>
-      <option>Pastor Alemán</option>
-    </select>
+</form>
 
-    <label>Objetivo</label>
-    <select id="goal">
-      <option>Salud</option>
-      <option>Trabajo</option>
-      <option>Exposición</option>
-    </select>
+<div id="result"></div>
 
-    <label>Consanguinidad</label>
-    <select id="consanguinity">
-      <option>Baja</option>
-      <option>Media</option>
-      <option>Alta</option>
-    </select>
-
-    <fieldset class="checkbox-group">
-      <legend>Antecedentes</legend>
-      <label><input type="checkbox" name="conditions" value="Displasia"> Displasia</label>
-      <label><input type="checkbox" name="conditions" value="Oculares"> Oculares</label>
-      <label><input type="checkbox" name="conditions" value="Respiratorios"> Respiratorios</label>
-    </fieldset>
-
-    <button type="submit" class="primary-btn">Generar análisis</button>
-  </form>
-
-  <section id="result" class="result-card" style="display:none;">
-    <h2 id="verdict"></h2>
-    <p id="analysisText"></p>
-    <p id="recommendationText"></p>
-
-    <button id="payPro" class="primary-btn" style="margin-top:20px;">
-      Desbloquear informe PRO
-    </button>
-  </section>
-
-</main>
-
-<script src="app.js"></script>
-</body>
-</html>
 
 
 
