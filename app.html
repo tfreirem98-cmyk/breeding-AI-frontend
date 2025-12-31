@@ -4,12 +4,9 @@
   <meta charset="UTF-8" />
   <title>BreedingAI · Análisis profesional de cruce</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- ESTILOS -->
-  <link rel="stylesheet" href="app.css" />
-
-  <!-- EVITA QUIRKS MODE -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="stylesheet" href="app.css" />
 </head>
 
 <body>
@@ -18,88 +15,98 @@
   </header>
 
   <main class="container">
-    <h2>Análisis profesional de cruce</h2>
-    <p class="subtitle">Herramienta profesional para criadores.</p>
+    <section class="hero">
+      <h2>Análisis profesional de cruce</h2>
+      <p>
+        Evaluación objetiva de riesgos genéticos y viabilidad reproductiva,
+        orientada a criadores responsables.
+      </p>
+    </section>
 
+    <!-- FORMULARIO -->
     <section class="card">
-      <!-- RAZA -->
       <label for="raza">Raza</label>
       <select id="raza">
-        <option value="Border Collie">Border Collie</option>
-        <option value="Golden Retriever">Golden Retriever</option>
-        <option value="Labrador Retriever">Labrador Retriever</option>
-        <option value="Pastor Alemán">Pastor Alemán</option>
-        <option value="Bulldog Inglés">Bulldog Inglés</option>
+        <option>Border Collie</option>
+        <option>Golden Retriever</option>
+        <option>Labrador Retriever</option>
+        <option>Pastor Alemán</option>
+        <option>Bulldog Inglés</option>
+        <option>Bulldog Francés</option>
+        <option>Caniche</option>
+        <option>Rottweiler</option>
+        <option>Doberman</option>
+        <option>Boxer</option>
+        <option>Beagle</option>
+        <option>Chihuahua</option>
+        <option>Husky Siberiano</option>
+        <option>Malamute de Alaska</option>
+        <option>Akita Inu</option>
+        <option>Shiba Inu</option>
+        <option>Dálmata</option>
+        <option>Setter Inglés</option>
+        <option>Cocker Spaniel</option>
+        <option>Teckel</option>
       </select>
 
-      <!-- OBJETIVO -->
       <label for="objetivo">Objetivo de cría</label>
       <select id="objetivo">
-        <option value="Salud">Salud</option>
-        <option value="Trabajo">Trabajo</option>
-        <option value="Estética">Estética</option>
+        <option>Salud</option>
+        <option>Trabajo</option>
+        <option>Compañía</option>
+        <option>Estética</option>
       </select>
 
-      <!-- CONSANGUINIDAD -->
       <label for="consanguinidad">Consanguinidad</label>
       <select id="consanguinidad">
-        <option value="Baja">Baja</option>
-        <option value="Media">Media</option>
-        <option value="Alta">Alta</option>
+        <option>Baja</option>
+        <option>Media</option>
+        <option>Alta</option>
       </select>
 
-      <!-- ANTECEDENTES -->
       <fieldset class="antecedentes">
         <legend>Antecedentes conocidos</legend>
-
-        <label>
-          <input type="checkbox" name="antecedentes" value="Displasia" />
-          Displasia
-        </label>
-
-        <label>
-          <input type="checkbox" name="antecedentes" value="Oculares" />
-          Oculares
-        </label>
-
-        <label>
-          <input type="checkbox" name="antecedentes" value="Respiratorios" />
-          Respiratorios
-        </label>
-
-        <label>
-          <input type="checkbox" name="antecedentes" value="Neurológicos" />
-          Neurológicos
-        </label>
+        <label><input type="checkbox" name="antecedentes" value="Displasia"> Displasia</label>
+        <label><input type="checkbox" name="antecedentes" value="Oculares"> Oculares</label>
+        <label><input type="checkbox" name="antecedentes" value="Respiratorios"> Respiratorios</label>
+        <label><input type="checkbox" name="antecedentes" value="Neurológicos"> Neurológicos</label>
       </fieldset>
 
-      <!-- BOTÓN ANALIZAR -->
       <button id="analyzeBtn" class="btn-primary">
         Generar análisis
       </button>
     </section>
 
     <!-- RESULTADO -->
-    <section id="result" class="result"></section>
+    <section id="result" class="result-card">
+      <!-- JS inyecta aquí -->
+    </section>
 
     <!-- PRO -->
-    <section class="pro">
-      <h3>¿Necesitas análisis profesionales?</h3>
+    <section class="pro-card">
+      <h3>🔬 ¿Necesitas análisis profesionales?</h3>
       <p>
-        Accede a análisis ilimitados, histórico completo y soporte avanzado.
+        Desbloquea análisis ilimitados, informes avanzados,
+        histórico completo de cruces y soporte prioritario.
       </p>
 
+      <ul class="pro-features">
+        <li>✔ Análisis ilimitados</li>
+        <li>✔ Historial completo por criadero</li>
+        <li>✔ Recomendaciones avanzadas</li>
+        <li>✔ Acceso prioritario a nuevas funciones IA</li>
+      </ul>
+
       <button id="proBtn" class="btn-pro">
-        Pasar a PRO
+        Pasar a PRO · 29 €/mes
       </button>
     </section>
   </main>
 
   <footer class="footer">
-    © 2025 BreedingAI
+    © 2025 BreedingAI · Plataforma profesional para criadores
   </footer>
 
-  <!-- JS -->
   <script src="app.js"></script>
 </body>
 </html>
