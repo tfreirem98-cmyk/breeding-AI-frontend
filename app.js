@@ -1,77 +1,68 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("analysis-form");
-  const resultCard = document.getElementById("result");
+// ===== CONFIG =====
+const BACKEND_URL = "https://breedingai-backend.onrender.com";
 
-  const verdictEl = document.getElementById("verdict");
-  const scoreEl = document.getElementById("score");
-  const summaryEl = document.getElementById("summary");
-  const recommendationEl = document.getElementById("recommendation");
+// ===== ELEMENTOS =====
+const btnAnalizar = document.getElementById("btn-analizar");
+const btnPro = document.getElementById("btn-pro");
+const resultado = document.getElementById("resultado");
 
-  const params = new URLSearchParams(window.location.search);
-  const isPro = params.get("pro") === "true";
+// ===== ANÁLISIS =====
+btnAnalizar.addEventListener("click", async () => {
+  const raza = document.getElementById("raza").value;
+  const objetivo = document.getElementById("objetivo").value;
+  const consanguinidad = document.getElementById("consanguinidad").value;
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  const antecedentes = Array.from(
+    document.querySelectorAll("input[name='antecedentes']:checked")
+  ).map((el) => el.value);
 
-    const breed = document.getElementById("breed").value;
-    const goal = document.getElementById("goal").value;
-    const inbreeding = document.getElementById("inbreeding").value;
-
-    const antecedentes = Array.from(
-      document.querySelectorAll("fieldset input[type='checkbox']:checked")
-    ).map((el) => el.value);
-
-    resultCard.classList.remove("hidden");
-    verdictEl.textContent = "Analizando…";
-    scoreEl.textContent = "—";
-    summaryEl.textContent = "";
-    recommendationEl.textContent = "";
-
-    const res = await fetch(
-      "https://breedingai-backend.onrender.com/analyze",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          breed,
-          goal,
-          consanguinity: inbreeding,
-          antecedentes,
-          pro: isPro,
-        }),
-      }
-    );
+  try {
+    const res = await fetch(`${BACKEND_URL}/analyze`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        raza,
+        objetivo,
+        consanguinidad,
+        antecedentes,
+      }),
+    });
 
     const data = await res.json();
 
-    verdictEl.textContent = data.verdict;
-    scoreEl.textContent = `${data.score} / 10`;
-    summaryEl.textContent = data.summary;
+    resultado.innerHTML = `
+      <h3>Resultado del análisis</h3>
+      <p><strong>Veredicto:</strong> ${data.veredicto}</p>
+      <p><strong>Puntuación:</strong> ${data.puntuacion}</p>
+      <p>${data.descripcion}</p>
+      <p><strong>Recomendación:</strong> ${data.recomendacion}</p>
+    `;
+  } catch (err) {
+    resultado.innerHTML = "Error al generar el análisis.";
+  }
+});
 
-    if (data.locked) {
-      recommendationEl.innerHTML = `
-        <strong>🔒 Informe PRO bloqueado</strong><br/>
-        Desbloquea el análisis completo y recomendaciones profesionales.
-        <br/><br/>
-        <button id="payPro" class="btn-primary">Desbloquear PRO</button>
-      `;
-
-      document.getElementById("payPro").addEventListener("click", iniciarPago);
-    } else {
-      recommendationEl.textContent = data.recommendation;
-    }
-  });
-
-  async function iniciarPago() {
+// ===== STRIPE PRO =====
+btnPro.addEventListener("click", async () => {
+  try {
     const res = await fetch(
-      "https://breedingai-backend.onrender.com/create-checkout-session",
+      `${BACKEND_URL}/create-checkout-session`,
       { method: "POST" }
     );
 
     const data = await res.json();
-    window.location.href = data.url;
+
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert("No se pudo iniciar el pago.");
+    }
+  } catch (err) {
+    alert("Error al conectar con el servidor.");
   }
 });
+
+
 
 
 
