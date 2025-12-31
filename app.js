@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .forEach((el) => antecedentes.push(el.value));
 
     try {
-      const res = await fetch("https://TU-BACKEND-RENDER.onrender.com/analyze", {
+      const res = await fetch("https://breedingai-backend.onrender.com", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 
 
 
