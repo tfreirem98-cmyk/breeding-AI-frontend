@@ -1,38 +1,34 @@
-const API = "https://breedingai-backend.onrender.com";
+const result = document.getElementById("result");
 
-const params = new URLSearchParams(window.location.search);
-const isPro = params.get("pro") === "1";
+document.getElementById("analyze").onclick = () => {
+  const raza = document.getElementById("raza").value;
+  const objetivo = document.getElementById("objetivo").value;
+  const consanguinidad = document.getElementById("consanguinidad").value;
+  const antecedentes = [...document.querySelectorAll("input:checked")].map(a => a.value);
 
-document.getElementById("analyze").onclick = async () => {
-  const antecedentes = [...document.querySelectorAll("input:checked")].map(i => i.value);
+  let score = 0;
+  if (consanguinidad === "Media") score += 2;
+  if (consanguinidad === "Alta") score += 4;
+  score += antecedentes.length;
 
-  const res = await fetch(`${API}/analyze`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      raza: raza.value,
-      objetivo: objetivo.value,
-      consanguinidad: consanguinidad.value,
-      antecedentes,
-      isPro
-    })
-  });
+  let verdict = "RIESGO BAJO";
+  if (score >= 4) verdict = "RIESGO MODERADO";
+  if (score >= 7) verdict = "RIESGO ALTO";
 
-  if (res.status === 403) {
-    result.innerHTML = "Límite gratuito alcanzado.";
-    return;
-  }
-
-  const data = await res.json();
-  result.innerText = data.analysis + `\n\nUsos restantes: ${data.usesLeft}`;
+  result.innerHTML = `
+    <h2>Resultado del análisis</h2>
+    <p><strong>Veredicto:</strong> ${verdict}</p>
+    <p><strong>Puntuación:</strong> ${score}</p>
+    <p>
+      Evaluación basada en raza (${raza}), objetivo (${objetivo}),
+      consanguinidad (${consanguinidad}) y antecedentes.
+    </p>
+  `;
 };
 
-document.getElementById("pro").onclick = async () => {
-  const res = await fetch(`${API}/create-checkout-session`, { method: "POST" });
-  const data = await res.json();
-  window.location.href = data.url;
+document.getElementById("pro").onclick = () => {
+  window.location.href = "https://breedingai-backend.onrender.com/create-checkout-session";
 };
-
 
 
 
