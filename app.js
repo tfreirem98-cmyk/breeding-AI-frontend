@@ -1,10 +1,26 @@
 const API_URL = "https://breedingai-backend.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("analysis-form");
-  const resultBox = document.getElementById("result");
-  const proBox = document.getElementById("pro-box");
-  const proButton = document.getElementById("go-pro");
+  // 🔍 FORM: intentamos varias opciones válidas
+  const form =
+    document.getElementById("analysis-form") ||
+    document.querySelector("form");
+
+  // 🔍 RESULTADO
+  const resultBox =
+    document.getElementById("result") ||
+    document.getElementById("analysis-result") ||
+    document.querySelector(".analysis-result");
+
+  // 🔍 PRO
+  const proBox =
+    document.getElementById("pro-box") ||
+    document.querySelector(".pro-box");
+
+  const proButton =
+    document.getElementById("go-pro") ||
+    document.querySelector(".go-pro") ||
+    document.querySelector("[data-go-pro]");
 
   if (!form || !resultBox) {
     console.error("Formulario o contenedor de resultados no encontrado");
@@ -14,12 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    resultBox.innerHTML = "Analizando...";
+    resultBox.innerHTML = "<p>Analizando cruce...</p>";
     if (proBox) proBox.style.display = "none";
 
-    const raza = document.getElementById("raza")?.value;
-    const objetivo = document.getElementById("objetivo")?.value;
-    const consanguinidad = document.getElementById("consanguinidad")?.value;
+    const raza = document.querySelector("[name='raza']")?.value;
+    const objetivo = document.querySelector("[name='objetivo']")?.value;
+    const consanguinidad = document.querySelector("[name='consanguinidad']")?.value;
 
     const antecedentes = [];
     document
@@ -53,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } catch (err) {
       resultBox.innerHTML =
-        "<p class='error'>No se pudo conectar con el servidor</p>";
+        "<p class='error'>Error de conexión con el servidor</p>";
     }
   });
 
@@ -71,7 +87,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function renderResultado(data) {
-  const resultBox = document.getElementById("result");
+  const resultBox =
+    document.getElementById("result") ||
+    document.getElementById("analysis-result") ||
+    document.querySelector(".analysis-result");
 
   resultBox.innerHTML = `
     <h2>Resultado del análisis</h2>
@@ -90,7 +109,7 @@ function renderResultado(data) {
 
     ${
       data.riesgos?.length
-        ? `<h3>Riesgos identificados</h3>
+        ? `<h3>Riesgos detectados</h3>
            <ul>${data.riesgos.map((r) => `<li>${r}</li>`).join("")}</ul>`
         : ""
     }
@@ -103,6 +122,8 @@ function renderResultado(data) {
     <p class="usos">Usos gratuitos restantes: ${data.usosRestantes}</p>
   `;
 }
+
+
 
 
 
