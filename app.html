@@ -2,80 +2,181 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>BreedingAI – Análisis profesional de cruce</title>
-  <link rel="stylesheet" href="index.css" />
+  <title>BreedingAI · Análisis profesional</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <link rel="stylesheet" href="app.css" />
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+      background: #f6f8f7;
+      margin: 0;
+      padding: 0;
+      color: #0f172a;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 40px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      font-size: 34px;
+      color: #064e3b;
+      margin-bottom: 10px;
+    }
+
+    p.subtitle {
+      color: #475569;
+      font-size: 18px;
+      margin-bottom: 40px;
+    }
+
+    label {
+      display: block;
+      margin-top: 24px;
+      font-weight: 600;
+    }
+
+    select {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      margin-top: 6px;
+      font-size: 16px;
+    }
+
+    .checkbox-group {
+      margin-top: 12px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .checkbox-group label {
+      display: inline-block;
+      margin-right: 18px;
+      font-weight: 500;
+    }
+
+    .primary-btn {
+      width: 100%;
+      margin-top: 32px;
+      padding: 18px;
+      font-size: 18px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(90deg, #064e3b, #16a34a);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .pro-box {
+      margin-top: 30px;
+      padding: 24px;
+      background: #f0fdf4;
+      border-radius: 14px;
+      border: 1px solid #bbf7d0;
+      display: none;
+    }
+
+    .pro-btn {
+      margin-top: 16px;
+      padding: 14px 26px;
+      font-size: 16px;
+      border-radius: 999px;
+      border: none;
+      background: #0f172a;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
-  <main class="app-container">
 
+  <div class="container">
     <h1>Análisis profesional de cruce</h1>
     <p class="subtitle">
-      5 análisis gratuitos · Informes profesionales con IA en PRO
+      Herramienta orientativa para criadores.  
+      Incluye <strong>5 análisis gratuitos</strong>.
     </p>
 
     <!-- FORMULARIO -->
-    <form id="analysis-form" class="card">
+    <label for="raza">Raza</label>
+    <select id="raza">
+      <option>Border Collie</option>
+      <option>Golden Retriever</option>
+      <option>Labrador Retriever</option>
+      <option>Pastor Alemán</option>
+      <option>Bulldog Francés</option>
+      <option>Caniche</option>
+      <option>Rottweiler</option>
+      <option>Doberman</option>
+    </select>
 
-      <label>Raza</label>
-      <select name="raza">
-        <option>Border Collie</option>
-        <option>Golden Retriever</option>
-        <option>Labrador Retriever</option>
-        <option>Pastor Alemán</option>
-        <option>Bulldog Inglés</option>
-      </select>
+    <label for="objetivo">Objetivo de cría</label>
+    <select id="objetivo">
+      <option>Salud</option>
+      <option>Trabajo</option>
+      <option>Compañía</option>
+      <option>Exposición</option>
+    </select>
 
-      <label>Objetivo de cría</label>
-      <select name="objetivo">
-        <option value="Salud">Salud</option>
-        <option value="Trabajo">Trabajo</option>
-        <option value="Exposición">Exposición</option>
-      </select>
+    <label for="consanguinidad">Consanguinidad</label>
+    <select id="consanguinidad">
+      <option>Baja</option>
+      <option>Media</option>
+      <option>Alta</option>
+    </select>
 
-      <label>Consanguinidad</label>
-      <select name="consanguinidad">
-        <option value="Baja">Baja</option>
-        <option value="Media">Media</option>
-        <option value="Alta">Alta</option>
-      </select>
+    <label>Antecedentes conocidos</label>
+    <div class="checkbox-group">
+      <label><input type="checkbox" value="Displasia" /> Displasia</label>
+      <label><input type="checkbox" value="Oculares" /> Oculares</label>
+      <label><input type="checkbox" value="Respiratorios" /> Respiratorios</label>
+      <label><input type="checkbox" value="Neurológicos" /> Neurológicos</label>
+    </div>
 
-      <fieldset>
-        <legend>Antecedentes conocidos</legend>
-        <label><input type="checkbox" name="antecedentes" value="Displasia" /> Displasia</label>
-        <label><input type="checkbox" name="antecedentes" value="Oculares" /> Oculares</label>
-        <label><input type="checkbox" name="antecedentes" value="Respiratorios" /> Respiratorios</label>
-        <label><input type="checkbox" name="antecedentes" value="Neurológicos" /> Neurológicos</label>
-      </fieldset>
-
-      <button type="submit" class="primary">
-        Generar análisis
-      </button>
-    </form>
+    <button id="analyze" class="primary-btn">
+      Generar análisis
+    </button>
 
     <!-- RESULTADO -->
-    <section id="analysis-result" class="card result">
-      <!-- Aquí inyecta JS -->
-    </section>
+    <div id="result" class="result"></div>
 
-    <!-- BLOQUE PRO -->
-    <section id="pro-box" class="card pro" style="display:none;">
-      <h2>Has alcanzado el límite gratuito</h2>
+    <!-- CTA PRO (SIEMPRE EXISTE EN DOM) -->
+    <div id="proBox" class="pro-box">
+      <h3>Has alcanzado el límite gratuito</h3>
       <p>
-        Desbloquea análisis profesionales ilimitados, informes con IA,
-        explicación genética detallada y recomendaciones expertas.
+        Desbloquea análisis profesionales ilimitados con informes avanzados,
+        justificación técnica y recomendaciones expertas.
       </p>
-      <button id="go-pro" class="pro-button">
+      <button id="pro" class="pro-btn">
         Pasar a PRO · 5€/mes
       </button>
-    </section>
-
-  </main>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>
 </html>
+
+
 
 
 
