@@ -9,7 +9,7 @@
 
   <style>
     body {
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
       background: #f6f8f7;
       margin: 0;
       padding: 0;
@@ -17,31 +17,30 @@
     }
 
     .container {
-      max-width: 960px;
+      max-width: 900px;
       margin: 60px auto;
       padding: 40px;
       background: #ffffff;
-      border-radius: 18px;
+      border-radius: 20px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.08);
     }
 
     h1 {
-      font-size: 36px;
-      margin-bottom: 10px;
+      font-size: 34px;
       color: #064e3b;
+      margin-bottom: 10px;
     }
 
     p.subtitle {
       color: #475569;
-      margin-bottom: 40px;
       font-size: 18px;
+      margin-bottom: 40px;
     }
 
     label {
-      font-weight: 600;
       display: block;
       margin-top: 24px;
-      margin-bottom: 8px;
+      font-weight: 600;
     }
 
     select {
@@ -49,19 +48,20 @@
       padding: 14px;
       border-radius: 12px;
       border: 1px solid #cbd5e1;
+      margin-top: 6px;
       font-size: 16px;
     }
 
     .checkbox-group {
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
+      margin-top: 12px;
       padding: 16px;
-      margin-top: 16px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
     }
 
     .checkbox-group label {
       display: inline-block;
-      margin-right: 20px;
+      margin-right: 18px;
       font-weight: 500;
     }
 
@@ -73,7 +73,7 @@
       border-radius: 999px;
       border: none;
       background: linear-gradient(90deg, #064e3b, #16a34a);
-      color: white;
+      color: #fff;
       font-weight: 700;
       cursor: pointer;
     }
@@ -90,6 +90,7 @@
       background: #f0fdf4;
       border-radius: 14px;
       border: 1px solid #bbf7d0;
+      display: none;
     }
 
     .pro-btn {
@@ -99,41 +100,45 @@
       border-radius: 999px;
       border: none;
       background: #0f172a;
-      color: white;
-      cursor: pointer;
+      color: #fff;
       font-weight: 600;
+      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
+
   <div class="container">
     <h1>Análisis profesional de cruce</h1>
-    <p class="subtitle">Herramienta profesional para criadores.</p>
+    <p class="subtitle">
+      Herramienta orientativa para criadores.  
+      5 análisis gratuitos disponibles.
+    </p>
 
-    <!-- FORMULARIO -->
-    <label>Raza</label>
-    <select id="breed">
+    <!-- FORMULARIO (NO SUBMIT) -->
+    <label for="raza">Raza</label>
+    <select id="raza">
       <option>Border Collie</option>
       <option>Golden Retriever</option>
       <option>Labrador Retriever</option>
       <option>Pastor Alemán</option>
-      <option>Bulldog Inglés</option>
+      <option>Bulldog Francés</option>
       <option>Caniche</option>
-      <option>Doberman</option>
       <option>Rottweiler</option>
+      <option>Doberman</option>
     </select>
 
-    <label>Objetivo de cría</label>
-    <select id="goal">
+    <label for="objetivo">Objetivo de cría</label>
+    <select id="objetivo">
       <option>Salud</option>
       <option>Trabajo</option>
       <option>Compañía</option>
       <option>Exposición</option>
     </select>
 
-    <label>Consanguinidad</label>
-    <select id="inbreeding">
+    <label for="consanguinidad">Consanguinidad</label>
+    <select id="consanguinidad">
       <option>Baja</option>
       <option>Media</option>
       <option>Alta</option>
@@ -141,61 +146,35 @@
 
     <label>Antecedentes conocidos</label>
     <div class="checkbox-group">
-      <label><input type="checkbox" /> Displasia</label>
-      <label><input type="checkbox" /> Oculares</label>
-      <label><input type="checkbox" /> Respiratorios</label>
-      <label><input type="checkbox" /> Neurológicos</label>
+      <label><input type="checkbox" value="Displasia" /> Displasia</label>
+      <label><input type="checkbox" value="Oculares" /> Oculares</label>
+      <label><input type="checkbox" value="Respiratorios" /> Respiratorios</label>
+      <label><input type="checkbox" value="Neurológicos" /> Neurológicos</label>
     </div>
 
-    <button class="primary-btn" onclick="runAnalysis()">Generar análisis</button>
+    <button id="analyze" class="primary-btn">
+      Generar análisis
+    </button>
 
     <!-- RESULTADO -->
-    <div id="result" class="result" style="display:none;">
-      <h2>Resultado del análisis</h2>
-      <p><strong>Veredicto:</strong> RIESGO MODERADO</p>
-      <p><strong>Puntuación:</strong> 5</p>
-      <p>Evaluación orientativa basada en los parámetros seleccionados.</p>
+    <div id="result" class="result"></div>
 
-      <div class="pro-box">
-        <h3>¿Necesitas un análisis profesional real?</h3>
-        <p>
-          Accede a informes avanzados con IA, explicación genética,
-          recomendaciones personalizadas y uso ilimitado.
-        </p>
-        <button class="pro-btn" onclick="goPro()">Pasar a PRO · 5€/mes</button>
-      </div>
+    <!-- CTA PRO -->
+    <div id="proBox" class="pro-box">
+      <h3>Has alcanzado el límite gratuito</h3>
+      <p>
+        Accede a análisis profesionales ilimitados con informes avanzados.
+      </p>
+      <button id="pro" class="pro-btn">
+        Pasar a PRO · 5€/mes
+      </button>
     </div>
   </div>
 
-  <!-- SCRIPTS -->
-  <script>
-    function runAnalysis() {
-      document.getElementById("result").style.display = "block";
-    }
-
-    async function goPro() {
-      try {
-        const res = await fetch(
-          "https://breedingai-backend.onrender.com/create-checkout-session",
-          { method: "POST" }
-        );
-
-        const data = await res.json();
-
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          alert("No se pudo iniciar el pago.");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Error conectando con el servidor.");
-      }
-    }
-  </script>
+  <!-- SCRIPT -->
+  <script src="app.js"></script>
 </body>
 </html>
-
 
 
 
