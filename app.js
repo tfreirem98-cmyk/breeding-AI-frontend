@@ -1,13 +1,13 @@
 const API_URL = "https://breedingai-backend.onrender.com";
 
-// Elementos
 const analyzeBtn = document.getElementById("analyze");
 const resultBox = document.getElementById("result");
+const proBox = document.getElementById("proBox");
 const proBtn = document.getElementById("pro");
 
 analyzeBtn.addEventListener("click", async () => {
-  // LIMPIAR RESULTADO SIEMPRE
   resultBox.innerHTML = "<p>Analizando...</p>";
+  proBox.style.display = "none";
 
   const raza = document.getElementById("raza").value;
   const objetivo = document.getElementById("objetivo").value;
@@ -15,7 +15,7 @@ analyzeBtn.addEventListener("click", async () => {
 
   const antecedentes = Array.from(
     document.querySelectorAll("input[type='checkbox']:checked")
-  ).map((el) => el.value);
+  ).map(el => el.value);
 
   try {
     const response = await fetch(`${API_URL}/analyze`, {
@@ -31,17 +31,17 @@ analyzeBtn.addEventListener("click", async () => {
 
     const data = await response.json();
 
-    // ====== LIMITE ALCANZADO ======
-    if (!response.ok && data.error === "FREE_LIMIT_REACHED") {
+    // 🔴 LÍMITE GRATUITO ALCANZADO
+    if (response.status === 403 && data.error === "FREE_LIMIT_REACHED") {
       resultBox.innerHTML = `
         <h3>Límite alcanzado</h3>
         <p>Has utilizado tus 5 análisis gratuitos.</p>
       `;
-      proBtn.style.display = "block";
+      proBox.style.display = "block";
       return;
     }
 
-    // ====== MOSTRAR RESULTADO DINÁMICO ======
+    // 🟢 RESULTADO NORMAL
     resultBox.innerHTML = `
       <h2>Resultado del análisis</h2>
       <p><strong>Veredicto:</strong> ${data.resultado.veredicto}</p>
@@ -51,11 +51,8 @@ analyzeBtn.addEventListener("click", async () => {
       <p><em>Usos gratuitos restantes: ${data.usosRestantes}</em></p>
     `;
 
-    // Mostrar CTA PRO si se acaban los usos
     if (data.usosRestantes <= 0) {
-      proBtn.style.display = "block";
-    } else {
-      proBtn.style.display = "none";
+      proBox.style.display = "block";
     }
 
   } catch (err) {
@@ -80,7 +77,6 @@ proBtn.addEventListener("click", async () => {
     alert("Error al iniciar el pago.");
   }
 });
-
 
 
 
