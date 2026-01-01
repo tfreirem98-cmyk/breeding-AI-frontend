@@ -1,24 +1,43 @@
 const API_URL = "https://breedingai-backend.onrender.com";
 
+// Elementos principales
 const analyzeBtn = document.getElementById("analyze");
 const resultBox = document.getElementById("result");
 const proBox = document.getElementById("proBox");
 const proBtn = document.getElementById("pro");
 
-analyzeBtn.addEventListener("click", async () => {
-  resultBox.innerHTML = "<p>Analizando...</p>";
-  proBox.style.display = "none";
+// Elementos del resultado estructurado
+const verdictBadge = document.getElementById("verdictBadge");
+const scoreBadge = document.getElementById("scoreBadge");
+const summaryText = document.getElementById("summaryText");
+const factorsList = document.getElementById("factorsList");
+const alertsList = document.getElementById("alertsList");
 
+// =======================
+// ANALYZE (FREE)
+// =======================
+analyzeBtn.addEventListener("click", async () => {
+  // Reset visual
+  proBox.style.display = "none";
+  verdictBadge.textContent = "";
+  scoreBadge.textContent = "";
+  summaryText.textContent = "";
+  factorsList.innerHTML = "";
+  alertsList.innerHTML = "";
+
+  resultBox.style.display = "block";
+  summaryText.textContent = "Analizando cruce...";
+
+  // Obtener valores
   const raza = document.getElementById("raza").value;
   const objetivo = document.getElementById("objetivo").value;
   const consanguinidad = document.getElementById("consanguinidad").value;
-
-  const antecedentes = Array.from(
-    document.querySelectorAll("input[type='checkbox']:checked")
-  ).map(el => el.value);
+  const antecedentes = [...document.querySelectorAll("input:checked")].map(
+    el => el.value
+  );
 
   try {
-    const response = await fetch(`${API_URL}/analyze`, {
+    const res = await fetch(`${API_URL}/analyze`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -29,42 +48,56 @@ analyzeBtn.addEventListener("click", async () => {
       })
     });
 
-    const data = await response.json();
+    const data = await res.json();
 
-    // 🔴 LÍMITE GRATUITO ALCANZADO
-    if (response.status === 403 && data.error === "FREE_LIMIT_REACHED") {
-      resultBox.innerHTML = `
-        <h3>Límite alcanzado</h3>
-        <p>Has utilizado tus 5 análisis gratuitos.</p>
-      `;
+    // =======================
+    // LÍMITE FREE ALCANZADO
+    // =======================
+    if (res.status === 403) {
+      summaryText.textContent = data.message;
       proBox.style.display = "block";
       return;
     }
 
-    // 🟢 RESULTADO NORMAL
-    resultBox.innerHTML = `
-      <h2>Resultado del análisis</h2>
-      <p><strong>Veredicto:</strong> ${data.resultado.veredicto}</p>
-      <p><strong>Puntuación:</strong> ${data.resultado.puntuacion}</p>
-      <p>${data.resultado.descripcion}</p>
-      <p><strong>Recomendación:</strong> ${data.resultado.recomendacion}</p>
-      <p><em>Usos gratuitos restantes: ${data.usosRestantes}</em></p>
-    `;
+    const resultado = data.resultado;
 
-    if (data.usosRestantes <= 0) {
-      proBox.style.display = "block";
+    // =======================
+    // RENDER RESULTADO
+    // =======================
+    verdictBadge.textContent = resultado.verdict;
+    scoreBadge.textContent = `Puntuación: ${resultado.score}/10`;
+    summaryText.textContent = resultado.summary;
+
+    // Factores
+    resultado.factors.forEach(factor => {
+      const li = document.createElement("li");
+      li.textContent = factor;
+      factorsList.appendChild(li);
+    });
+
+    // Alertas
+    if (resultado.alerts.length === 0) {
+      const li = document.createElement("li");
+      li.textContent = "No se han detectado alertas críticas.";
+      alertsList.appendChild(li);
+    } else {
+      resultado.alerts.forEach(alert => {
+        const li = document.createElement("li");
+        li.textContent = alert;
+        alertsList.appendChild(li);
+      });
     }
 
-  } catch (err) {
-    console.error(err);
-    resultBox.innerHTML =
-      "<p>Error al generar el análisis. Inténtalo de nuevo.</p>";
+  } catch (error) {
+    summaryText.textContent =
+      "Ha ocurrido un error al generar el análisis. Inténtalo de nuevo.";
+    console.error(error);
   }
 });
 
-// =====================
+// =======================
 // STRIPE PRO
-// =====================
+// =======================
 proBtn.addEventListener("click", async () => {
   try {
     const res = await fetch(
@@ -73,10 +106,12 @@ proBtn.addEventListener("click", async () => {
     );
     const data = await res.json();
     window.location.href = data.url;
-  } catch (err) {
-    alert("Error al iniciar el pago.");
+  } catch (error) {
+    alert("No se pudo iniciar el pago. Inténtalo más tarde.");
+    console.error(error);
   }
 });
+
 
 
 
