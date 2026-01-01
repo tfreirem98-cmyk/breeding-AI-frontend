@@ -1,30 +1,26 @@
 const API_URL = "https://breedingai-backend.onrender.com";
 
-const form = document.getElementById("analysisForm");
+// Elementos
+const analyzeBtn = document.getElementById("analyze");
 const resultBox = document.getElementById("result");
-const proBox = document.getElementById("proBox");
+const proBtn = document.getElementById("pro");
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
+analyzeBtn.addEventListener("click", async () => {
   // LIMPIAR RESULTADO SIEMPRE
-  resultBox.innerHTML = "";
-  proBox.style.display = "none";
+  resultBox.innerHTML = "<p>Analizando...</p>";
 
   const raza = document.getElementById("raza").value;
   const objetivo = document.getElementById("objetivo").value;
   const consanguinidad = document.getElementById("consanguinidad").value;
 
   const antecedentes = Array.from(
-    document.querySelectorAll("input[name='antecedentes']:checked")
+    document.querySelectorAll("input[type='checkbox']:checked")
   ).map((el) => el.value);
 
   try {
-    const res = await fetch(`${API_URL}/analyze`, {
+    const response = await fetch(`${API_URL}/analyze`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         raza,
         objetivo,
@@ -33,21 +29,21 @@ form.addEventListener("submit", async (e) => {
       })
     });
 
-    const data = await res.json();
+    const data = await response.json();
 
     // ====== LIMITE ALCANZADO ======
-    if (!res.ok && data.error === "FREE_LIMIT_REACHED") {
+    if (!response.ok && data.error === "FREE_LIMIT_REACHED") {
       resultBox.innerHTML = `
         <h3>Límite alcanzado</h3>
-        <p>Has usado tus 5 análisis gratuitos.</p>
+        <p>Has utilizado tus 5 análisis gratuitos.</p>
       `;
-      proBox.style.display = "block";
+      proBtn.style.display = "block";
       return;
     }
 
-    // ====== MOSTRAR RESULTADO ======
+    // ====== MOSTRAR RESULTADO DINÁMICO ======
     resultBox.innerHTML = `
-      <h3>Resultado del análisis</h3>
+      <h2>Resultado del análisis</h2>
       <p><strong>Veredicto:</strong> ${data.resultado.veredicto}</p>
       <p><strong>Puntuación:</strong> ${data.resultado.puntuacion}</p>
       <p>${data.resultado.descripcion}</p>
@@ -55,31 +51,36 @@ form.addEventListener("submit", async (e) => {
       <p><em>Usos gratuitos restantes: ${data.usosRestantes}</em></p>
     `;
 
-    // SI SE ACABAN → CTA PRO
+    // Mostrar CTA PRO si se acaban los usos
     if (data.usosRestantes <= 0) {
-      proBox.style.display = "block";
+      proBtn.style.display = "block";
+    } else {
+      proBtn.style.display = "none";
     }
 
   } catch (err) {
     console.error(err);
-    resultBox.innerHTML = "<p>Error al generar el análisis.</p>";
+    resultBox.innerHTML =
+      "<p>Error al generar el análisis. Inténtalo de nuevo.</p>";
   }
 });
 
-// ==================
+// =====================
 // STRIPE PRO
-// ==================
-async function goPro() {
+// =====================
+proBtn.addEventListener("click", async () => {
   try {
-    const res = await fetch(`${API_URL}/create-checkout-session`, {
-      method: "POST"
-    });
+    const res = await fetch(
+      `${API_URL}/create-checkout-session`,
+      { method: "POST" }
+    );
     const data = await res.json();
     window.location.href = data.url;
   } catch (err) {
-    alert("Error al redirigir a Stripe");
+    alert("Error al iniciar el pago.");
   }
-}
+});
+
 
 
 
