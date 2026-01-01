@@ -4,79 +4,77 @@ const analyzeBtn = document.getElementById("analyze");
 const resultBox = document.getElementById("result");
 const proBox = document.getElementById("proBox");
 const proBtn = document.getElementById("pro");
+const proResult = document.getElementById("proResult");
 
 analyzeBtn.addEventListener("click", async () => {
   resultBox.innerHTML = "<p>Analizando...</p>";
+  proResult.innerHTML = "";
   proBox.style.display = "none";
 
   const raza = document.getElementById("raza").value;
   const objetivo = document.getElementById("objetivo").value;
   const consanguinidad = document.getElementById("consanguinidad").value;
+  const antecedentes = [...document.querySelectorAll("input:checked")].map(
+    el => el.value
+  );
 
-  const antecedentes = Array.from(
-    document.querySelectorAll("input[type='checkbox']:checked")
-  ).map(el => el.value);
+  const res = await fetch(`${API_URL}/analyze`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      raza,
+      objetivo,
+      consanguinidad,
+      antecedentes
+    })
+  });
 
-  try {
-    const response = await fetch(`${API_URL}/analyze`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        raza,
-        objetivo,
-        consanguinidad,
-        antecedentes
-      })
-    });
+  const data = await res.json();
 
-    const data = await response.json();
-
-    // 🔴 LÍMITE GRATUITO ALCANZADO
-    if (response.status === 403 && data.error === "FREE_LIMIT_REACHED") {
-      resultBox.innerHTML = `
-        <h3>Límite alcanzado</h3>
-        <p>Has utilizado tus 5 análisis gratuitos.</p>
-      `;
-      proBox.style.display = "block";
-      return;
-    }
-
-    // 🟢 RESULTADO NORMAL
-    resultBox.innerHTML = `
-      <h2>Resultado del análisis</h2>
-      <p><strong>Veredicto:</strong> ${data.resultado.veredicto}</p>
-      <p><strong>Puntuación:</strong> ${data.resultado.puntuacion}</p>
-      <p>${data.resultado.descripcion}</p>
-      <p><strong>Recomendación:</strong> ${data.resultado.recomendacion}</p>
-      <p><em>Usos gratuitos restantes: ${data.usosRestantes}</em></p>
-    `;
-
-    if (data.usosRestantes <= 0) {
-      proBox.style.display = "block";
-    }
-
-  } catch (err) {
-    console.error(err);
-    resultBox.innerHTML =
-      "<p>Error al generar el análisis. Inténtalo de nuevo.</p>";
+  if (res.status === 403) {
+    resultBox.innerHTML = `<p>${data.message}</p>`;
+    proBox.style.display = "block";
+    return;
   }
+
+  resultBox.innerHTML = `
+    <h3>${data.resultado.veredicto}</h3>
+    <p>${data.resultado.descripcion}</p>
+    <p><strong>Recomendación:</strong> ${data.resultado.recomendacion}</p>
+    <p><em>Usos restantes: ${data.usosRestantes}</em></p>
+  `;
 });
 
-// =====================
-// STRIPE PRO
-// =====================
 proBtn.addEventListener("click", async () => {
-  try {
-    const res = await fetch(
-      `${API_URL}/create-checkout-session`,
-      { method: "POST" }
-    );
-    const data = await res.json();
-    window.location.href = data.url;
-  } catch (err) {
-    alert("Error al iniciar el pago.");
-  }
+  proResult.innerHTML = "<p>Generando informe profesional…</p>";
+
+  const raza = document.getElementById("raza").value;
+  const objetivo = document.getElementById("objetivo").value;
+  const consanguinidad = document.getElementById("consanguinidad").value;
+  const antecedentes = [...document.querySelectorAll("input:checked")].map(
+    el => el.value
+  );
+
+  const res = await fetch(`${API_URL}/analyze-pro`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      raza,
+      objetivo,
+      consanguinidad,
+      antecedentes
+    })
+  });
+
+  const data = await res.json();
+
+  proResult.innerHTML = `
+    <h2>Informe profesional</h2>
+    <p>${data.informeProfesional.replace(/\n/g, "<br><br>")}</p>
+  `;
 });
+
+
 
 
 
