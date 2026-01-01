@@ -1,94 +1,115 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>BreedingAI · Análisis profesional de cruce</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="app.css" />
+  <meta charset="UTF-8">
+  <title>BreedingAI</title>
+  <link rel="stylesheet" href="app.css">
 </head>
-
 <body>
 
-<header class="header">
-  <div class="header-inner">
-    <h1>BreedingAI</h1>
-    <span>Análisis profesional para criadores</span>
+<h1>Análisis profesional de cruce</h1>
+<p>5 análisis gratuitos · Informes profesionales con IA en PRO</p>
+
+<form id="analysisForm">
+  <label>Raza</label>
+  <select id="raza">
+    <option>Border Collie</option>
+    <option>Labrador Retriever</option>
+    <option>Golden Retriever</option>
+    <option>Pastor Alemán</option>
+    <option>Bulldog Inglés</option>
+  </select>
+
+  <label>Objetivo de cría</label>
+  <select id="objetivo">
+    <option>Salud</option>
+    <option>Trabajo</option>
+    <option>Exposición</option>
+  </select>
+
+  <label>Consanguinidad</label>
+  <select id="consanguinidad">
+    <option>Baja</option>
+    <option>Media</option>
+    <option>Alta</option>
+  </select>
+
+  <fieldset>
+    <legend>Antecedentes</legend>
+    <label><input type="checkbox" value="Displasia"> Displasia</label>
+    <label><input type="checkbox" value="Oculares"> Oculares</label>
+    <label><input type="checkbox" value="Respiratorios"> Respiratorios</label>
+    <label><input type="checkbox" value="Neurológicos"> Neurológicos</label>
+  </fieldset>
+
+  <button type="submit">Generar análisis</button>
+</form>
+
+<section id="result" style="display:none;">
+  <h2>Resultado del análisis</h2>
+  <p><strong>Veredicto:</strong> <span id="verdict"></span></p>
+  <p><strong>Puntuación:</strong> <span id="score"></span></p>
+  <p id="explanation"></p>
+  <p><strong>Recomendación:</strong></p>
+  <p id="recommendation"></p>
+
+  <div id="proBox" style="display:none;">
+    <h3>¿Necesitas análisis profesionales reales?</h3>
+    <p>Accede a informes avanzados con IA, históricos y uso ilimitado.</p>
+    <button id="goPro">Pasar a PRO · 5€/mes</button>
   </div>
-</header>
+</section>
 
-<main class="main">
+<script>
+const form = document.getElementById("analysisForm");
+const result = document.getElementById("result");
+const proBox = document.getElementById("proBox");
 
-  <section class="card">
-    <h2>Análisis profesional de cruce</h2>
-    <p class="subtitle">
-      5 análisis gratuitos · Informes profesionales con IA en PRO
-    </p>
+form.onsubmit = async (e) => {
+  e.preventDefault();
 
-    <label>Raza</label>
-    <select id="raza">
-      <option>Border Collie</option>
-      <option>Golden Retriever</option>
-      <option>Labrador Retriever</option>
-      <option>Pastor Alemán</option>
-      <option>Bulldog Inglés</option>
-      <option>Bulldog Francés</option>
-      <option>Caniche</option>
-      <option>Rottweiler</option>
-      <option>Doberman</option>
-    </select>
+  const antecedentes = [...document.querySelectorAll("input[type=checkbox]:checked")]
+    .map(i => i.value);
 
-    <label>Objetivo de cría</label>
-    <select id="objetivo">
-      <option>Salud</option>
-      <option>Trabajo</option>
-      <option>Compañía</option>
-      <option>Exposición</option>
-    </select>
+  const res = await fetch("https://breedingai-backend.onrender.com/analyze", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      raza: raza.value,
+      objetivo: objetivo.value,
+      consanguinidad: consanguinidad.value,
+      antecedentes
+    })
+  });
 
-    <label>Consanguinidad</label>
-    <select id="consanguinidad">
-      <option>Baja</option>
-      <option>Media</option>
-      <option>Alta</option>
-    </select>
+  const data = await res.json();
 
-    <label>Antecedentes conocidos</label>
-    <div class="checkboxes">
-      <label><input type="checkbox" value="Displasia"> Displasia</label>
-      <label><input type="checkbox" value="Oculares"> Oculares</label>
-      <label><input type="checkbox" value="Respiratorios"> Respiratorios</label>
-      <label><input type="checkbox" value="Neurológicos"> Neurológicos</label>
-    </div>
+  if (data.error) {
+    proBox.style.display = "block";
+    return;
+  }
 
-    <button id="analyze" class="btn-primary">
-      Generar análisis
-    </button>
-  </section>
+  verdict.textContent = data.verdict;
+  score.textContent = data.score;
+  explanation.innerHTML = data.explanation;
+  recommendation.innerHTML = data.recommendation;
 
-  <section id="result" class="result-card"></section>
+  result.style.display = "block";
+  if (!data.pro && data.remaining === 0) proBox.style.display = "block";
+};
 
-  <section id="proBox" class="pro-card">
-    <h3>¿Necesitas un análisis profesional real?</h3>
-    <p>
-      Accede a informes avanzados con IA, explicación genética,
-      recomendaciones personalizadas y uso ilimitado.
-    </p>
-    <button id="pro" class="btn-pro">
-      Pasar a PRO · 5 €/mes
-    </button>
-  </section>
+document.getElementById("goPro").onclick = async () => {
+  const res = await fetch("https://breedingai-backend.onrender.com/create-checkout-session", {
+    method: "POST"
+  });
+  const data = await res.json();
+  window.location.href = data.url;
+};
+</script>
 
-  <section id="proResult" class="pro-result"></section>
-
-</main>
-
-<footer class="footer">
-  © 2025 BreedingAI · Uso orientativo
-</footer>
-
-<script src="app.js"></script>
 </body>
 </html>
+
 
 
 
