@@ -99,6 +99,53 @@ select {
   color: #64748b;
 }
 
+/* RESULTADO PROFESIONAL */
+
+.result {
+  margin-top: 40px;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+#verdictBadge {
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #064e3b;
+  color: #fff;
+}
+
+#scoreBadge {
+  font-weight: 600;
+  color: #475569;
+}
+
+.result-section {
+  margin-top: 25px;
+}
+
+.result-section h4 {
+  margin-bottom: 10px;
+  color: #064e3b;
+}
+
+.result-section ul {
+  padding-left: 20px;
+}
+
+.alert-section li {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
 
 
 
