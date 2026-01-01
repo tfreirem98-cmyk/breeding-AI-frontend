@@ -2,69 +2,199 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>BreedingAI – Análisis</title>
+  <title>BreedingAI · Análisis profesional de cruce</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <link rel="stylesheet" href="app.css" />
+
+  <style>
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f6f8f7;
+      margin: 0;
+      padding: 0;
+      color: #0f172a;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 60px auto;
+      padding: 40px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      color: #064e3b;
+    }
+
+    p.subtitle {
+      color: #475569;
+      margin-bottom: 40px;
+      font-size: 18px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+
+    select {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      font-size: 16px;
+    }
+
+    .checkbox-group {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .checkbox-group label {
+      display: inline-block;
+      margin-right: 20px;
+      font-weight: 500;
+    }
+
+    .primary-btn {
+      width: 100%;
+      margin-top: 32px;
+      padding: 18px;
+      font-size: 18px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(90deg, #064e3b, #16a34a);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .pro-box {
+      margin-top: 30px;
+      padding: 24px;
+      background: #f0fdf4;
+      border-radius: 14px;
+      border: 1px solid #bbf7d0;
+    }
+
+    .pro-btn {
+      margin-top: 16px;
+      padding: 14px 26px;
+      font-size: 16px;
+      border-radius: 999px;
+      border: none;
+      background: #0f172a;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="container">
+    <h1>Análisis profesional de cruce</h1>
+    <p class="subtitle">Herramienta profesional para criadores.</p>
 
-<a href="index.html" class="back">← Volver</a>
+    <!-- FORMULARIO -->
+    <label>Raza</label>
+    <select id="breed">
+      <option>Border Collie</option>
+      <option>Golden Retriever</option>
+      <option>Labrador Retriever</option>
+      <option>Pastor Alemán</option>
+      <option>Bulldog Inglés</option>
+      <option>Caniche</option>
+      <option>Doberman</option>
+      <option>Rottweiler</option>
+    </select>
 
-<h1>Análisis profesional de cruce</h1>
-<p class="subtitle">Evaluación objetiva orientada a criadores profesionales.</p>
+    <label>Objetivo de cría</label>
+    <select id="goal">
+      <option>Salud</option>
+      <option>Trabajo</option>
+      <option>Compañía</option>
+      <option>Exposición</option>
+    </select>
 
-<div class="card">
+    <label>Consanguinidad</label>
+    <select id="inbreeding">
+      <option>Baja</option>
+      <option>Media</option>
+      <option>Alta</option>
+    </select>
 
-  <label>Raza</label>
-  <select id="raza">
-    <option>Border Collie</option>
-    <option>Golden Retriever</option>
-    <option>Labrador Retriever</option>
-    <option>Pastor Alemán</option>
-    <option>Bulldog Inglés</option>
-    <option>Caniche</option>
-    <option>Boxer</option>
-    <option>Rottweiler</option>
-    <option>Dobermann</option>
-    <option>Husky Siberiano</option>
-  </select>
+    <label>Antecedentes conocidos</label>
+    <div class="checkbox-group">
+      <label><input type="checkbox" /> Displasia</label>
+      <label><input type="checkbox" /> Oculares</label>
+      <label><input type="checkbox" /> Respiratorios</label>
+      <label><input type="checkbox" /> Neurológicos</label>
+    </div>
 
-  <label>Objetivo de cría</label>
-  <select id="objetivo">
-    <option>Salud</option>
-    <option>Trabajo</option>
-    <option>Belleza</option>
-  </select>
+    <button class="primary-btn" onclick="runAnalysis()">Generar análisis</button>
 
-  <label>Consanguinidad</label>
-  <select id="consanguinidad">
-    <option>Baja</option>
-    <option>Media</option>
-    <option>Alta</option>
-  </select>
+    <!-- RESULTADO -->
+    <div id="result" class="result" style="display:none;">
+      <h2>Resultado del análisis</h2>
+      <p><strong>Veredicto:</strong> RIESGO MODERADO</p>
+      <p><strong>Puntuación:</strong> 5</p>
+      <p>Evaluación orientativa basada en los parámetros seleccionados.</p>
 
-  <fieldset>
-    <legend>Antecedentes conocidos</legend>
-    <label><input type="checkbox" value="Displasia"> Displasia</label>
-    <label><input type="checkbox" value="Oculares"> Oculares</label>
-    <label><input type="checkbox" value="Respiratorios"> Respiratorios</label>
-    <label><input type="checkbox" value="Neurológicos"> Neurológicos</label>
-  </fieldset>
+      <div class="pro-box">
+        <h3>¿Necesitas un análisis profesional real?</h3>
+        <p>
+          Accede a informes avanzados con IA, explicación genética,
+          recomendaciones personalizadas y uso ilimitado.
+        </p>
+        <button class="pro-btn" onclick="goPro()">Pasar a PRO · 5€/mes</button>
+      </div>
+    </div>
+  </div>
 
-  <button id="analyze">Generar análisis</button>
-</div>
+  <!-- SCRIPTS -->
+  <script>
+    function runAnalysis() {
+      document.getElementById("result").style.display = "block";
+    }
 
-<div id="result" class="result"></div>
+    async function goPro() {
+      try {
+        const res = await fetch(
+          "https://breedingai-backend.onrender.com/create-checkout-session",
+          { method: "POST" }
+        );
 
-<div class="pro-box">
-  <h3>¿Necesitas análisis profesionales?</h3>
-  <p>Accede a análisis ilimitados y soporte avanzado.</p>
-  <button id="pro">Pasar a PRO</button>
-</div>
+        const data = await res.json();
 
-<script src="app.js"></script>
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert("No se pudo iniciar el pago.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error conectando con el servidor.");
+      }
+    }
+  </script>
 </body>
 </html>
-
 
 
 
