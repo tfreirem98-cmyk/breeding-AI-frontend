@@ -1,83 +1,115 @@
-const API_URL = "https://breedingai-backend.onrender.com";
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("analysisForm");
+  const resultContainer = document.getElementById("analysisResult");
+  const freeCounter = document.getElementById("freeUses");
+  const proBlock = document.getElementById("proBlock");
+  const proButton = document.getElementById("goProBtn");
 
-const analyzeBtn = document.getElementById("analyze");
-const resultBox = document.getElementById("result");
-const proBox = document.getElementById("proBox");
-const proBtn = document.getElementById("pro");
+  if (!form || !resultContainer) {
+    console.error("Formulario o contenedor de resultados no encontrado");
+    return;
+  }
 
-analyzeBtn.addEventListener("click", async () => {
-  resultBox.innerHTML = "<p>Analizando...</p>";
-  proBox.style.display = "none";
+  // ===== CONFIG =====
+  const API_URL = "https://breedingai-backend.onrender.com";
+  const MAX_FREE_USES = 5;
 
-  const raza = document.getElementById("raza").value;
-  const objetivo = document.getElementById("objetivo").value;
-  const consanguinidad = document.getElementById("consanguinidad").value;
+  // ===== FREE USES =====
+  function getFreeUses() {
+    return Number(localStorage.getItem("freeUses")) || 0;
+  }
 
-  const antecedentes = Array.from(
-    document.querySelectorAll("input[type='checkbox']:checked")
-  ).map(el => el.value);
+  function incrementFreeUses() {
+    const uses = getFreeUses() + 1;
+    localStorage.setItem("freeUses", uses);
+    return uses;
+  }
 
-  try {
-    const response = await fetch(`${API_URL}/analyze`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        raza,
-        objetivo,
-        consanguinidad,
-        antecedentes
-      })
-    });
+  function updateFreeUI() {
+    const remaining = MAX_FREE_USES - getFreeUses();
+    if (freeCounter) {
+      freeCounter.textContent = remaining > 0 ? remaining : 0;
+    }
 
-    const data = await response.json();
+    if (remaining <= 0 && proBlock) {
+      proBlock.style.display = "block";
+    }
+  }
 
-    // 🔴 LÍMITE GRATUITO ALCANZADO
-    if (response.status === 403 && data.error === "FREE_LIMIT_REACHED") {
-      resultBox.innerHTML = `
-        <h3>Límite alcanzado</h3>
-        <p>Has utilizado tus 5 análisis gratuitos.</p>
-      `;
-      proBox.style.display = "block";
+  updateFreeUI();
+
+  // ===== FORM SUBMIT =====
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (getFreeUses() >= MAX_FREE_USES) {
+      if (proBlock) proBlock.style.display = "block";
       return;
     }
 
-    // 🟢 RESULTADO NORMAL
-    resultBox.innerHTML = `
-      <h2>Resultado del análisis</h2>
-      <p><strong>Veredicto:</strong> ${data.resultado.veredicto}</p>
-      <p><strong>Puntuación:</strong> ${data.resultado.puntuacion}</p>
-      <p>${data.resultado.descripcion}</p>
-      <p><strong>Recomendación:</strong> ${data.resultado.recomendacion}</p>
-      <p><em>Usos gratuitos restantes: ${data.usosRestantes}</em></p>
-    `;
+    const formData = new FormData(form);
 
-    if (data.usosRestantes <= 0) {
-      proBox.style.display = "block";
+    const payload = {
+      breed: formData.get("breed"),
+      objective: formData.get("objective"),
+      consanguinity: formData.get("consanguinity"),
+      antecedentes: formData.getAll("antecedentes"),
+    };
+
+    resultContainer.innerHTML = "<p>Generando análisis con IA...</p>";
+
+    try {
+      const res = await fetch(`${API_URL}/analyze`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        throw new Error("Error en el servidor");
+      }
+
+      const data = await res.json();
+
+      if (!data.analysis) {
+        throw new Error("Respuesta IA inválida");
+      }
+
+      // ===== RENDER IA RESULT =====
+      resultContainer.innerHTML = `
+        <h3>Resultado del análisis</h3>
+        <div class="ai-analysis">
+          ${data.analysis.replace(/\n/g, "<br>")}
+        </div>
+      `;
+
+      incrementFreeUses();
+      updateFreeUI();
+    } catch (err) {
+      console.error(err);
+      resultContainer.innerHTML =
+        "<p>Error de conexión con el servidor</p>";
     }
+  });
 
-  } catch (err) {
-    console.error(err);
-    resultBox.innerHTML =
-      "<p>Error al generar el análisis. Inténtalo de nuevo.</p>";
+  // ===== STRIPE =====
+  if (proButton) {
+    proButton.addEventListener("click", async () => {
+      try {
+        const res = await fetch(`${API_URL}/create-checkout-session`, {
+          method: "POST",
+        });
+
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        }
+      } catch (err) {
+        console.error("Error Stripe", err);
+      }
+    });
   }
 });
-
-// =====================
-// STRIPE PRO
-// =====================
-proBtn.addEventListener("click", async () => {
-  try {
-    const res = await fetch(
-      `${API_URL}/create-checkout-session`,
-      { method: "POST" }
-    );
-    const data = await res.json();
-    window.location.href = data.url;
-  } catch (err) {
-    alert("Error al iniciar el pago.");
-  }
-});
-
 
 
 
