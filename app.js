@@ -1,15 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const generateBtn = document.getElementById("generateBtn");
-  const resultContainer = document.getElementById("result");
-  const proButton = document.getElementById("proButton");
+  const API_URL = "https://breedingai-backend.onrender.com";
+  const MAX_FREE_USES = 5;
+
+  // Botón "Generar análisis" (por texto)
+  const generateBtn = Array.from(document.querySelectorAll("button"))
+    .find(btn => btn.textContent.includes("Generar análisis"));
+
+  // Contenedor de resultados (primer bloque grande bajo el botón)
+  const resultContainer = document.querySelector("section:last-of-type, .result, .analysis, div[class*='result']");
 
   if (!generateBtn || !resultContainer) {
     console.error("Botón o contenedor de resultados no encontrado");
     return;
   }
-
-  const API_URL = "https://breedingai-backend.onrender.com";
-  const MAX_FREE_USES = 5;
 
   function getFreeUses() {
     return Number(localStorage.getItem("freeUses")) || 0;
@@ -27,19 +30,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   generateBtn.addEventListener("click", async () => {
     if (remainingUses() <= 0) {
-      if (proButton) proButton.style.display = "block";
+      resultContainer.innerHTML += `
+        <div class="pro-block">
+          <h3>Has alcanzado el límite gratuito</h3>
+          <button id="goPro">Pasar a PRO · 5€/mes</button>
+        </div>
+      `;
+      document.getElementById("goPro")?.addEventListener("click", goPro);
       return;
     }
 
-    const breed = document.getElementById("breed").value;
-    const objective = document.getElementById("objective").value;
-    const consanguinity = document.getElementById("consanguinity").value;
+    const breed = document.querySelector("select").value;
+    const selects = document.querySelectorAll("select");
+    const objective = selects[1]?.value;
+    const consanguinity = selects[2]?.value;
 
     const antecedentes = Array.from(
-      document.querySelectorAll("input[name='antecedentes']:checked")
-    ).map((el) => el.value);
+      document.querySelectorAll("input[type='checkbox']:checked")
+    ).map(el => el.nextSibling.textContent.trim());
 
-    resultContainer.innerHTML = "<p>Generando análisis con IA...</p>";
+    resultContainer.innerHTML = "<p>Generando análisis con IA experta…</p>";
 
     try {
       const res = await fetch(`${API_URL}/analyze`, {
@@ -49,52 +59,53 @@ document.addEventListener("DOMContentLoaded", () => {
           breed,
           objective,
           consanguinity,
-          antecedentes,
-        }),
+          antecedentes
+        })
       });
 
-      if (!res.ok) throw new Error("Error backend");
+      if (!res.ok) throw new Error("Backend error");
 
       const data = await res.json();
 
-      if (!data.analysis) throw new Error("IA sin respuesta");
-
       resultContainer.innerHTML = `
-        <h3>Resultado del análisis</h3>
+        <h2>Resultado del análisis</h2>
         <div class="ai-analysis">
           ${data.analysis.replace(/\n/g, "<br>")}
         </div>
-        <p><strong>Usos gratuitos restantes:</strong> ${
-          remainingUses() - 1
-        }</p>
+        <p><strong>Usos gratuitos restantes:</strong> ${remainingUses() - 1}</p>
       `;
 
       incrementFreeUses();
 
-      if (remainingUses() <= 0 && proButton) {
-        proButton.style.display = "block";
+      if (remainingUses() <= 0) {
+        resultContainer.innerHTML += `
+          <div class="pro-block">
+            <h3>Accede a análisis profesionales completos</h3>
+            <button id="goPro">Pasar a PRO · 5€/mes</button>
+          </div>
+        `;
+        document.getElementById("goPro")?.addEventListener("click", goPro);
       }
+
     } catch (err) {
       console.error(err);
-      resultContainer.innerHTML =
-        "<p>Error de conexión con el servidor</p>";
+      resultContainer.innerHTML = "<p>Error de conexión con el servidor</p>";
     }
   });
 
-  if (proButton) {
-    proButton.addEventListener("click", async () => {
-      try {
-        const res = await fetch(`${API_URL}/create-checkout-session`, {
-          method: "POST",
-        });
-        const data = await res.json();
-        if (data.url) window.location.href = data.url;
-      } catch (err) {
-        console.error("Error Stripe", err);
-      }
-    });
+  async function goPro() {
+    try {
+      const res = await fetch(`${API_URL}/create-checkout-session`, {
+        method: "POST"
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch (e) {
+      console.error("Stripe error", e);
+    }
   }
 });
+
 
 
 
