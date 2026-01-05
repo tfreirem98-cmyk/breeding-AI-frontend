@@ -1,76 +1,67 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
+const API_URL = "https://breedingai-backend.onrender.com/analyze";
 
-import { analyze } from "./rules/engine.js";
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("analyzeBtn");
+  if (!btn) {
+    console.error("Botón de análisis no encontrado");
+    return;
+  }
 
-dotenv.config();
+  btn.addEventListener("click", async () => {
+    const raza = document.getElementById("raza").value;
+    const objetivo = document.getElementById("objetivo").value;
+    const consanguinidad = document.getElementById("consanguinidad").value;
 
-const app = express();
+    const antecedentes = {
+      displasia: document.getElementById("ant_displasia")?.checked || false,
+      oculares: document.getElementById("ant_oculares")?.checked || false,
+      respiratorios: document.getElementById("ant_respiratorios")?.checked || false,
+      neurologicos: document.getElementById("ant_neurologicos")?.checked || false
+    };
 
-/* =========================
-   MIDDLEWARES
-========================= */
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST"],
-  allowedHeaders: ["Content-Type"]
-}));
-
-app.use(express.json());
-
-/* =========================
-   HEALTH CHECK
-========================= */
-app.get("/", (req, res) => {
-  res.json({ status: "BreedingAI backend OK" });
-});
-
-/* =========================
-   ANALYZE ENDPOINT
-========================= */
-app.post("/analyze", async (req, res) => {
-  try {
-    const { raza, objetivo, consanguinidad, antecedentes } = req.body;
-
-    // Validación estricta pero correcta
-    if (
-      typeof raza !== "string" ||
-      typeof objetivo !== "string" ||
-      typeof consanguinidad !== "string" ||
-      !Array.isArray(antecedentes)
-    ) {
-      return res.status(400).json({
-        error: "Datos inválidos",
-        received: req.body
-      });
-    }
-
-    const result = await analyze({
+    const payload = {
       raza,
       objetivo,
       consanguinidad,
       antecedentes
-    });
+    };
 
-    return res.json(result);
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
 
-  } catch (err) {
-    console.error("ERROR /analyze:", err);
-    return res.status(500).json({
-      error: "Error interno del servidor"
-    });
-  }
+      if (!res.ok) {
+        throw new Error("Backend error");
+      }
+
+      const data = await res.json();
+      renderResult(data);
+
+    } catch (err) {
+      console.error(err);
+      document.getElementById("result").innerHTML =
+        "<p>Error de conexión con el servidor</p>";
+    }
+  });
 });
 
-/* =========================
-   START SERVER
-========================= */
-const PORT = process.env.PORT || 3001;
+function renderResult(data) {
+  const container = document.getElementById("result");
 
-app.listen(PORT, () => {
-  console.log(`BreedingAI backend running on port ${PORT}`);
-});
+  container.innerHTML = `
+    <h3>Resultado del análisis</h3>
+    <p><strong>Veredicto:</strong> ${data.veredicto}</p>
+    <p><strong>Puntuación:</strong> ${data.puntuacion}</p>
+    <p>${data.descripcion}</p>
+    <p><strong>Recomendación:</strong> ${data.recomendacion}</p>
+    <p><em>Usos gratuitos restantes: ${data.usosRestantes}</em></p>
+  `;
+}
+
+
 
 
 
