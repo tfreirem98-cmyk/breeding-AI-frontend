@@ -1,154 +1,125 @@
+/* =========================
+   BASE
+========================= */
 body {
-  margin: 0;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
   background: #f6f8f7;
   color: #0f172a;
 }
 
-.header {
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.header-inner {
-  max-width: 1000px;
-  margin: auto;
-  padding: 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.main {
-  max-width: 900px;
-  margin: 50px auto;
-  padding: 0 20px;
-}
-
-.card {
-  background: white;
-  border-radius: 18px;
-  padding: 40px;
-  box-shadow: 0 20px 40px rgba(0,0,0,.08);
-}
-
-.card label {
-  display: block;
-  margin-top: 20px;
-  font-weight: 600;
-}
-
-select {
-  width: 100%;
-  padding: 14px;
-  margin-top: 6px;
-  border-radius: 10px;
-  border: 1px solid #cbd5e1;
-}
-
-.checkboxes {
-  margin-top: 10px;
-}
-
-.checkboxes label {
-  margin-right: 16px;
-}
-
-.btn-primary {
-  margin-top: 30px;
-  width: 100%;
-  padding: 16px;
-  border-radius: 999px;
-  background: linear-gradient(90deg,#064e3b,#16a34a);
-  color: white;
-  font-size: 18px;
-  border: none;
-  cursor: pointer;
-}
-
-.result-card,
-.pro-card,
-.pro-result {
-  margin-top: 40px;
-  background: white;
-  padding: 30px;
-  border-radius: 18px;
-  box-shadow: 0 20px 40px rgba(0,0,0,.08);
-}
-
-.pro-card {
-  display: none;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-}
-
-.btn-pro {
-  margin-top: 20px;
-  padding: 14px 24px;
-  border-radius: 999px;
-  background: #0f172a;
-  color: white;
-  border: none;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.footer {
-  text-align: center;
-  padding: 40px;
-  color: #64748b;
-}
-
-/* RESULTADO PROFESIONAL */
-
+/* =========================
+   RESULTADO ANÁLISIS
+========================= */
 .result {
-  margin-top: 40px;
-  padding: 30px;
-  background: #ffffff;
-  border-radius: 18px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  margin-top: 50px;
+  padding-top: 30px;
+  border-top: 1px solid #e5e7eb;
 }
 
-.result-header {
-  display: flex;
-  justify-content: space-between;
+.result h3 {
+  font-size: 26px;
+  color: #064e3b;
   margin-bottom: 20px;
 }
 
-#verdictBadge {
-  font-weight: 700;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: #064e3b;
-  color: #fff;
+/* =========================
+   TEXTO IA
+========================= */
+.result p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #1e293b;
+  margin-bottom: 16px;
 }
 
-#scoreBadge {
+/* =========================
+   BLOQUE INFORME
+========================= */
+.result p strong {
+  color: #065f46;
+}
+
+/* =========================
+   SECCIONES IA (heurística)
+========================= */
+.result p:has(strong) {
+  background: #f0fdf4;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid #bbf7d0;
+}
+
+/* =========================
+   RECOMENDACIÓN FINAL
+========================= */
+.result p:last-of-type {
+  background: #0f172a;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
   font-weight: 600;
-  color: #475569;
 }
 
-.result-section {
-  margin-top: 25px;
+.result p:last-of-type strong {
+  color: #86efac;
 }
 
-.result-section h4 {
-  margin-bottom: 10px;
+/* =========================
+   TRANSICIÓN SUAVE
+========================= */
+.result {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   PRO BOX (CTA)
+========================= */
+.pro-box {
+  margin-top: 40px;
+  padding: 28px;
+  background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+  border-radius: 18px;
+  border: 1px solid #bbf7d0;
+}
+
+.pro-box h3 {
+  font-size: 22px;
   color: #064e3b;
 }
 
-.result-section ul {
-  padding-left: 20px;
+.pro-box p {
+  font-size: 16px;
+  color: #1e293b;
 }
 
-.alert-section li {
-  color: #b91c1c;
-  font-weight: 600;
+.pro-btn {
+  margin-top: 18px;
+  padding: 14px 30px;
+  font-size: 16px;
+  border-radius: 999px;
+  border: none;
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-
-
-
+.pro-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
 
 
 
