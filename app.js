@@ -1,62 +1,69 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Localizar el formulario REAL
-  const form = document.querySelector("form");
-  if (!form) {
-    console.error("Formulario no encontrado");
+  const analyzeBtn = document.getElementById("analyze");
+  const resultBox = document.getElementById("result");
+  const proBox = document.getElementById("proBox");
+  const proBtn = document.getElementById("pro");
+
+  if (!analyzeBtn || !resultBox || !proBox) {
+    console.error("Elementos clave no encontrados en el DOM");
     return;
   }
 
-  // 2. Localizar el botón REAL por texto
-  const analyzeBtn = Array.from(document.querySelectorAll("button"))
-    .find(btn => btn.textContent.toLowerCase().includes("generar"));
+  const API_ANALYZE = "https://breedingai-backend.onrender.com/analyze";
+  const API_STRIPE = "https://breedingai-backend.onrender.com/create-checkout-session";
 
-  if (!analyzeBtn) {
-    console.error("Botón de análisis no encontrado");
-    return;
+  const MAX_FREE = 5;
+
+  function getUses() {
+    return Number(localStorage.getItem("breedingai_uses")) || 0;
   }
 
-  // 3. Localizar contenedor de resultados REAL
-  const resultBox = document.querySelector("#resultado, .resultado, .result-box, div");
-
-  if (!resultBox) {
-    console.error("Contenedor de resultados no encontrado");
-    return;
+  function incrementUses() {
+    const u = getUses() + 1;
+    localStorage.setItem("breedingai_uses", u);
+    return u;
   }
 
-  analyzeBtn.addEventListener("click", async (e) => {
-    e.preventDefault();
+  function remainingUses() {
+    return Math.max(0, MAX_FREE - getUses());
+  }
 
-    resultBox.innerHTML = "<p>Analizando cruce...</p>";
-
-    const raza = document.querySelector("select").value;
-    const selects = document.querySelectorAll("select");
-    const objetivo = selects[1]?.value || "";
-    const consanguinidad = selects[2]?.value || "";
-
-    const antecedentes = Array.from(
-      document.querySelectorAll("input[type='checkbox']:checked")
+  function collectAntecedentes() {
+    return Array.from(
+      document.querySelectorAll(".checkbox-group input[type='checkbox']:checked")
     ).map(cb => cb.value);
+  }
+
+  analyzeBtn.addEventListener("click", async () => {
+    if (remainingUses() <= 0) {
+      proBox.style.display = "block";
+      return;
+    }
+
+    const raza = document.getElementById("raza").value;
+    const objetivo = document.getElementById("objetivo").value;
+    const consanguinidad = document.getElementById("consanguinidad").value;
+    const antecedentes = collectAntecedentes();
+
+    resultBox.innerHTML = "<p>Generando análisis profesional…</p>";
 
     try {
-      const response = await fetch(
-        "https://breedingai-backend.onrender.com/analyze",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            raza,
-            objetivo,
-            consanguinidad,
-            antecedentes
-          })
-        }
-      );
+      const res = await fetch(API_ANALYZE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          raza,
+          objetivo,
+          consanguinidad,
+          antecedentes
+        })
+      });
 
-      if (!response.ok) {
-        throw new Error("Backend error");
+      if (!res.ok) {
+        throw new Error("Error backend");
       }
 
-      const data = await response.json();
+      const data = await res.json();
 
       resultBox.innerHTML = `
         <h3>Resultado del análisis</h3>
@@ -64,21 +71,34 @@ document.addEventListener("DOMContentLoaded", () => {
         <p><strong>Puntuación:</strong> ${data.score}</p>
         <p>${data.explanation}</p>
         <p><strong>Recomendación:</strong> ${data.recommendation}</p>
-        ${
-          data.freeLeft !== undefined
-            ? `<p><em>Usos gratuitos restantes: ${data.freeLeft}</em></p>`
-            : ""
-        }
+        <p><em>Análisis gratuitos restantes: ${remainingUses() - 1}</em></p>
       `;
+
+      incrementUses();
+
+      if (remainingUses() <= 0) {
+        proBox.style.display = "block";
+      }
+
     } catch (err) {
       console.error(err);
       resultBox.innerHTML =
-        "<p style='color:red'>Error de conexión con el servidor</p>";
+        "<p style='color:red'>No se pudo generar el análisis. Inténtalo de nuevo.</p>";
     }
   });
+
+  if (proBtn) {
+    proBtn.addEventListener("click", async () => {
+      try {
+        const res = await fetch(API_STRIPE, { method: "POST" });
+        const data = await res.json();
+        if (data.url) window.location.href = data.url;
+      } catch (err) {
+        console.error("Error Stripe", err);
+      }
+    });
+  }
 });
-
-
 
 
 
