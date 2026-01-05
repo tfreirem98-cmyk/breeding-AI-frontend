@@ -4,15 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const proBox = document.getElementById("proBox");
   const proBtn = document.getElementById("pro");
 
-  if (!analyzeBtn || !resultBox || !proBox) {
-    console.error("Elementos clave no encontrados en el DOM");
-    return;
-  }
-
   const API_ANALYZE = "https://breedingai-backend.onrender.com/analyze";
   const API_STRIPE = "https://breedingai-backend.onrender.com/create-checkout-session";
 
-  const MAX_FREE = 5;
+  const MAX_FREE = 3;
 
   function getUses() {
     return Number(localStorage.getItem("breedingai_uses")) || 0;
@@ -37,6 +32,13 @@ document.addEventListener("DOMContentLoaded", () => {
   analyzeBtn.addEventListener("click", async () => {
     if (remainingUses() <= 0) {
       proBox.style.display = "block";
+      resultBox.innerHTML = `
+        <h3>Límite gratuito alcanzado</h3>
+        <p>
+          Ya has utilizado los ${MAX_FREE} análisis gratuitos.
+          Desbloquea análisis profesionales ilimitados por <strong>5€/mes</strong>.
+        </p>
+      `;
       return;
     }
 
@@ -59,9 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
       });
 
-      if (!res.ok) {
-        throw new Error("Error backend");
-      }
+      if (!res.ok) throw new Error("Backend error");
 
       const data = await res.json();
 
@@ -87,18 +87,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  if (proBtn) {
-    proBtn.addEventListener("click", async () => {
-      try {
-        const res = await fetch(API_STRIPE, { method: "POST" });
-        const data = await res.json();
-        if (data.url) window.location.href = data.url;
-      } catch (err) {
-        console.error("Error Stripe", err);
-      }
-    });
-  }
+  proBtn.addEventListener("click", async () => {
+    try {
+      const res = await fetch(API_STRIPE, { method: "POST" });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch (err) {
+      console.error("Error Stripe", err);
+    }
+  });
 });
+
+
 
 
 
