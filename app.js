@@ -1,10 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("analysisForm");
-  const analyzeBtn = document.getElementById("analyzeBtn");
-  const resultBox = document.getElementById("analysisResult");
+  // 1. Localizar el formulario REAL
+  const form = document.querySelector("form");
+  if (!form) {
+    console.error("Formulario no encontrado");
+    return;
+  }
 
-  if (!form || !analyzeBtn || !resultBox) {
-    console.error("Formulario, botón o contenedor de resultados no encontrado");
+  // 2. Localizar el botón REAL por texto
+  const analyzeBtn = Array.from(document.querySelectorAll("button"))
+    .find(btn => btn.textContent.toLowerCase().includes("generar"));
+
+  if (!analyzeBtn) {
+    console.error("Botón de análisis no encontrado");
+    return;
+  }
+
+  // 3. Localizar contenedor de resultados REAL
+  const resultBox = document.querySelector("#resultado, .resultado, .result-box, div");
+
+  if (!resultBox) {
+    console.error("Contenedor de resultados no encontrado");
     return;
   }
 
@@ -13,13 +28,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     resultBox.innerHTML = "<p>Analizando cruce...</p>";
 
-    const raza = document.getElementById("breed").value;
-    const objetivo = document.getElementById("goal").value;
-    const consanguinidad = document.getElementById("inbreeding").value;
+    const raza = document.querySelector("select").value;
+    const selects = document.querySelectorAll("select");
+    const objetivo = selects[1]?.value || "";
+    const consanguinidad = selects[2]?.value || "";
 
     const antecedentes = Array.from(
-      document.querySelectorAll("input[name='antecedentes']:checked")
-    ).map(el => el.value);
+      document.querySelectorAll("input[type='checkbox']:checked")
+    ).map(cb => cb.value);
 
     try {
       const response = await fetch(
@@ -54,14 +70,14 @@ document.addEventListener("DOMContentLoaded", () => {
             : ""
         }
       `;
-
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
       resultBox.innerHTML =
         "<p style='color:red'>Error de conexión con el servidor</p>";
     }
   });
 });
+
 
 
 
