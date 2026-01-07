@@ -20,6 +20,7 @@ analyzeBtn.addEventListener("click", async () => {
 
   try {
     const response = await fetch("https://breedingai-backend.onrender.com/analyze", {
+      console.log("RESPUESTA BACKEND:", data);
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -73,6 +74,7 @@ analyzeBtn.addEventListener("click", async () => {
     `;
   }
 });
+
 
 
 
