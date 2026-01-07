@@ -11,7 +11,7 @@ analyzeBtn.addEventListener("click", async () => {
   ).map(cb => cb.value);
 
   if (!raza || !objetivo || !consanguinidad) {
-    alert("Por favor, completa todos los campos del formulario.");
+    alert("Completa todos los campos del formulario.");
     return;
   }
 
@@ -31,38 +31,41 @@ analyzeBtn.addEventListener("click", async () => {
     });
 
     const data = await response.json();
+    if (!response.ok) throw new Error("Backend error");
 
-    if (!response.ok) {
-      throw new Error("Error en el análisis");
-    }
+    // Construcción segura del informe
+    const factors = data.factors?.map(f => `<li>${f}</li>`).join("") || "";
+    const alerts = data.alerts?.map(a => `<li>${a}</li>`).join("") || "";
 
     resultBox.innerHTML = `
       <div class="report-card">
+
         <h2>🧬 Informe clínico de viabilidad de cruce</h2>
 
-        <div class="report-summary">
+        <div class="report-box">
           <strong>Veredicto clínico:</strong> ${data.verdict}<br>
           <strong>Índice de riesgo:</strong> ${data.score} / 10
         </div>
 
-        <div class="report-section">
-          <h3>📋 Resumen ejecutivo</h3>
-          <p>${data.summary}</p>
+        <div class="report-box">
+          <h3>📋 Factores analizados</h3>
+          <ul>${factors}</ul>
         </div>
 
-        <div class="report-section">
-          <h3>🧠 Evaluación clínica detallada</h3>
-          <p>${data.analysis}</p>
+        <div class="report-box alert">
+          <h3>⚠️ Alertas clínicas</h3>
+          <ul>${alerts}</ul>
         </div>
 
-        <div class="report-section">
+        <div class="report-box recommendation">
           <h3>✅ Recomendación clínica final</h3>
           <p>${data.recommendation}</p>
         </div>
+
       </div>
     `;
 
-  } catch (error) {
+  } catch (err) {
     resultBox.innerHTML = `
       <p class="error">
         No se pudo generar el análisis. Inténtalo de nuevo.
@@ -70,7 +73,6 @@ analyzeBtn.addEventListener("click", async () => {
     `;
   }
 });
-
 
 
 
