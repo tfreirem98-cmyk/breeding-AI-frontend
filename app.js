@@ -14,44 +14,45 @@ analyzeBtn.addEventListener("click", async () => {
     document.querySelectorAll(".checkbox-group input:checked")
   ).map(cb => cb.value);
 
-  if (!raza) {
-    resultDiv.innerHTML = `<p style="color:red">Selecciona una raza.</p>`;
-    return;
-  }
-
   try {
-    const res = await fetch("https://breedingai-backend.onrender.com/analyze", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        raza,
-        objetivo,
-        consanguinidad,
-        antecedentes
-      })
-    });
+    const response = await fetch(
+      "https://breedingai-backend.onrender.com/analyze",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          raza,
+          objetivo,
+          consanguinidad,
+          antecedentes
+        })
+      }
+    );
 
-    if (!res.ok) {
+    if (!response.ok) {
       throw new Error("Backend error");
     }
 
-    const data = await res.json();
+    const data = await response.json();
 
-    // 🔒 VALIDACIONES DEFENSIVAS
     const veredicto = data.veredicto || "No disponible";
     const puntuacion = data.puntuacion ?? "-";
-    const analisis = data.analisis || "No se pudo generar el análisis.";
+    const analisis = data.analisis || "Análisis no disponible.";
     const recomendacion = data.recomendacion || "";
-    const usosRestantes = data.usosRestantes ?? null;
+    const usosRestantes = data.usosRestantes;
 
     resultDiv.innerHTML = `
       <h2>Resultado del análisis</h2>
       <p><strong>Veredicto:</strong> ${veredicto}</p>
       <p><strong>Puntuación:</strong> ${puntuacion}</p>
       <p>${analisis}</p>
-      ${recomendacion ? `<p><strong>Recomendación:</strong> ${recomendacion}</p>` : ""}
       ${
-        usosRestantes !== null
+        recomendacion
+          ? `<p><strong>Recomendación:</strong> ${recomendacion}</p>`
+          : ""
+      }
+      ${
+        typeof usosRestantes === "number"
           ? `<p><em>Usos gratuitos restantes: ${usosRestantes}</em></p>`
           : ""
       }
@@ -61,17 +62,13 @@ analyzeBtn.addEventListener("click", async () => {
       proBox.style.display = "block";
     }
 
-  } catch (err) {
-    console.error(err);
-    resultDiv.innerHTML = `
-      <p style="color:red">
-        No se pudo generar el análisis. Inténtalo de nuevo.
-      </p>
-    `;
+  } catch (error) {
+    console.error(error);
+    resultDiv.innerHTML =
+      "<p style='color:red'>No se pudo generar el análisis. Inténtalo de nuevo.</p>";
   }
 });
 
-// BOTÓN PRO
 const proBtn = document.getElementById("pro");
 if (proBtn) {
   proBtn.addEventListener("click", () => {
