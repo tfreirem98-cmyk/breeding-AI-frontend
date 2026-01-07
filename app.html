@@ -20,16 +20,14 @@
   <label for="raza">Raza</label>
   <select id="raza">
     <option value="">Seleccionar raza</option>
+    <option>Labrador Retriever</option>
+    <option>Golden Retriever</option>
+    <option>Pastor Alemán</option>
+    <option>Border Collie</option>
     <option>Akita Inu</option>
     <option>Alaskan Malamute</option>
-    <option>Border Collie</option>
-    <option>Golden Retriever</option>
-    <option>Labrador Retriever</option>
-    <option>Pastor Alemán</option>
     <option>Pastor Belga Malinois</option>
     <option>Pastor Belga Tervueren</option>
-    <option>Pastor Australiano</option>
-    <option>Pointer Inglés</option>
     <option>Rottweiler</option>
     <option>Doberman</option>
     <option>Caniche</option>
@@ -59,9 +57,16 @@
     <label><input type="checkbox" value="Neurológicos"> Neurológicos</label>
   </div>
 
-  <button id="analyze" class="primary-btn">Generar análisis</button>
+  <button id="analyze" class="primary-btn">
+    Generar análisis
+  </button>
 
-  <!-- INFORME -->
+  <!-- ERROR -->
+  <p id="error" class="error hidden">
+    No se pudo generar el análisis. Inténtalo de nuevo.
+  </p>
+
+  <!-- INFORME (OCULTO POR DEFECTO) -->
   <div id="report" class="clinical-report hidden">
 
     <h2>🧬 Informe clínico de viabilidad de cruce</h2>
@@ -88,15 +93,12 @@
 
   </div>
 
-  <p id="error" class="error hidden">
-    No se pudo generar el análisis. Inténtalo de nuevo.
-  </p>
-
 </div>
 
 <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
