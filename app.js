@@ -1,11 +1,7 @@
-const analyzeBtn = document.getElementById("analyzeBtn");
-const errorDiv = document.getElementById("error");
-const report = document.getElementById("report");
+const analyzeBtn = document.getElementById("analyze");
+const resultBox = document.getElementById("result");
 
 analyzeBtn.addEventListener("click", async () => {
-  errorDiv.textContent = "";
-  report.style.display = "none";
-
   const raza = document.getElementById("raza").value;
   const objetivo = document.getElementById("objetivo").value;
   const consanguinidad = document.getElementById("consanguinidad").value;
@@ -15,9 +11,12 @@ analyzeBtn.addEventListener("click", async () => {
   ).map(cb => cb.value);
 
   if (!raza || !objetivo || !consanguinidad) {
-    errorDiv.textContent = "Por favor, completa todos los campos obligatorios.";
+    alert("Por favor, completa todos los campos del formulario.");
     return;
   }
+
+  resultBox.classList.remove("hidden");
+  resultBox.innerHTML = "<p>Generando informe clínico...</p>";
 
   try {
     const response = await fetch("https://breedingai-backend.onrender.com/analyze", {
@@ -31,39 +30,44 @@ analyzeBtn.addEventListener("click", async () => {
       })
     });
 
-    if (!response.ok) {
-      throw new Error("Error en el backend");
-    }
-
     const data = await response.json();
 
-    document.getElementById("verdict").textContent = data.verdict;
-    document.getElementById("score").textContent = `Índice de riesgo: ${data.score} / 10`;
+    if (!response.ok) {
+      throw new Error("Error en el análisis");
+    }
 
-    const factorsList = document.getElementById("factors");
-    factorsList.innerHTML = "";
-    data.factors.forEach(f => {
-      const li = document.createElement("li");
-      li.textContent = f;
-      factorsList.appendChild(li);
-    });
+    resultBox.innerHTML = `
+      <div class="report-card">
+        <h2>🧬 Informe clínico de viabilidad de cruce</h2>
 
-    const alertsList = document.getElementById("alerts");
-    alertsList.innerHTML = "";
-    data.alerts.forEach(a => {
-      const li = document.createElement("li");
-      li.textContent = a;
-      alertsList.appendChild(li);
-    });
+        <div class="report-summary">
+          <strong>Veredicto clínico:</strong> ${data.verdict}<br>
+          <strong>Índice de riesgo:</strong> ${data.score} / 10
+        </div>
 
-    document.getElementById("recommendation").textContent =
-      data.recommendation;
+        <div class="report-section">
+          <h3>📋 Resumen ejecutivo</h3>
+          <p>${data.summary}</p>
+        </div>
 
-    report.style.display = "block";
+        <div class="report-section">
+          <h3>🧠 Evaluación clínica detallada</h3>
+          <p>${data.analysis}</p>
+        </div>
 
-  } catch (err) {
-    errorDiv.textContent = "No se pudo generar el análisis. Inténtalo de nuevo.";
-    console.error(err);
+        <div class="report-section">
+          <h3>✅ Recomendación clínica final</h3>
+          <p>${data.recommendation}</p>
+        </div>
+      </div>
+    `;
+
+  } catch (error) {
+    resultBox.innerHTML = `
+      <p class="error">
+        No se pudo generar el análisis. Inténtalo de nuevo.
+      </p>
+    `;
   }
 });
 
