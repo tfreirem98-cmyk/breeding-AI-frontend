@@ -1,81 +1,94 @@
-const analyzeBtn = document.getElementById("analyze");
-const resultDiv = document.getElementById("result");
-const proBox = document.getElementById("proBox");
+document.addEventListener("DOMContentLoaded", () => {
+  const analyzeBtn = document.getElementById("analyze");
+  const resultBox = document.getElementById("result");
+  const proBox = document.getElementById("proBox");
 
-analyzeBtn.addEventListener("click", async () => {
-  resultDiv.innerHTML = "";
-  proBox.style.display = "none";
+  if (!analyzeBtn || !resultBox) {
+    console.error("Botón o contenedor de resultados no encontrado");
+    return;
+  }
 
-  const raza = document.getElementById("raza").value;
-  const objetivo = document.getElementById("objetivo").value;
-  const consanguinidad = document.getElementById("consanguinidad").value;
+  analyzeBtn.addEventListener("click", async () => {
+    resultBox.innerHTML = "Analizando…";
+    proBox.style.display = "none";
 
-  const antecedentes = Array.from(
-    document.querySelectorAll(".checkbox-group input:checked")
-  ).map(cb => cb.value);
+    const raza = document.getElementById("raza").value;
+    const objetivo = document.getElementById("objetivo").value;
+    const consanguinidad = document.getElementById("consanguinidad").value;
 
-  try {
-    const response = await fetch(
-      "https://breedingai-backend.onrender.com/analyze",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          raza,
-          objetivo,
-          consanguinidad,
-          antecedentes
-        })
+    const antecedentes = Array.from(
+      document.querySelectorAll(".checkbox-group input:checked")
+    ).map(cb => cb.value);
+
+    try {
+      const response = await fetch(
+        "https://breedingai-backend.onrender.com/analyze",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            raza,
+            objetivo,
+            consanguinidad,
+            antecedentes
+          })
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Backend error");
       }
-    );
 
-    if (!response.ok) {
-      throw new Error("Backend error");
+      const data = await response.json();
+
+      // 🔑 MAPEO CORRECTO DE CLAVES (ESTA ERA LA CLAVE)
+      const verdict = data.verdict ?? "No disponible";
+      const score = data.score ?? "-";
+      const factors = data.factors ?? [];
+      const alerts = data.alerts ?? [];
+      const recommendation = data.recommendation ?? "No disponible";
+
+      resultBox.innerHTML = `
+        <h2>Resultado del análisis</h2>
+
+        <p><strong>Veredicto:</strong> ${verdict}</p>
+        <p><strong>Puntuación:</strong> ${score}</p>
+
+        <h4>Factores considerados</h4>
+        <ul>
+          ${factors.map(f => `<li>${f}</li>`).join("") || "<li>No especificados</li>"}
+        </ul>
+
+        <h4>Alertas relevantes</h4>
+        <ul>
+          ${alerts.map(a => `<li>${a}</li>`).join("") || "<li>Ninguna</li>"}
+        </ul>
+
+        <p><strong>Recomendación:</strong> ${recommendation}</p>
+      `;
+
+      // Mostrar CTA PRO si backend lo decide más adelante
+      if (data.limitReached) {
+        proBox.style.display = "block";
+      }
+
+    } catch (err) {
+      console.error(err);
+      resultBox.innerHTML =
+        "<p style='color:red'>No se pudo generar el análisis. Inténtalo de nuevo.</p>";
     }
+  });
 
-    const data = await response.json();
-
-    const veredicto = data.veredicto || "No disponible";
-    const puntuacion = data.puntuacion ?? "-";
-    const analisis = data.analisis || "Análisis no disponible.";
-    const recomendacion = data.recomendacion || "";
-    const usosRestantes = data.usosRestantes;
-
-    resultDiv.innerHTML = `
-      <h2>Resultado del análisis</h2>
-      <p><strong>Veredicto:</strong> ${veredicto}</p>
-      <p><strong>Puntuación:</strong> ${puntuacion}</p>
-      <p>${analisis}</p>
-      ${
-        recomendacion
-          ? `<p><strong>Recomendación:</strong> ${recomendacion}</p>`
-          : ""
-      }
-      ${
-        typeof usosRestantes === "number"
-          ? `<p><em>Usos gratuitos restantes: ${usosRestantes}</em></p>`
-          : ""
-      }
-    `;
-
-    if (usosRestantes === 0) {
-      proBox.style.display = "block";
-    }
-
-  } catch (error) {
-    console.error(error);
-    resultDiv.innerHTML =
-      "<p style='color:red'>No se pudo generar el análisis. Inténtalo de nuevo.</p>";
+  const proBtn = document.getElementById("pro");
+  if (proBtn) {
+    proBtn.addEventListener("click", () => {
+      window.location.href =
+        "https://breedingai-backend.onrender.com/create-checkout-session";
+    });
   }
 });
 
-const proBtn = document.getElementById("pro");
-if (proBtn) {
-  proBtn.addEventListener("click", () => {
-    window.location.href =
-      "https://breedingai-backend.onrender.com/create-checkout-session";
-  });
-}
+
 
 
 
