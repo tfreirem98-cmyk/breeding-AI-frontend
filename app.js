@@ -34,35 +34,61 @@ analyzeBtn.addEventListener("click", async () => {
     // 🔑 CLAVE: normalizamos la respuesta
     const data = rawData.analysis ? rawData.analysis : rawData;
 
-    resultBox.innerHTML = `
-      <h2>🧬 Informe clínico de viabilidad de cruce</h2>
+result.innerHTML = `
+  <div class="clinic-header">
+    <span>🧬</span>
+    <h2>Informe clínico de viabilidad de cruce</h2>
+  </div>
 
-      <p><strong>Veredicto clínico:</strong> ${data.veredicto_clinico ?? "No disponible"}</p>
-      <p><strong>Índice de riesgo:</strong> ${data.indice_riesgo ?? "-"} / 10</p>
+  <div class="verdict-box">
+    <div class="verdict">
+      Veredicto clínico: ${data.verdict}
+    </div>
+    <div class="score">
+      Índice de riesgo: ${data.score} / 10
+    </div>
+  </div>
 
-      <hr />
+  <div class="executive-summary">
+    <h3>📋 Resumen ejecutivo</h3>
+    <p>${data.summary}</p>
+  </div>
 
-      <h3>📋 Resumen ejecutivo</h3>
-      <p>${data.resumen_ejecutivo ?? "No disponible."}</p>
+  <div class="report-grid">
+    <div class="report-card">
+      <h4>🧠 Perfil genético de la raza</h4>
+      <p>${data.breedProfile}</p>
+    </div>
 
-      <h3>🧠 Perfil genético de la raza</h3>
-      <p>${data.perfil_genetico_raza ?? "No disponible."}</p>
+    <div class="report-card">
+      <h4>🧬 Impacto de la consanguinidad</h4>
+      <p>${data.consanguinityImpact}</p>
+    </div>
 
-      <h3>🔗 Impacto de la consanguinidad</h3>
-      <p>${data.impacto_consanguinidad ?? "No disponible."}</p>
+    <div class="report-card">
+      <h4>⚠️ Evaluación de antecedentes</h4>
+      <p>${data.backgroundRisks}</p>
+    </div>
 
-      <h3>⚠️ Evaluación de antecedentes</h3>
-      <p>${data.evaluacion_antecedentes ?? "No disponible."}</p>
+    <div class="report-card">
+      <h4>📊 Evaluación global</h4>
+      <p>${data.globalAssessment}</p>
+    </div>
+  </div>
 
-      <h3>🧪 Recomendación clínica final</h3>
-      <p>${data.recomendacion_clinica_final ?? "No disponible."}</p>
-    `;
+  <div class="final-recommendation">
+    <h3>✅ Recomendación clínica final</h3>
+    <p>${data.recommendation}</p>
+  </div>
+`;
+
   } catch (err) {
     console.error(err);
     resultBox.innerHTML =
       "<p style='color:red'>No se pudo generar el análisis. Inténtalo de nuevo.</p>";
   }
 });
+
 
 
 
