@@ -2,114 +2,99 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>BreedingAI · Análisis clínico profesional</title>
+  <title>BreedingAI · Análisis profesional</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <link rel="stylesheet" href="app.css" />
-
-  <style>
-    .hidden { display: none; }
-  </style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <h1>Análisis profesional de cruce</h1>
-    <p class="subtitle">
-      Herramienta orientativa para criadores · Incluye <strong>3 análisis gratuitos</strong>
-    </p>
+  <h1>Análisis profesional de cruce</h1>
+  <p class="subtitle">
+    Herramienta orientativa para criadores · Incluye <strong>3 análisis gratuitos</strong>
+  </p>
 
-    <!-- FORMULARIO -->
-    <label for="raza">Raza</label>
-    <select id="raza">
-      <option value="">Seleccionar raza</option>
-      <option>Akita Inu</option>
-      <option>Alaskan Malamute</option>
-      <option>Border Collie</option>
-      <option>Golden Retriever</option>
-      <option>Labrador Retriever</option>
-      <option>Pastor Alemán</option>
-      <option>Pastor Belga Malinois</option>
-      <option>Pastor Belga Tervueren</option>
-      <option>Pointer Inglés</option>
-    </select>
+  <!-- FORMULARIO -->
+  <label for="raza">Raza</label>
+  <select id="raza">
+    <option value="">Seleccionar raza</option>
+    <option>Akita Inu</option>
+    <option>Alaskan Malamute</option>
+    <option>Border Collie</option>
+    <option>Golden Retriever</option>
+    <option>Labrador Retriever</option>
+    <option>Pastor Alemán</option>
+    <option>Pastor Belga Malinois</option>
+    <option>Pastor Belga Tervueren</option>
+    <option>Pastor Australiano</option>
+    <option>Pointer Inglés</option>
+    <option>Rottweiler</option>
+    <option>Doberman</option>
+    <option>Caniche</option>
+    <option>Bulldog Francés</option>
+  </select>
 
-    <label for="objetivo">Objetivo de cría</label>
-    <select id="objetivo">
-      <option>Salud</option>
-      <option>Trabajo</option>
-      <option>Compañía</option>
-      <option>Exposición</option>
-    </select>
+  <label for="objetivo">Objetivo de cría</label>
+  <select id="objetivo">
+    <option>Salud</option>
+    <option>Trabajo</option>
+    <option>Compañía</option>
+    <option>Exposición</option>
+  </select>
 
-    <label for="consanguinidad">Consanguinidad</label>
-    <select id="consanguinidad">
-      <option>Baja</option>
-      <option>Media</option>
-      <option>Alta</option>
-    </select>
+  <label for="consanguinidad">Consanguinidad</label>
+  <select id="consanguinidad">
+    <option>Baja</option>
+    <option>Media</option>
+    <option>Alta</option>
+  </select>
 
-    <label>Antecedentes conocidos</label>
-    <div class="checkbox-group">
-      <label><input type="checkbox" value="Displasia"> Displasia</label>
-      <label><input type="checkbox" value="Oculares"> Oculares</label>
-      <label><input type="checkbox" value="Respiratorios"> Respiratorios</label>
-      <label><input type="checkbox" value="Neurológicos"> Neurológicos</label>
-    </div>
+  <label>Antecedentes conocidos</label>
+  <div class="checkbox-group">
+    <label><input type="checkbox" value="Displasia"> Displasia</label>
+    <label><input type="checkbox" value="Oculares"> Oculares</label>
+    <label><input type="checkbox" value="Respiratorios"> Respiratorios</label>
+    <label><input type="checkbox" value="Neurológicos"> Neurológicos</label>
+  </div>
 
-    <button id="analyze" class="primary-btn">
-      Generar análisis
-    </button>
+  <button id="analyze" class="primary-btn">Generar análisis</button>
 
-    <!-- INFORME CLÍNICO -->
-    <div id="clinical-report" class="clinical-report hidden">
+  <!-- INFORME -->
+  <div id="report" class="clinical-report hidden">
 
-      <div class="clinical-header">
-        🧬 Informe clínico de viabilidad de cruce
-      </div>
+    <h2>🧬 Informe clínico de viabilidad de cruce</h2>
 
-      <div class="clinical-metrics">
-        <div><strong>Veredicto clínico:</strong> <span id="verdict"></span></div>
-        <div><strong>Índice de riesgo:</strong> <span id="riskScore"></span></div>
-      </div>
+    <p><strong>Veredicto clínico:</strong> <span id="verdict"></span></p>
+    <p><strong>Índice de riesgo:</strong> <span id="score"></span></p>
 
-      <div class="report-card">
-        <h3>📄 Resumen ejecutivo</h3>
-        <p id="summary"></p>
-      </div>
+    <hr>
 
-      <div class="report-card split">
-        <div>
-          <h3>🧠 Perfil genético de la raza</h3>
-          <p id="genetics"></p>
-        </div>
-        <div>
-          <h3>🔗 Impacto de la consanguinidad</h3>
-          <p id="consanguinity"></p>
-        </div>
-      </div>
+    <h3>📄 Resumen ejecutivo</h3>
+    <p id="summary"></p>
 
-      <div class="report-card alert">
-        <h3>⚠ Evaluación de antecedentes</h3>
-        <p id="backgrounds"></p>
-      </div>
+    <h3>🧠 Perfil genético de la raza</h3>
+    <p id="genetics"></p>
 
-      <div class="final-recommendation">
-        <h3>✅ Recomendación clínica final</h3>
-        <p id="recommendation"></p>
-      </div>
+    <h3>🔗 Impacto de la consanguinidad</h3>
+    <p id="consanguinity"></p>
 
-    </div>
+    <h3>⚠ Evaluación de antecedentes</h3>
+    <p id="backgrounds"></p>
 
-    <div id="error" class="error hidden">
-      No se pudo generar el análisis. Inténtalo de nuevo.
-    </div>
+    <h3>✅ Recomendación clínica final</h3>
+    <p id="recommendation"></p>
 
   </div>
 
-  <script src="app.js"></script>
+  <p id="error" class="error hidden">
+    No se pudo generar el análisis. Inténtalo de nuevo.
+  </p>
+
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
 
