@@ -50,6 +50,7 @@
       border: 1px solid #cbd5e1;
       margin-top: 6px;
       font-size: 16px;
+      background: #ffffff;
     }
 
     .checkbox-group {
@@ -112,23 +113,76 @@
   <div class="container">
     <h1>Análisis profesional de cruce</h1>
     <p class="subtitle">
-      Herramienta orientativa para criadores.  
-      Incluye <strong>3 análisis gratuitos</strong>.
+      Herramienta orientativa para criadores profesionales.  
+      Incluye <strong>3 análisis profesionales gratuitos</strong>.
     </p>
 
-    <!-- FORMULARIO -->
+    <!-- RAZA -->
     <label for="raza">Raza</label>
     <select id="raza">
-      <option>Border Collie</option>
-      <option>Golden Retriever</option>
-      <option>Labrador Retriever</option>
+      <option value="" disabled selected>Selecciona una raza</option>
+
+      <!-- Trabajo -->
       <option>Pastor Alemán</option>
-      <option>Bulldog Francés</option>
-      <option>Caniche</option>
+      <option>Border Collie</option>
+      <option>Pastor Belga Malinois</option>
+      <option>Pastor Belga Tervueren</option>
+      <option>Pastor Australiano</option>
       <option>Rottweiler</option>
       <option>Doberman</option>
+      <option>Husky Siberiano</option>
+      <option>Akita Inu</option>
+      <option>Alaskan Malamute</option>
+
+      <!-- Caza -->
+      <option>Labrador Retriever</option>
+      <option>Golden Retriever</option>
+      <option>Pointer Inglés</option>
+      <option>Setter Inglés</option>
+      <option>Setter Irlandés</option>
+      <option>Braco Alemán</option>
+      <option>Weimaraner</option>
+      <option>Cocker Spaniel Inglés</option>
+      <option>Springer Spaniel Inglés</option>
+      <option>Teckel (Dachshund)</option>
+
+      <!-- Molosoides -->
+      <option>Bulldog Inglés</option>
+      <option>Bulldog Francés</option>
+      <option>Bóxer</option>
+      <option>Mastín Español</option>
+      <option>Dogo Argentino</option>
+      <option>Cane Corso</option>
+      <option>Fila Brasileiro</option>
+      <option>Gran Danés</option>
+
+      <!-- Compañía -->
+      <option>Caniche (Toy / Mini / Estándar)</option>
+      <option>Bichón Maltés</option>
+      <option>Shih Tzu</option>
+      <option>Pomerania</option>
+      <option>Chihuahua</option>
+      <option>Yorkshire Terrier</option>
+      <option>Boston Terrier</option>
+      <option>Pug</option>
+
+      <!-- Primitivas -->
+      <option>Basenji</option>
+      <option>Shiba Inu</option>
+      <option>Samoyedo</option>
+      <option>Chow Chow</option>
+
+      <!-- Otras comunes -->
+      <option>American Staffordshire Terrier</option>
+      <option>Staffordshire Bull Terrier</option>
+      <option>Jack Russell Terrier</option>
+      <option>Beagle</option>
+      <option>Galgo Español</option>
+      <option>Whippet</option>
+      <option>Podenco Ibicenco</option>
     </select>
 
+    <!-- OBJETIVO -->
     <label for="objetivo">Objetivo de cría</label>
     <select id="objetivo">
       <option>Salud</option>
@@ -137,6 +191,7 @@
       <option>Exposición</option>
     </select>
 
+    <!-- CONSANGUINIDAD -->
     <label for="consanguinidad">Consanguinidad</label>
     <select id="consanguinidad">
       <option>Baja</option>
@@ -144,6 +199,7 @@
       <option>Alta</option>
     </select>
 
+    <!-- ANTECEDENTES -->
     <label>Antecedentes conocidos</label>
     <div class="checkbox-group">
       <label><input type="checkbox" value="Displasia" /> Displasia</label>
@@ -152,6 +208,7 @@
       <label><input type="checkbox" value="Neurológicos" /> Neurológicos</label>
     </div>
 
+    <!-- BOTÓN -->
     <button id="analyze" class="primary-btn">
       Generar análisis
     </button>
@@ -159,7 +216,7 @@
     <!-- RESULTADO -->
     <div id="result" class="result"></div>
 
-    <!-- CTA PRO (SIEMPRE EXISTE EN DOM) -->
+    <!-- PRO -->
     <div id="proBox" class="pro-box">
       <h3>Has alcanzado el límite gratuito</h3>
       <p>
@@ -175,6 +232,7 @@
   <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
