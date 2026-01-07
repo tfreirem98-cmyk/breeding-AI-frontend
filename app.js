@@ -32,13 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
   analyzeBtn.addEventListener("click", async () => {
     if (remainingUses() <= 0) {
       proBox.style.display = "block";
-      resultBox.innerHTML = `
-        <h3>Límite gratuito alcanzado</h3>
-        <p>
-          Ya has utilizado los ${MAX_FREE} análisis gratuitos.
-          Desbloquea análisis profesionales ilimitados por <strong>5€/mes</strong>.
-        </p>
-      `;
       return;
     }
 
@@ -47,7 +40,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const consanguinidad = document.getElementById("consanguinidad").value;
     const antecedentes = collectAntecedentes();
 
-    resultBox.innerHTML = "<p>Generando análisis profesional…</p>";
+    if (!raza) {
+      resultBox.innerHTML = "<p class='error'>Selecciona una raza para continuar.</p>";
+      return;
+    }
+
+    resultBox.innerHTML = "<p class='loading'>Generando informe profesional…</p>";
 
     try {
       const res = await fetch(API_ANALYZE, {
@@ -66,12 +64,37 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       resultBox.innerHTML = `
-        <h3>Resultado del análisis</h3>
-        <p><strong>Veredicto:</strong> ${data.verdict}</p>
-        <p><strong>Puntuación:</strong> ${data.score}</p>
-        <p>${data.explanation}</p>
-        <p><strong>Recomendación:</strong> ${data.recommendation}</p>
-        <p><em>Análisis gratuitos restantes: ${remainingUses() - 1}</em></p>
+        <div class="report">
+
+          <div class="report-header">
+            <h3>Informe de evaluación genética</h3>
+            <span class="badge ${data.verdict.replace(" ", "-").toLowerCase()}">
+              ${data.verdict}
+            </span>
+          </div>
+
+          <div class="report-meta">
+            <div><strong>Raza:</strong> ${raza}</div>
+            <div><strong>Objetivo:</strong> ${objetivo}</div>
+            <div><strong>Consanguinidad:</strong> ${consanguinidad}</div>
+            <div><strong>Puntuación:</strong> ${data.score}</div>
+          </div>
+
+          <div class="report-section">
+            <h4>Análisis profesional</h4>
+            <p>${data.explanation.replace(/\n/g, "<br><br>")}</p>
+          </div>
+
+          <div class="report-recommendation">
+            <h4>Recomendación experta</h4>
+            <p>${data.recommendation}</p>
+          </div>
+
+          <div class="report-footer">
+            Análisis gratuitos restantes: ${remainingUses() - 1}
+          </div>
+
+        </div>
       `;
 
       incrementUses();
@@ -83,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.error(err);
       resultBox.innerHTML =
-        "<p style='color:red'>No se pudo generar el análisis. Inténtalo de nuevo.</p>";
+        "<p class='error'>No se pudo generar el análisis. Inténtalo de nuevo.</p>";
     }
   });
 
@@ -97,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 
 
 
