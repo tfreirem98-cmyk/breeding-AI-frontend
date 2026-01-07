@@ -1,95 +1,68 @@
-const analyzeBtn = document.getElementById("analyze");
-const resultBox = document.getElementById("result");
-const proBox = document.getElementById("proBox");
+const analyzeBtn = document.getElementById('analyze');
+const report = document.getElementById('clinical-report');
+const errorBox = document.getElementById('error');
 
-analyzeBtn.addEventListener("click", async () => {
-  resultBox.innerHTML = "Generando informe clínico…";
-  proBox.style.display = "none";
+analyzeBtn.addEventListener('click', async () => {
+  errorBox.classList.add('hidden');
+  report.classList.add('hidden');
 
-  const raza = document.getElementById("raza").value;
-  const objetivo = document.getElementById("objetivo").value;
-  const consanguinidad = document.getElementById("consanguinidad").value;
+  const raza = document.getElementById('raza').value;
+  const objetivo = document.getElementById('objetivo').value;
+  const consanguinidad = document.getElementById('consanguinidad').value;
 
   const antecedentes = Array.from(
-    document.querySelectorAll(".checkbox-group input:checked")
-  ).map(el => el.value);
+    document.querySelectorAll('.checkbox-group input:checked')
+  ).map(cb => cb.value);
+
+  if (!raza) {
+    alert('Selecciona una raza');
+    return;
+  }
 
   try {
-    const response = await fetch(
-      "https://breedingai-backend.onrender.com/analyze",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          raza,
-          objetivo,
-          consanguinidad,
-          antecedentes
-        })
-      }
-    );
+    const response = await fetch('https://breedingai-backend.onrender.com/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        raza,
+        objetivo,
+        consanguinidad,
+        antecedentes
+      })
+    });
 
-    const rawData = await response.json();
+    if (!response.ok) {
+      throw new Error('Backend error');
+    }
 
-    // 🔑 CLAVE: normalizamos la respuesta
-    const data = rawData.analysis ? rawData.analysis : rawData;
+    const data = await response.json();
 
-result.innerHTML = `
-  <div class="clinic-header">
-    <span>🧬</span>
-    <h2>Informe clínico de viabilidad de cruce</h2>
-  </div>
+    // Pintar informe
+    document.getElementById('verdict').textContent = data.verdict;
+    document.getElementById('riskScore').textContent = `${data.score} / 10`;
 
-  <div class="verdict-box">
-    <div class="verdict">
-      Veredicto clínico: ${data.verdict}
-    </div>
-    <div class="score">
-      Índice de riesgo: ${data.score} / 10
-    </div>
-  </div>
+    document.getElementById('summary').textContent =
+      data.sections?.summary || 'No disponible.';
 
-  <div class="executive-summary">
-    <h3>📋 Resumen ejecutivo</h3>
-    <p>${data.summary}</p>
-  </div>
+    document.getElementById('genetics').textContent =
+      data.sections?.genetics || 'No disponible.';
 
-  <div class="report-grid">
-    <div class="report-card">
-      <h4>🧠 Perfil genético de la raza</h4>
-      <p>${data.breedProfile}</p>
-    </div>
+    document.getElementById('consanguinity').textContent =
+      data.sections?.consanguinity || 'No disponible.';
 
-    <div class="report-card">
-      <h4>🧬 Impacto de la consanguinidad</h4>
-      <p>${data.consanguinityImpact}</p>
-    </div>
+    document.getElementById('backgrounds').textContent =
+      data.sections?.backgrounds || 'No disponible.';
 
-    <div class="report-card">
-      <h4>⚠️ Evaluación de antecedentes</h4>
-      <p>${data.backgroundRisks}</p>
-    </div>
+    document.getElementById('recommendation').textContent =
+      data.sections?.recommendation || 'No disponible.';
 
-    <div class="report-card">
-      <h4>📊 Evaluación global</h4>
-      <p>${data.globalAssessment}</p>
-    </div>
-  </div>
-
-  <div class="final-recommendation">
-    <h3>✅ Recomendación clínica final</h3>
-    <p>${data.recommendation}</p>
-  </div>
-`;
+    report.classList.remove('hidden');
 
   } catch (err) {
     console.error(err);
-    resultBox.innerHTML =
-      "<p style='color:red'>No se pudo generar el análisis. Inténtalo de nuevo.</p>";
+    errorBox.classList.remove('hidden');
   }
 });
-
-
 
 
 
