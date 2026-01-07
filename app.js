@@ -48,24 +48,54 @@ document.addEventListener("DOMContentLoaded", () => {
       const alerts = data.alerts ?? [];
       const recommendation = data.recommendation ?? "No disponible";
 
-      resultBox.innerHTML = `
-        <h2>Resultado del análisis</h2>
+resultBox.innerHTML = `
+  <h2>🔬 Informe clínico de viabilidad de cruce</h2>
 
-        <p><strong>Veredicto:</strong> ${verdict}</p>
-        <p><strong>Puntuación:</strong> ${score}</p>
+  <section>
+    <h3>1️⃣ Resumen ejecutivo</h3>
+    <p>
+      El cruce evaluado presenta un <strong>${verdict}</strong>,
+      con un índice de riesgo estimado de <strong>${score}/10</strong>.
+      ${recommendation}
+    </p>
+  </section>
 
-        <h4>Factores considerados</h4>
-        <ul>
-          ${factors.map(f => `<li>${f}</li>`).join("") || "<li>No especificados</li>"}
-        </ul>
+  <section>
+    <h3>2️⃣ Índice de riesgo global</h3>
+    <p>
+      Clasificación clínica: <strong>${verdict}</strong><br/>
+      Escala de riesgo utilizada: 0 (mínimo) – 10 (crítico).
+    </p>
+  </section>
 
-        <h4>Alertas relevantes</h4>
-        <ul>
-          ${alerts.map(a => `<li>${a}</li>`).join("") || "<li>Ninguna</li>"}
-        </ul>
+  <section>
+    <h3>3️⃣ Factores genéticos y técnicos evaluados</h3>
+    <ul>
+      ${factors.map(f => `<li>${f}</li>`).join("")}
+    </ul>
+  </section>
 
-        <p><strong>Recomendación:</strong> ${recommendation}</p>
-      `;
+  <section>
+    <h3>4️⃣ Alertas clínicas relevantes</h3>
+    <ul>
+      ${alerts.length
+        ? alerts.map(a => `<li>${a}</li>`).join("")
+        : "<li>No se han detectado alertas clínicas relevantes.</li>"
+      }
+    </ul>
+  </section>
+
+  <section>
+    <h3>5️⃣ Recomendación profesional final</h3>
+    <p><strong>${recommendation}</strong></p>
+  </section>
+
+  <section style="margin-top:20px; font-size:14px; color:#475569;">
+    Este informe es orientativo y está diseñado para apoyar decisiones
+    responsables de cría desde un punto de vista técnico, genético y ético.
+  </section>
+`;
+
 
       // Mostrar CTA PRO si backend lo decide más adelante
       if (data.limitReached) {
@@ -87,6 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
