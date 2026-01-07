@@ -1,125 +1,85 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const analyzeBtn = document.getElementById("analyze");
-  const resultBox = document.getElementById("result");
-  const proBox = document.getElementById("proBox");
-  const proBtn = document.getElementById("pro");
+const analyzeBtn = document.getElementById("analyze");
+const resultDiv = document.getElementById("result");
+const proBox = document.getElementById("proBox");
 
-  const API_ANALYZE = "https://breedingai-backend.onrender.com/analyze";
-  const API_STRIPE = "https://breedingai-backend.onrender.com/create-checkout-session";
+analyzeBtn.addEventListener("click", async () => {
+  resultDiv.innerHTML = "";
+  proBox.style.display = "none";
 
-  const MAX_FREE = 3;
+  const raza = document.getElementById("raza").value;
+  const objetivo = document.getElementById("objetivo").value;
+  const consanguinidad = document.getElementById("consanguinidad").value;
 
-  function getUses() {
-    return Number(localStorage.getItem("breedingai_uses")) || 0;
+  const antecedentes = Array.from(
+    document.querySelectorAll(".checkbox-group input:checked")
+  ).map(cb => cb.value);
+
+  if (!raza) {
+    resultDiv.innerHTML = `<p style="color:red">Selecciona una raza.</p>`;
+    return;
   }
 
-  function incrementUses() {
-    const u = getUses() + 1;
-    localStorage.setItem("breedingai_uses", u);
-    return u;
-  }
+  try {
+    const res = await fetch("https://breedingai-backend.onrender.com/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        raza,
+        objetivo,
+        consanguinidad,
+        antecedentes
+      })
+    });
 
-  function remainingUses() {
-    return Math.max(0, MAX_FREE - getUses());
-  }
-
-  function collectAntecedentes() {
-    return Array.from(
-      document.querySelectorAll(".checkbox-group input[type='checkbox']:checked")
-    ).map(cb => cb.value);
-  }
-
-  analyzeBtn.addEventListener("click", async () => {
-    if (remainingUses() <= 0) {
-      proBox.style.display = "block";
-      return;
+    if (!res.ok) {
+      throw new Error("Backend error");
     }
 
-    const raza = document.getElementById("raza").value;
-    const objetivo = document.getElementById("objetivo").value;
-    const consanguinidad = document.getElementById("consanguinidad").value;
-    const antecedentes = collectAntecedentes();
+    const data = await res.json();
 
-    if (!raza) {
-      resultBox.innerHTML = "<p class='error'>Selecciona una raza para continuar.</p>";
-      return;
-    }
+    // 🔒 VALIDACIONES DEFENSIVAS
+    const veredicto = data.veredicto || "No disponible";
+    const puntuacion = data.puntuacion ?? "-";
+    const analisis = data.analisis || "No se pudo generar el análisis.";
+    const recomendacion = data.recomendacion || "";
+    const usosRestantes = data.usosRestantes ?? null;
 
-    resultBox.innerHTML = "<p class='loading'>Generando informe profesional…</p>";
-
-    try {
-      const res = await fetch(API_ANALYZE, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          raza,
-          objetivo,
-          consanguinidad,
-          antecedentes
-        })
-      });
-
-      if (!res.ok) throw new Error("Backend error");
-
-      const data = await res.json();
-
-      resultBox.innerHTML = `
-        <div class="report">
-
-          <div class="report-header">
-            <h3>Informe de evaluación genética</h3>
-            <span class="badge ${data.verdict.replace(" ", "-").toLowerCase()}">
-              ${data.verdict}
-            </span>
-          </div>
-
-          <div class="report-meta">
-            <div><strong>Raza:</strong> ${raza}</div>
-            <div><strong>Objetivo:</strong> ${objetivo}</div>
-            <div><strong>Consanguinidad:</strong> ${consanguinidad}</div>
-            <div><strong>Puntuación:</strong> ${data.score}</div>
-          </div>
-
-          <div class="report-section">
-            <h4>Análisis profesional</h4>
-            <p>${data.explanation.replace(/\n/g, "<br><br>")}</p>
-          </div>
-
-          <div class="report-recommendation">
-            <h4>Recomendación experta</h4>
-            <p>${data.recommendation}</p>
-          </div>
-
-          <div class="report-footer">
-            Análisis gratuitos restantes: ${remainingUses() - 1}
-          </div>
-
-        </div>
-      `;
-
-      incrementUses();
-
-      if (remainingUses() <= 0) {
-        proBox.style.display = "block";
+    resultDiv.innerHTML = `
+      <h2>Resultado del análisis</h2>
+      <p><strong>Veredicto:</strong> ${veredicto}</p>
+      <p><strong>Puntuación:</strong> ${puntuacion}</p>
+      <p>${analisis}</p>
+      ${recomendacion ? `<p><strong>Recomendación:</strong> ${recomendacion}</p>` : ""}
+      ${
+        usosRestantes !== null
+          ? `<p><em>Usos gratuitos restantes: ${usosRestantes}</em></p>`
+          : ""
       }
+    `;
 
-    } catch (err) {
-      console.error(err);
-      resultBox.innerHTML =
-        "<p class='error'>No se pudo generar el análisis. Inténtalo de nuevo.</p>";
+    if (usosRestantes === 0) {
+      proBox.style.display = "block";
     }
-  });
 
-  proBtn.addEventListener("click", async () => {
-    try {
-      const res = await fetch(API_STRIPE, { method: "POST" });
-      const data = await res.json();
-      if (data.url) window.location.href = data.url;
-    } catch (err) {
-      console.error("Error Stripe", err);
-    }
-  });
+  } catch (err) {
+    console.error(err);
+    resultDiv.innerHTML = `
+      <p style="color:red">
+        No se pudo generar el análisis. Inténtalo de nuevo.
+      </p>
+    `;
+  }
 });
+
+// BOTÓN PRO
+const proBtn = document.getElementById("pro");
+if (proBtn) {
+  proBtn.addEventListener("click", () => {
+    window.location.href =
+      "https://breedingai-backend.onrender.com/create-checkout-session";
+  });
+}
+
 
 
 
