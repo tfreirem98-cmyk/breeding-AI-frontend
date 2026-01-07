@@ -1,10 +1,10 @@
-const analyzeBtn = document.getElementById("analyze");
-const resultBox = document.getElementById("result");
-const proBox = document.getElementById("proBox");
+const analyzeBtn = document.getElementById("analyzeBtn");
+const errorDiv = document.getElementById("error");
+const report = document.getElementById("report");
 
 analyzeBtn.addEventListener("click", async () => {
-  resultBox.innerHTML = "Generando informe clínico…";
-  proBox.style.display = "none";
+  errorDiv.textContent = "";
+  report.style.display = "none";
 
   const raza = document.getElementById("raza").value;
   const objetivo = document.getElementById("objetivo").value;
@@ -12,58 +12,60 @@ analyzeBtn.addEventListener("click", async () => {
 
   const antecedentes = Array.from(
     document.querySelectorAll(".checkbox-group input:checked")
-  ).map(el => el.value);
+  ).map(cb => cb.value);
+
+  if (!raza || !objetivo || !consanguinidad) {
+    errorDiv.textContent = "Por favor, completa todos los campos obligatorios.";
+    return;
+  }
 
   try {
-    const response = await fetch(
-      "https://breedingai-backend.onrender.com/analyze",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          raza,
-          objetivo,
-          consanguinidad,
-          antecedentes
-        })
-      }
-    );
+    const response = await fetch("https://breedingai-backend.onrender.com/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        raza,
+        objetivo,
+        consanguinidad,
+        antecedentes
+      })
+    });
 
-    const rawData = await response.json();
+    if (!response.ok) {
+      throw new Error("Error en el backend");
+    }
 
-    // 🔑 CLAVE: normalizamos la respuesta
-    const data = rawData.analysis ? rawData.analysis : rawData;
+    const data = await response.json();
 
-    resultBox.innerHTML = `
-      <h2>🧬 Informe clínico de viabilidad de cruce</h2>
+    document.getElementById("verdict").textContent = data.verdict;
+    document.getElementById("score").textContent = `Índice de riesgo: ${data.score} / 10`;
 
-      <p><strong>Veredicto clínico:</strong> ${data.veredicto_clinico ?? "No disponible"}</p>
-      <p><strong>Índice de riesgo:</strong> ${data.indice_riesgo ?? "-"} / 10</p>
+    const factorsList = document.getElementById("factors");
+    factorsList.innerHTML = "";
+    data.factors.forEach(f => {
+      const li = document.createElement("li");
+      li.textContent = f;
+      factorsList.appendChild(li);
+    });
 
-      <hr />
+    const alertsList = document.getElementById("alerts");
+    alertsList.innerHTML = "";
+    data.alerts.forEach(a => {
+      const li = document.createElement("li");
+      li.textContent = a;
+      alertsList.appendChild(li);
+    });
 
-      <h3>📋 Resumen ejecutivo</h3>
-      <p>${data.resumen_ejecutivo ?? "No disponible."}</p>
+    document.getElementById("recommendation").textContent =
+      data.recommendation;
 
-      <h3>🧠 Perfil genético de la raza</h3>
-      <p>${data.perfil_genetico_raza ?? "No disponible."}</p>
+    report.style.display = "block";
 
-      <h3>🔗 Impacto de la consanguinidad</h3>
-      <p>${data.impacto_consanguinidad ?? "No disponible."}</p>
-
-      <h3>⚠️ Evaluación de antecedentes</h3>
-      <p>${data.evaluacion_antecedentes ?? "No disponible."}</p>
-
-      <h3>🧪 Recomendación clínica final</h3>
-      <p>${data.recomendacion_clinica_final ?? "No disponible."}</p>
-    `;
   } catch (err) {
+    errorDiv.textContent = "No se pudo generar el análisis. Inténtalo de nuevo.";
     console.error(err);
-    resultBox.innerHTML =
-      "<p style='color:red'>No se pudo generar el análisis. Inténtalo de nuevo.</p>";
   }
 });
-
 
 
 
