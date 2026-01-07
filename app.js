@@ -1,96 +1,133 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const analyzeBtn = document.getElementById("analyze");
-  const resultBox = document.getElementById("result");
-  const proBox = document.getElementById("proBox");
-  const proBtn = document.getElementById("pro");
+// ===============================
+// BreedingAI · app.js
+// Render clínico premium estable
+// ===============================
 
-  if (!analyzeBtn || !resultBox) {
-    console.error("Elementos principales no encontrados");
+const analyzeBtn = document.getElementById("analyze");
+const resultBox = document.getElementById("result");
+const proBox = document.getElementById("proBox");
+
+if (!analyzeBtn || !resultBox) {
+  console.error("Botón o contenedor de resultados no encontrado");
+}
+
+analyzeBtn.addEventListener("click", async () => {
+  resultBox.innerHTML = "";
+  resultBox.style.display = "block";
+
+  const raza = document.getElementById("raza")?.value;
+  const objetivo = document.getElementById("objetivo")?.value;
+  const consanguinidad = document.getElementById("consanguinidad")?.value;
+
+  const antecedentes = Array.from(
+    document.querySelectorAll(".checkbox-group input:checked")
+  ).map((el) => el.value);
+
+  if (!raza || !objetivo || !consanguinidad) {
+    resultBox.innerHTML = `<p style="color:red">Completa todos los campos obligatorios.</p>`;
     return;
   }
 
-  analyzeBtn.addEventListener("click", async () => {
-    resultBox.innerHTML = "Generando informe clínico…";
-    if (proBox) proBox.style.display = "none";
-
-    const raza = document.getElementById("raza").value;
-    const objetivo = document.getElementById("objetivo").value;
-    const consanguinidad = document.getElementById("consanguinidad").value;
-
-    const antecedentes = Array.from(
-      document.querySelectorAll(".checkbox-group input:checked")
-    ).map(cb => cb.value);
-
-    if (!raza) {
-      resultBox.innerHTML =
-        "<p style='color:red'>Selecciona una raza para continuar.</p>";
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        "https://breedingai-backend.onrender.com/analyze",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            raza,
-            objetivo,
-            consanguinidad,
-            antecedentes
-          })
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Error del backend");
+  try {
+    const res = await fetch(
+      "https://breedingai-backend.onrender.com/analyze",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          raza,
+          objetivo,
+          consanguinidad,
+          antecedentes,
+        }),
       }
+    );
 
-      const data = await response.json();
-
-      const verdict = data.verdict ?? "No disponible";
-      const score = data.score ?? "-";
-      const analysisText =
-        data.analysisText ?? "Análisis clínico no disponible.";
-      const recommendation =
-        data.recommendation ?? "Sin recomendación específica.";
-
-      resultBox.innerHTML = `
-        <h2>🔬 Informe clínico de viabilidad de cruce</h2>
-
-        <p><strong>Veredicto clínico:</strong> ${verdict}</p>
-        <p><strong>Índice de riesgo:</strong> ${score} / 10</p>
-
-        <hr/>
-
-        <div style="line-height:1.7; margin-top:20px;">
-          ${analysisText.replace(/\n/g, "<br><br>")}
-        </div>
-
-        <hr/>
-
-        <p style="margin-top:20px;">
-          <strong>Recomendación final:</strong><br/>
-          ${recommendation}
-        </p>
-      `;
-
-    } catch (error) {
-      console.error(error);
-      resultBox.innerHTML =
-        "<p style='color:red'>No se pudo generar el análisis. Inténtalo de nuevo.</p>";
+    if (!res.ok) {
+      throw new Error("Error de backend");
     }
-  });
 
-  if (proBtn) {
-    proBtn.addEventListener("click", () => {
-      window.location.href =
-        "https://breedingai-backend.onrender.com/create-checkout-session";
-    });
+    const data = await res.json();
+
+    renderClinicalReport(data);
+
+    if (data.freeLeft !== undefined && data.freeLeft <= 0 && proBox) {
+      proBox.style.display = "block";
+    }
+
+  } catch (err) {
+    console.error(err);
+    resultBox.innerHTML = `
+      <p style="color:red">
+        No se pudo generar el análisis. Inténtalo de nuevo.
+      </p>
+    `;
   }
 });
 
+function renderClinicalReport(data) {
+  const verdict = data.verdict || "No disponible";
+  const score = data.score !== undefined ? data.score : "-";
+  const analysis = data.analysis || "Análisis clínico no disponible.";
+  const recommendation =
+    data.recommendation ||
+    "Se recomienda consultar con un veterinario especializado.";
 
+  resultBox.innerHTML = `
+    <div style="margin-top:40px">
+
+      <h2>🧬 Informe clínico de viabilidad de cruce</h2>
+
+      <p>
+        <strong>Veredicto clínico:</strong>
+        <span>${verdict}</span>
+      </p>
+
+      <p>
+        <strong>Índice de riesgo:</strong>
+        ${score} / 10
+      </p>
+
+      <hr style="margin:20px 0" />
+
+      <section>
+        <h3>📋 Evaluación clínica detallada</h3>
+        <p>${analysis}</p>
+      </section>
+
+      <hr style="margin:20px 0" />
+
+      <section>
+        <h3>✅ Recomendación final</h3>
+        <p>${recommendation}</p>
+      </section>
+
+    </div>
+  `;
+}
+
+// ===============================
+// Botón PRO (Stripe)
+// ===============================
+const proBtn = document.getElementById("pro");
+
+if (proBtn) {
+  proBtn.addEventListener("click", async () => {
+    try {
+      const res = await fetch(
+        "https://breedingai-backend.onrender.com/create-checkout-session",
+        { method: "POST" }
+      );
+
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      console.error("Error al redirigir a Stripe", err);
+    }
+  });
+}
 
 
 
